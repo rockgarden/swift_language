@@ -5,6 +5,8 @@
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
         <page name='Control Flow'/>
+        <page name='Functions'/>
+        <page name='Closures'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='extension'/>

@@ -18,6 +18,8 @@ let hello = "Hola, qué tal"
 //一行中声明多个变量或者常量，用逗号隔开
 var a = 3, b = 4, c = 5, d = "反斜杠"
 debugPrint("占位符: \(d)")
+// 三目运算符
+var ab = a>b ? "a>b":"a<b"
 
 //Optionals can be nil or the number they store, if any.
 var optionalInteger: Int?

@@ -8,11 +8,6 @@
 
 import Foundation
 
-
-var a11:Int
-var a = 3, b = 4, c = 5, d = "反斜杠"
-
-
 //MARK:- 运算符
 var c1=19/4 //4
 let con = 100;
@@ -50,8 +45,7 @@ print(rem)
 /*相等===与特征不等!==*/
 //var c = a === b //ab指向的类型实例相同时c为ture
 
-// 三目运算符
-var ab = a>b ? "a>b":"a<b"
+
 
 
 //MARK:- 字符操作
@@ -137,193 +131,10 @@ if quotation==sameQu{
 }
 
 
-//MARK:- func
-func sayHello(personName:String)->String{
-    return "hello,"+personName+"!"
-}
-print(sayHello("Jack"))
-
-func lNumber(start:Int,end:Int)->Int{
-    return end - start
-}
-print(lNumber(1,end: 10))
-
-// 外部参数
-func join(s1 s1:String,toString s2:String,withJoiner joiner:String)->String{
-    return s1+joiner+s2
-}
-print(join(s1: "hello", toString: "world", withJoiner: ","))
-
-// 可变参数
-func sum (numbers: Int...) -> Int{
-    var total: Int = 0
-    for num in numbers {
-        total += num
-    }
-    print("\(total)")
-    return total
-}
-sum(1,2,3,4,5,6,7)
-
-// 默认参数
-func sayHi(msg:String, name:String = "wangkan") {
-    print("\(name),\(msg)")
-}
-sayHi("王任洲")
-sayHi("王任洲",name: "王侃")
-
-//FIXME:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
-func factorial(var number: Int) -> Int {
-    var result: Int = 1
-    while number > 1 {
-        result = result * number
-        number -= 1
-    }
-    return result
-}
-print(factorial(6)) //注意不要超界
-
-// 赋值
-func swap(inout a:Int , inout b: Int) {
-    let tmp = a
-    a = b
-    b = tmp
-}
-swap(&a, &b)
-print("after swap: a=\(a),b=\(b)")
-
-// 函数作参数
-func addInts(a:Int,b:Int)->Int{
-    return a+b
-}
-func multiplyInts(a:Int,b:Int)->Int{
-    return a*b
-}
-var mathFunction:(Int,Int)->Int = addInts
-print("***\(mathFunction(2,3))")
-func printMathResult(mathFunction:(Int,Int)->Int,a:Int,b:Int){
-    print(mathFunction(a,b))
-}
-printMathResult(multiplyInts,a: 3,b: 5)
-
-// 函数作返回值
-func squre(num: Int) -> Int {
-    return num*num
-}
-func cube(num: Int) -> Int {
-    return num*num*num
-}
-func getMateFunc(type type: String) -> (Int) -> Int {
-    switch(type){
-    case "squre":
-        return squre
-    default:
-        return cube
-    }
-}
-var mathFunc = getMateFunc(type: "other")
-print(mathFunc(5))
-
-// MARK: - 函数重载
-func test(){
-    print("return void")
-}
-func test(msg:String){
-    print("reload return void")
-}
-func test(msg:String)->String{
-    print("reload return void")
-    return "test"
-}
-func test(msg msg:String){
-    print("reload test(),外部参数为\(msg)")
-}
-test()
-var result:Void=test(msg:"wangkan")
-var result1:String=test("wangkan")
-// 局部参数名不能算reload
-//func test(msg1:String){
-//    print("reload return void")
-//}
 
 
-// MARK: - func嵌套
-func getMathFunc(type type:String)->(Int)->Int{
-    func squre(num: Int) -> Int { //外部squre无效
-        return num*num
-    }
-    func cube(num: Int) -> Int {
-        return num*num*num
-    }
-    switch(type){
-    case "squre":
-        return squre
-    default:
-        return cube
-    }
-}
-var mathFunc1=getMateFunc(type: "squre")
-print(mathFunc1(4))
-var mathFunc2=getMateFunc(type: "other")
-print(mathFunc2(4))
 
 
-// MARK: - 闭包
-func getMathFuncC(type type:String)->(Int)->Int{
-    func squre(num: Int) -> Int { //外部squre无效
-        return num*num
-    }
-    func cube(num: Int) -> Int {
-        return num*num*num
-    }
-    switch(type){
-    case "squre":
-        return {(num: Int) -> Int in
-            return num*num
-        }
-    default:
-        return {(num: Int) -> Int in
-            return num*num*num
-        }
-    }
-}
-var mathFunc3=getMathFuncC(type: "squre")
-print(mathFunc3(5))
-var mathFunc4=getMathFuncC(type: "other")
-print(mathFunc4(5))
-
-//利用上下文推断类型
-var squreContent1: (Int) -> Int = {(num) in return num * num}
-var squreContent2: (Int) -> Int = {num in return num * num}
-var squreContent3: (Int) -> Int = {$0 * $0}
-print(squreContent1(10))
-print(squreContent2(100))
-print(squreContent3(1000))
-
-var resultContent: Int = {
-    var result = 1
-    for i in 1...$1{
-        result *= $0
-    }
-    return result
-}(4,3)
-print(resultContent)
-
-// 尾随闭包
-func someFunc(num:Int,fn:(Int)->()){
-
-}
-//someFunc(20 , {})
-//someFunc(20){}
-
-func makeArr(ele: String) -> () -> [String] {
-    var arr: [String] = []
-    func addElement() -> [String]{
-        arr.append(ele)
-        return arr
-    }
-    return addElement
-}
 
 
 // MARK: - enum
