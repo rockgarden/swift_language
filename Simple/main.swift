@@ -132,86 +132,6 @@ if quotation==sameQu{
 
 
 
-
-
-
-
-
-// MARK: - enum
-enum season {
-    case spring
-    case summer
-    case fall
-    case winter
-}
-enum season1 {
-    case spring,summer,fall,winter
-}
-var weather: season
-weather = .summer
-print(weather)
-
-var chooseDay = season.fall
-switch(chooseDay){
-case .spring:
-    print(season.spring)
-case .summer:
-    print(season.summer)
-case .fall:
-    print(season.fall)
-case .winter:
-    print(season.winter)
-    //default:
-    //    print("seaseon")
-}
-
-// 赋值
-enum season2:Character{
-    case spring="春"
-    case summer="夏"
-    case fall="秋"
-    case winter="冬"
-}
-// 赋值推断
-enum weekday: Int{
-    case mon,tur,wen=3,thur,fri,sat,sum //杖举值的类型为整型时才可
-}
-print(weekday.sum.rawValue) //获取原始值
-
-// 取值
-var mySeason = season2(rawValue: "秋")
-if mySeason != nil{
-    switch(mySeason!){
-    case .spring:
-        print("info")
-    case .summer:
-        print("info")
-    case .fall,.winter:
-        print("infoinfo")
-    }
-}
-
-//关联值
-enum planet {
-    case earth(weight: Double, name: String)
-    case mars(density: Double, name: String, weight: Double)
-    case venus(Double, String)
-    case saturn
-    case neptune
-}
-var p1 = planet.earth(weight: 1.0, name: "地球")
-var p3 = planet.mars(density: 3.95, name: "火星", weight: 0.1)
-
-switch(p3){
-case planet.earth(var weight, var name):
-    print("earth \(weight)")
-case let planet.mars(density:d, name:n, weight:w):
-    print("\(n)\(w)\(d)")
-default:
-    break
-}
-
-
 // MARK: - Class
 // required deinit
 class Person{
@@ -480,25 +400,6 @@ let obj:NSObject = "hello"
 let objStr:NSString = obj as! NSString //NSObject是编译时类型,NSString是运行时类型
 let objPri:NSObject = 5 // 运行时类型为NSNumber
 //let strPri:NSString = objPri as! NSString
-
-
-// MARK: - struct
-struct Dog {
-    var name:String
-    var age:Int
-    func run(){
-        print(name)
-    }
-}
-
-var dog = Dog(name: "rock", age: 2)
-print(dog.name)
-dog.run()
-var dog2 = dog
-dog2.name = "snoopy"
-print(dog2.name)
-print(dog.name)
-
 
 //struct in extension
 extension String {

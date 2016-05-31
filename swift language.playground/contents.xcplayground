@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios'>
+<playground version='6.0' target-platform='ios' display-mode='rendered'>
     <pages>
         <page name='Basics'/>
         <page name='Basic Operators'/>
@@ -7,11 +7,14 @@
         <page name='Control Flow'/>
         <page name='Functions'/>
         <page name='Closures'/>
+        <page name='Enumerations'/>
+        <page name='Classes &amp; Structs'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='extension'/>
         <page name='map'/>
         <page name='singleton'/>
         <page name='Generics'/>
+        <page name='Other'/>
     </pages>
 </playground>

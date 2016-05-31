@@ -1,6 +1,8 @@
-//: Playground - noun: a place where people can play
+//: [Previous](@previous)
 
-import Cocoa
+import CoreData
+import Foundation
+
 
 //数组中的每个元素乘以2
 (1...1024).map{$0 * 2}
@@ -20,18 +22,8 @@ tweet.characters
     .map(String.init)
     .contains(Set(words).contains)
 
-//读取文件
-let path = NSBundle.mainBundle().pathForResource("import-summary", ofType: "txt")
-let lines = try? String(contentsOfFile: path!).characters.split{$0 == "\n"}.map(String.init)
-if let lines=lines {
-    lines[0]
-    lines[1]
-    lines[2]
-    lines[3]
-    lines[4]
-    lines[5]
-    lines[6]
-}
+
+
 
 //map以及范围和三元运算符的简单使用
 let name = "uraimo"
@@ -110,3 +102,4 @@ nsArray2.addObject(4)
 nsArray
 
 
+//: [Next](@next)

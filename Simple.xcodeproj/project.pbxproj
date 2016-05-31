@@ -25,9 +25,7 @@
 /* Begin PBXFileReference section */
 		44460DEF1CF89B0F008BE7E1 /* swift language.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "swift language.playground"; sourceTree = "<group>"; };
 		44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Swift Standard Library.playground"; sourceTree = "<group>"; };
-		444E6CAD1CD78D1F00008599 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = Simple/MyPlayground.playground; sourceTree = "<group>"; };
-		44DCB2411CF9C20C001B82D9 /* 07_Enumerations.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 07_Enumerations.playground; sourceTree = "<group>"; };
-		44DCB2421CF9C20C001B82D9 /* 08_Classes & Structs.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "08_Classes & Structs.playground"; sourceTree = "<group>"; };
+		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
 		44DCB2431CF9C20C001B82D9 /* 09_Properties.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 09_Properties.playground; sourceTree = "<group>"; };
 		44DCB2441CF9C20C001B82D9 /* 10_Methods.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 10_Methods.playground; sourceTree = "<group>"; };
 		44DCB2451CF9C20C001B82D9 /* 11_Subscripts.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 11_Subscripts.playground; sourceTree = "<group>"; };
@@ -61,8 +59,6 @@
 		F1E89DAE1A37AD53007C4166 = {
 			isa = PBXGroup;
 			children = (
-				44DCB2411CF9C20C001B82D9 /* 07_Enumerations.playground */,
-				44DCB2421CF9C20C001B82D9 /* 08_Classes & Structs.playground */,
 				44DCB2431CF9C20C001B82D9 /* 09_Properties.playground */,
 				44DCB2441CF9C20C001B82D9 /* 10_Methods.playground */,
 				44DCB2451CF9C20C001B82D9 /* 11_Subscripts.playground */,
@@ -79,8 +75,8 @@
 				44DCB2501CF9C20C001B82D9 /* 23_Access Control.playground */,
 				44DCB2511CF9C20C001B82D9 /* 24_Higher Order Functions.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,
+				44D7694E1CFDD9680031291B /* Help.playground */,
 				44460DEF1CF89B0F008BE7E1 /* swift language.playground */,
-				444E6CAD1CD78D1F00008599 /* MyPlayground.playground */,
 				F1E89DB91A37AD53007C4166 /* Simple */,
 				F1E89DB81A37AD53007C4166 /* Products */,
 			);
