@@ -27,12 +27,25 @@ cmin = cmin &- 1 //下溢
 // 浮点数求余
 var rem=10%2.3
 
-// 特征运算符
-/*相等===与特征不等!==*/
+/*: 特征运算符
+ - 等价于 ( === )
+ - 不等价于 ( !== )
+ */
 //var c = (a === b) //ab指向的类型实例相同时c为ture
 
-//Addition is also available for strings
+//: 字符串String可用+拼接
 let string = "hello, " + "world"
+
+//: 字符串String插值
+var apples = 10
+var oranges = 4
+("I have \(apples + oranges) fruits") //自动转型
+
+//: 字符串NSString连接
+var i = 200
+var strI = "Hello Swift" as NSString //转成Foundation
+strI = "\(strI),\(i)"
+strI.substringWithRange(NSRange(location: 0, length: 5)) //可用NSString的相关方法
 
 //Nil Coalescing Operator
 //It's equivalent to (a ? b : c), but for optionals

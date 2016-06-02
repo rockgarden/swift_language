@@ -2,19 +2,7 @@
 
 import Foundation
 
-//MARK:- 字符操作
-// 字符串插值
-var apples = 10
-var oranges = 4
-print("I have \(apples + oranges) fruits")
 
-// 字符串连接
-var i = 200
-var strI = "Hello Swift" as NSString // 转成Foundation
-strI = "\(strI),\(i)"
-print(strI)
-
-strI.substringWithRange(NSRange(location: 0, length: 5))
 
 //注释 多行注释可以嵌套
 /*
@@ -166,59 +154,7 @@ var sc3 = SomeStruct(count: 20)
 print(sc1,sc2,sc3)
 
 
-//MARK:- 扩展添加下标
-extension String {
-    subscript(idx:Int) -> String {
-        get {
-            if idx > -1 && idx < self.characters.count{
-                var count = 0
-                var result = ""
-                for ch in self.characters{
-                    if count == idx {
-                        result = "\(ch)"
-                    }
-                    count += 1
-                }
-                return result
-            }else {
-                return ""
-            }
-        }
-        set {
-            var result = ""
-            var count = 0
-            for ch in self.characters{
-                if count == idx {
-                    result += newValue
-                } else {
-                    result += "\(ch)"
-                }
-                count += 1
-            }
-            self = result
-        }
-    }
-    subscript(start:Int, end:Int) -> String {
-        if start > -1 && start < self.characters.count && end > -1 && end <= self.characters.count && start < end {
-            var result = ""
-            var count = 0
-            for ch in self.characters{
-                if count >= start && count < end {
-                    result.append(ch)
-                }
-                count += 1
-            }
-            return result
-        }else{
-            return ""
-        }
-    }
-}
-var strSubscript = "long long code is trouble"
-print(strSubscript[5])
-strSubscript[0] = "w"
-strSubscript[6] = "k"
-print(strSubscript[0,10])
+
 
 
 // MARK:- 扩展添加嵌套类型
