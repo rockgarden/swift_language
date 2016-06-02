@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-/*
+/*:
  ===============
  INLINE CLOSURES
  ===============
@@ -11,9 +11,12 @@ let array = ["John", "Tim", "Steve", "Wangkan"]
 var reversed = array.sort({(s1: String, s2: String) -> Bool in return s1 > s2})
 debugPrint(reversed)
 
-//使用类型推断,可以省略参数类型和返回类型;
-//Using type inference, can omit the params and return types.
-//This is true when passing closures as params to a function.
+/*:
+ 类型推断
+ - 使用类型推断,可以省略参数类型和返回类型;
+ - Using type inference, can omit the params and return types.
+ - This is true when passing closures as params to a function.
+ */
 reversed = array.sort({s1, s2 in return s1 < s2})
 debugPrint(reversed)
 

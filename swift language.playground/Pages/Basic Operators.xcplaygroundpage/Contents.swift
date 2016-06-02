@@ -6,6 +6,31 @@ import UIKit
 
 let (x, y) = (1, 2)
 
+// 运算符
+var c1 = 19/4
+var ww = 4.0/0.0
+var fff = 0.0/0.0 //非数
+
+var g = -5.2
+var h = -3.1
+var mod = g%h //求余结果正负取决于被除数
+
+var a111 = 5
+var b111 = a111++ + 6 //先计算再自增
+var c111 = ++a111 + 6 //自增再计算
+
+// 溢出运算符 &+,&-,&*,&/,&%
+var cmin = UInt8.min
+//var f = cmin-1 //error
+cmin = cmin &- 1 //下溢
+
+// 浮点数求余
+var rem=10%2.3
+
+// 特征运算符
+/*相等===与特征不等!==*/
+//var c = (a === b) //ab指向的类型实例相同时c为ture
+
 //Addition is also available for strings
 let string = "hello, " + "world"
 

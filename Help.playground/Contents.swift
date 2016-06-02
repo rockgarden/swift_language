@@ -4,6 +4,7 @@
 
 //import Cocoa //FIXME:xcplaygroundpage中无法引用,Playground中才可引用
 //import XCPlaygroud
+
 import UIKit
 
 /*:
@@ -34,3 +35,8 @@ if let lines=lines {
  */
 
 //let sharedFileURL = XCPlaygroundSharedDataDirectoryURL.URLByAppendingPathComponent("example.json")
+
+//指定页跳转：
+//: ["Go to The End"](PageName)
+//PageName 代表目标页面的名称，如果页面名称中有空格，则需要使用%20来代替，这是 ASCII 中空格的符号。如下：
+//: ["Go to The End"](Last%20Page)

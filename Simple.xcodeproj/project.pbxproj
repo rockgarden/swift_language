@@ -26,7 +26,6 @@
 		44460DEF1CF89B0F008BE7E1 /* swift language.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "swift language.playground"; sourceTree = "<group>"; };
 		44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Swift Standard Library.playground"; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
-		44DCB2431CF9C20C001B82D9 /* 09_Properties.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 09_Properties.playground; sourceTree = "<group>"; };
 		44DCB2441CF9C20C001B82D9 /* 10_Methods.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 10_Methods.playground; sourceTree = "<group>"; };
 		44DCB2451CF9C20C001B82D9 /* 11_Subscripts.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 11_Subscripts.playground; sourceTree = "<group>"; };
 		44DCB2461CF9C20C001B82D9 /* 12_Inheritance.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 12_Inheritance.playground; sourceTree = "<group>"; };
@@ -59,7 +58,6 @@
 		F1E89DAE1A37AD53007C4166 = {
 			isa = PBXGroup;
 			children = (
-				44DCB2431CF9C20C001B82D9 /* 09_Properties.playground */,
 				44DCB2441CF9C20C001B82D9 /* 10_Methods.playground */,
 				44DCB2451CF9C20C001B82D9 /* 11_Subscripts.playground */,
 				44DCB2461CF9C20C001B82D9 /* 12_Inheritance.playground */,
