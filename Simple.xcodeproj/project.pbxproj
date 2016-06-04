@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		44460DEF1CF89B0F008BE7E1 /* swift language.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "swift language.playground"; sourceTree = "<group>"; };
 		44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Swift Standard Library.playground"; sourceTree = "<group>"; };
+		44B7B00F1D0326F20030EC8D /* UIStackView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = UIStackView.playground; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
 		44DCB2451CF9C20C001B82D9 /* 11_Subscripts.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 11_Subscripts.playground; sourceTree = "<group>"; };
 		44DCB2461CF9C20C001B82D9 /* 12_Inheritance.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 12_Inheritance.playground; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 				44DCB24E1CF9C20C001B82D9 /* 21_Protocols.playground */,
 				44DCB24F1CF9C20C001B82D9 /* 22_Generics.playground */,
 				44DCB2501CF9C20C001B82D9 /* 23_Access Control.playground */,
+				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44DCB2511CF9C20C001B82D9 /* 24_Higher Order Functions.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,
 				44D7694E1CFDD9680031291B /* Help.playground */,

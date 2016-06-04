@@ -110,7 +110,11 @@ var mathFunc = getMathFunc("other")
 debugPrint("getMathFunc result:\(mathFunc(5))")
 
 
-// MARK: - 函数重载
+/*:
+ 函数重载
+ - 外部参数可reload
+ - 局部参数不能reload
+*/
 func test(){
     print("return void")
 }
@@ -127,14 +131,14 @@ func test(msg msg:String){
 test()
 var result: Void = test(msg:"swift")
 var result1: String = test("swfit")
-//局部参数不能reload
-//func test(msg1:String){}
+//func test(msg1:String){} //Error
 
 
-//func嵌套
-//外部参数可reload
+/*:
+ func嵌套
+ */
 func getMathFunc(type type:String)->(Int)->Int{
-    func squre(num: Int) -> Int { //外部squre无效
+    func squre(num: Int) -> Int {
         return num*num
     }
     func cube(num: Int) -> Int {
@@ -148,9 +152,10 @@ func getMathFunc(type type:String)->(Int)->Int{
     }
 }
 var mathFunc1=getMathFunc(type: "squre")
-print(mathFunc1(4))
+(mathFunc1(4))
 var mathFunc2=getMathFunc(type: "other")
-print(mathFunc2(4))
+(mathFunc2(4))
+
 
 //: [Next](@next)
 
