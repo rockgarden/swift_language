@@ -1,18 +1,7 @@
-
-// |=------------------------------------------------------=|
-//  Copyright (c) 2016 Juan Antonio Karmy.
-//  Licensed under MIT License
-//
-//  See https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/ for Swift Language Reference
-//
-//  See Juan Antonio Karmy - http://karmy.co | http://twitter.com/jkarmy
-//
-// |=------------------------------------------------------=|
-
+//: [Previous](@previous)
+//: # Initialization 初始化
 
 import UIKit
-import CoreBluetooth;
-
 
 struct Celsius {
     var temperatureInCelsius: Double
@@ -35,7 +24,6 @@ struct Other {
     var temp: Double
     var otherProp: Int = 10
 }
-
 struct Size {
     var width = 0.0, height = 0.0
 }
@@ -63,28 +51,17 @@ struct Rect {
     }
 }
 
-/*
- ==================================
- */
-
-/*
+/*:
  For a class, every stored property must have an initial value, or have a value assigned to it inside the initializer.
  This reference image explains the relationship between designated initializers and convenience initializers.
  https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation01_2x.png
- • Rule 1
- A designated initializer must call a designated initializer from its immediate superclass.
- 
- • Rule 2
- A convenience initializer must call another initializer from the same class.
- 
- • Rule 3
- A convenience initializer must ultimately call a designated initializer.
- 
+ - Rule 1: A designated initializer must call a designated initializer from its immediate superclass.
+ - Rule 2: convenience initializer must call another initializer from the same class.
+ - Rule 3: convenience initializer must ultimately call a designated initializer.
  A simple way to remember this is:
  
  - Designated initializers must always delegate up.
  - Convenience initializers must always delegate across.
- 
  
  • Phase 1
  
@@ -103,22 +80,19 @@ struct Rect {
  - Finally, any convenience initializers in the chain have the option to customize the instance and to work with self.
  
  Also, keep in mind that:
- • Rule 1
- If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
+ - Rule 1
+ - If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
  
- • Rule 2
- If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as
+ - Rule 2
+ - If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as
  per rule 1, or by providing a custom implementation as part of its definition—then it automatically inherits all of the superclass convenience initializers.
  
- NOTE
- A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2.
- 
- 
+ - NOTE: A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2.
  */
 
 class Human {
     var gender: String
-    init(){
+    init() {
         self.gender = "Female"
     }
 }
@@ -129,37 +103,24 @@ class Person: Human {
         //Phase 1: Initialize class-defined properties and call the superclass initializer.
         self.name = name
         super.init()
-        //-------
-        
         //Phase 2: Further customization of local and inherited properties.
         self.gender = "Male"
-        //-------
     }
     convenience init(partialName name: String){
         //Phase 1: Call designated initializer
         let newName = "\(name) Karmy"
         self.init(fullName: newName)
-        //-------
-        
         //Phase 2: Access to self and properties
         self.name = "John Karmy"
-        //-------
-        
     }
 }
 
-/*
- ==================================
- */
-
-/*
+/*:
  Failable initializers allow us to return nil during initialization in case there was a problem.
  The object being initalized is treated as an optional.
  You can also define a failable initializer that returns an implicitly unwrapped optional instance by writing init!
+ - For enums, nil can be returned at any point of initalizations
  */
-
-// For enums, nil can be returned at any point of initalizations
-
 enum TemperatureUnit {
     case Kelvin, Celsius, Fahrenheit
     init?(symbol: Character) {
@@ -175,9 +136,7 @@ enum TemperatureUnit {
         }
     }
 }
-
-// For class instances, nil can only be returned after initalizing all properties.
-
+//: - For class instances, nil can only be returned after initalizing all properties.
 class Product {
     let name: String!
     init?(name: String) {
@@ -185,16 +144,10 @@ class Product {
         if name.isEmpty { return nil }
     }
 }
-
-/*
- ==================================
- */
-
-/*
+/*:
  You can pre-initialize properties by running code inside a closure. Since the execution happens before all other properties are initialized,
  you can't access other properties nor call self inside the closure.
  */
-
 struct Checkerboard {
     let boardColors: [Bool] = {
         var temporaryBoard = [Bool]()
@@ -213,26 +166,16 @@ struct Checkerboard {
     }
 }
 
-/*
- ==================================
- */
-
-class ViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        let bodyTemperature = Celsius(37.0)
-        print((bodyTemperature.temperatureInCelsius))
-        
-        let person = Person(fullName: "John")
-        print(person.name)
-        
-        let other = Other(temp: 20, otherProp: 10)
-        print(other.otherProp)
-        
-        if let product = Product(name: "Apple"){
-            print("Product is not nil. Names \(product.name)")
-        }
-        
-    }
+let bodyTemperature = Celsius(37.0)
+((bodyTemperature.temperatureInCelsius))
+let person = Person(fullName: "John")
+(person.name)
+let other = Other(temp: 20, otherProp: 10)
+(other.otherProp)
+if let product = Product(name: "Apple"){
+    ("Product is not nil. Names \(product.name)")
 }
-
+/*:
+ ***
+ [Next](@next)
+ */

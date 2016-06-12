@@ -4,26 +4,10 @@ import Foundation
 
 
 
-//注释 多行注释可以嵌套
-/*
-
- /*
- 第一层注释
- 第二层注释
- */
-
- */
 
 
-// 类型转换
-let a1: UInt8 = 10
-let b1: UInt16 = 100
-print("\(UInt16(a1) + b1)")
 
-let sa = 3
-let pi = 3.1415
-let add = Double(sa) + pi
-print(add)
+
 
 // 可选类型:处理值可能缺失的情况
 let Str = "1234"

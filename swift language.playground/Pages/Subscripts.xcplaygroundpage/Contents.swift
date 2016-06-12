@@ -2,7 +2,6 @@
 
 //: # subscripts
 
-import UIKit
 
 struct Matrix {
     let rows: Int, columns: Int
@@ -30,24 +29,20 @@ struct Matrix {
     }
 }
 
-class ViewController: UIViewController {
-    var matrix = Matrix(rows: 2, columns: 2)
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //This is setting up the first position of the matrix
-        matrix[0, 0] = 2.5
-        let number = matrix[0,0]
-        print(number)
-        //This call will fail, since it's out of bounds.
-        matrix[3, 3] = 4.5
-    }
-}
+var matrix = Matrix(rows: 2, columns: 2)
+//This is setting up the first position of the matrix
+matrix[0, 0] = 2.5
+let number = matrix[0,0]
+//This call will fail, since it's out of bounds.
+//matrix[3, 3] = 4.5
+
 
 //: 扩展添加下标
 extension String {
+    //返回指字符串指定位置的字符
     subscript(idx: Int) -> String {
         get {
-            if idx > -1 && idx < self.characters.count{
+            if idx > -1 && idx < self.characters.count {
                 var count = 0
                 var result = ""
                 for ch in self.characters{

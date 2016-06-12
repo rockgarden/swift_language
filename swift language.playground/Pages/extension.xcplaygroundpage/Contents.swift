@@ -16,7 +16,7 @@ extension Int {
     }
 }
 
-5.times{(print("swift"))}
+5.times{("swift")}
 
 /// protocol extension
 extension CustomStringConvertible {

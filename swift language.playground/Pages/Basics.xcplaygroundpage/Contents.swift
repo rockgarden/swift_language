@@ -18,8 +18,18 @@ let hello = "Hola, qué tal"
 //一行中声明多个变量或者常量，用逗号隔开
 var a = 3, b = 4, c = 5, d = "反斜杠"
 ("占位符: \(d)")
-// 三目运算符
+//: 三目运算符
 var ab = a>b ? "a>b":"a<b"
+
+//: 类型转换
+let a1: UInt8 = 10
+let b1: UInt16 = 100
+("\(UInt16(a1) + b1)")
+
+let sa = 3
+let pi = 3.1415
+let add = Double(sa) + pi
+(add)
 
 //Optionals can be nil or the number they store, if any.
 var optionalInteger: Int?
@@ -128,5 +138,12 @@ let age2 = 10
 assert(age2 >= 0, "年龄要大于0") //<0时可触发
 assert(true == true, "True isn't equal to false")
 
+//注释 多行注释可以嵌套
+/*
+ /*
+ 第一层注释
+ 第二层注释
+ */
+ */
 
 //: [Next](@next)

@@ -1,9 +1,7 @@
 //: [Previous](@previous)
 
-import UIKit
-import CoreBluetooth;
-
-/*
+//: # Enum
+/*:
  Definition of an Enum
  In this case, there's no default value for the enum members.
  */
@@ -13,12 +11,13 @@ enum CompassPoint {
     case East
     case West
 }
-//等效于
-//enum CompassPoint {
-//    case North, South, East, West
-//}
-var someEnum = CompassPoint.East
+//:等效于
+enum CompassPointA {
+    case North, South, East, West
+}
 
+var someEnum = CompassPoint.East
+var someEnumA = CompassPointA.East
 //Once the type is known, it can be omitted for reassignment.
 someEnum = .West
 ("This is the enum: \(someEnum)")
@@ -35,9 +34,9 @@ case .West:
 }
 
 
-/*
+/*:
  显式定义枚举成员
- Defines an enum with members with explicit types.
+ - Defines an enum with members with explicit types.
  */
 enum Barcode {
     case UPCA(Int, Int, Int, Int)
@@ -57,7 +56,7 @@ enum ASCIIControlCharacter: Character {
     case CarriageReturn = "\r"
 }
 let asciiCode = ASCIIControlCharacter.Tab
-print("Code is \(asciiCode.rawValue)")
+("Code is \(asciiCode.rawValue)")
 
 //In this case, since it's not guaranteed to find an enum for the specified rawValue, the initializer returns an optional
 if let lineFeed = ASCIIControlCharacter(rawValue: "\r") {
@@ -104,9 +103,9 @@ var p3 = planet.mars(density: 3.95, name: "火星", weight: 0.1)
 
 switch(p3){
 case planet.earth(var weight, var name):
-    print("earth \(weight)")
+    ("earth \(weight)")
 case let planet.mars(density:d, name:n, weight:w):
-    print("\(n)\(w)\(d)")
+    ("\(n)\(w)\(d)")
 default:
     break
 }

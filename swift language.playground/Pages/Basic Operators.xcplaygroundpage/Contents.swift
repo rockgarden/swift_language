@@ -47,11 +47,12 @@ var strI = "Hello Swift" as NSString //转成Foundation
 strI = "\(strI),\(i)"
 strI.substringWithRange(NSRange(location: 0, length: 5)) //可用NSString的相关方法
 
-//Nil Coalescing Operator
-//It's equivalent to (a ? b : c), but for optionals
-//空合并运算符
-//(a ?? b)对a进行空判断,若a有值就解封,否则返回b
-/* 表达式a必是可选类型 默认值b的类型必须要和a存储的类型保持一致 */
+/*:
+ Nil Coalescing Operator
+ - It's equivalent to (a ? b : c), but for optionals
+ - 空合并运算符 (a ?? b)对a进行空判断,若a有值就解封,否则返回b
+ - 表达式a必是可选类型 默认值b的类型必须要和a存储的类型保持一致
+ */
 let word="hello"
 var say:String?
 var content = say ?? word
@@ -83,6 +84,8 @@ for index in 0..<array.count{
 for (index, value) in array.enumerate() {
     print("value \(value) at index \(index)")
 }
+
+var image = UIImage(named: "1")
 
 
 //: [Next](@next)
