@@ -59,12 +59,9 @@ struct Rect {
  - Rule 2: convenience initializer must call another initializer from the same class.
  - Rule 3: convenience initializer must ultimately call a designated initializer.
  A simple way to remember this is:
- 
  - Designated initializers must always delegate up.
  - Convenience initializers must always delegate across.
- 
  • Phase 1
- 
  - A designated or convenience initializer is called on a class.
  - Memory for a new instance of that class is allocated. The memory is not yet initialized.
  - A designated initializer for that class confirms that all stored properties introduced by that class have a value. The memory for these stored properties is now initialized.
@@ -72,24 +69,16 @@ struct Rect {
  - This continues up the class inheritance chain until the top of the chain is reached.
  - Once the top of the chain is reached, and the final class in the chain has ensured that all of its store
  properties have a value, the instance’s memory is considered to be fully initialized, and phase 1 is complete.
- 
  • Phase 2
- 
  - Working back down from the top of the chain, each designated initializer in the chain has the option to
  customize the instance further. Initializers are now able to access self and can modify its properties, call its instance methods, and so on.
  - Finally, any convenience initializers in the chain have the option to customize the instance and to work with self.
- 
  Also, keep in mind that:
- - Rule 1
- - If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
- 
- - Rule 2
- - If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as
+ - Rule 1:If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
+ - Rule 2:If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as
  per rule 1, or by providing a custom implementation as part of its definition—then it automatically inherits all of the superclass convenience initializers.
- 
  - NOTE: A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2.
  */
-
 class Human {
     var gender: String
     init() {
