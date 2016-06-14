@@ -21,15 +21,15 @@ var reference1: Person?
 var reference2: Person?
 var reference3: Person?
 
-reference1 = Person(name: "John Appleseed")
-
 //At this point 3 strong references of "John Appleseed" are being stored.
+reference1 = Person(name: "John Appleseed")
 reference2 = reference1
 reference3 = reference1
 
 //John is still alive
 reference1 = nil
 reference2 = nil
+reference3
 
 //John is dead by now.
 reference3 = nil
@@ -37,6 +37,7 @@ reference3 = nil
 
 /*:
  Strong Reference Cycles Between Class Instances
+ 类实例之间的循环强引用
  */
 
 class Apartment {
@@ -56,16 +57,17 @@ var unit4A: Apartment?
 john = Tenant(name: "John Appleseed")
 unit4A = Apartment(unit: "4A")
 
-//Here's where the reference cycle is created.
+//创建循环强引用
 john!.apartment = unit4A
 unit4A!.tenant = john
-john = nil
-unit4A = nil
 
 // The variables are still references from inside the properties. This creates the reference cycle, and therefore, a memory leak.
 // A simple way around this would be to manually set the apartment and tenant properties to nil, and then set the outside references to nil.
+john!.apartment = nil
+unit4A!.tenant = nil
 john = nil
 unit4A = nil
+
 /*:
  ### Resolving Strong Reference Cycles Between Class Instances
  Weak and unowned references enable one instance in a reference cycle to refer to the other instance without keeping a strong hold on it. The instances can then refer to each other without creating a strong reference cycle.

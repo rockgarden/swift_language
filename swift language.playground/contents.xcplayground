@@ -16,6 +16,7 @@
         <page name='Initialization'/>
         <page name='Deinitialization'/>
         <page name='ARC'/>
+        <page name='Optional Chaining'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='extension'/>
