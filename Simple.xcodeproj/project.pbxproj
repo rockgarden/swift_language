@@ -28,8 +28,6 @@
 		44A11AF81D032DD000C8A97D /* SwiftLocalizedString.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftLocalizedString.playground; sourceTree = "<group>"; };
 		44B7B00F1D0326F20030EC8D /* UIStackView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = UIStackView.playground; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
-		44DCB24B1CF9C20C001B82D9 /* 17_Error_Handling.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 17_Error_Handling.playground; sourceTree = "<group>"; };
-		44DCB24C1CF9C20C001B82D9 /* 18_Type Casting copy.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "18_Type Casting copy.playground"; sourceTree = "<group>"; };
 		44DCB24D1CF9C20C001B82D9 /* 20_Extensions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 20_Extensions.playground; sourceTree = "<group>"; };
 		44DCB24E1CF9C20C001B82D9 /* 21_Protocols.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 21_Protocols.playground; sourceTree = "<group>"; };
 		44DCB24F1CF9C20C001B82D9 /* 22_Generics.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 22_Generics.playground; sourceTree = "<group>"; };
@@ -53,15 +51,13 @@
 		F1E89DAE1A37AD53007C4166 = {
 			isa = PBXGroup;
 			children = (
-				44A11AF81D032DD000C8A97D /* SwiftLocalizedString.playground */,
-				44DCB24B1CF9C20C001B82D9 /* 17_Error_Handling.playground */,
-				44DCB24C1CF9C20C001B82D9 /* 18_Type Casting copy.playground */,
 				44DCB24D1CF9C20C001B82D9 /* 20_Extensions.playground */,
 				44DCB24E1CF9C20C001B82D9 /* 21_Protocols.playground */,
 				44DCB24F1CF9C20C001B82D9 /* 22_Generics.playground */,
 				44DCB2501CF9C20C001B82D9 /* 23_Access Control.playground */,
-				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44DCB2511CF9C20C001B82D9 /* 24_Higher Order Functions.playground */,
+				44A11AF81D032DD000C8A97D /* SwiftLocalizedString.playground */,
+				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,
 				44D7694E1CFDD9680031291B /* Help.playground */,
 				44460DEF1CF89B0F008BE7E1 /* swift language.playground */,

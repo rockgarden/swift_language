@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-//: #Optional Chaining
+//: # Optional Chaining
 
 import UIKit
 
