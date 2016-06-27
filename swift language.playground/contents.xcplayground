@@ -19,9 +19,9 @@
         <page name='Optional Chaining'/>
         <page name='Error_Handling'/>
         <page name='Type Casting copy'/>
+        <page name='Extensions'/>
         <page name='didSet'/>
         <page name='guard'/>
-        <page name='extension'/>
         <page name='map'/>
         <page name='singleton'/>
         <page name='Generics'/>
