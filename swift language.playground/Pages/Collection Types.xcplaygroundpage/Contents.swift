@@ -203,17 +203,12 @@ let keyArr = [String](person.keys)
 let keyValue = [String](person.values)
 
 
-// NOTE
-
-// You can use your own custom types as dictionary key types by making
-// them conform to the Hashable protocol from Swift’s standard library.
-// Types that conform to the Hashable protocol must provide a
-// gettable Int property called hashValue, and must also provide an
-// implementation of the “is equal” operator (==). The value returned by a
-// type’s hashValue property is not required to be the same across different
-// executions of the same program, or in different programs.
-
-// All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default
+/*:
+ - NOTE:
+  You can use your own custom types as dictionary key types by making them conform to the Hashable protocol from Swift’s standard library.
+  Types that conform to the Hashable protocol must provide a gettable Int property called hashValue, and must also provide an implementation of the “is equal” operator (==). The value returned by a type’s hashValue property is not required to be the same across different executions of the same program, or in different programs.
+ */
+//: All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default
 
 
 //: [Next](@next)

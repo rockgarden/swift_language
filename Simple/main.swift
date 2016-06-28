@@ -2,13 +2,6 @@
 
 import Foundation
 
-
-
-
-
-
-
-
 // 可选类型:处理值可能缺失的情况
 let Str = "1234"
 let convertNumber = Int(Str)
@@ -59,40 +52,3 @@ if quotation==sameQu{
 
 
 
-//MARK:- protocol
-protocol Strokable {
-    var strokeWidth: Double {get set}
-}
-
-protocol Fullable {
-    var fullColor: Color? {get set}
-}
-enum Color { //fullColor协议属性的类型定义
-    case red,green,blue,yellow,cyan
-}
-
-protocol HasArea: Fullable, Strokable {//协议多继承
-    var area: Double {get}
-}
-protocol Mathable {
-    static var pi: Double {get}
-    static var e: Double {get}
-}
-
-struct Rect: HasArea, Mathable {
-    var width: Double
-    var height: Double
-    init(width:Double, height:Double){
-        self.width = width
-        self.height = height
-    }
-    var fullColor: Color?
-    var strokeWidth: Double = 0.0
-    var area: Double {
-        get{
-            return width * height
-        }
-    }
-    static var pi:Double = 3.14159535
-    static var e:Double = 2.71828
-}
