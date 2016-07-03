@@ -57,7 +57,7 @@ func factorial( max: Int) -> Int {
     }
     return result
 }
-debugPrint("factorial Result:\(factorial(6))") //注意不要Int超界
+("factorial Result:\(factorial(6))") //注意不要Int超界
 
 
 // 函数作参数
@@ -72,7 +72,7 @@ func multiplyInts(a:Int,b:Int)->Int{
 }
 
 func printMathResult(mathFunction:(Int,Int)->Int,a:Int,b:Int){
-    debugPrint("MathResult:\(mathFunction(a,b))")
+    ("MathResult:\(mathFunction(a,b))")
 }
 printMathResult(multiplyInts,a: 2,b: 3)
 
@@ -80,9 +80,9 @@ printMathResult(multiplyInts,a: 2,b: 3)
 var stringFunction: (String) -> String = sayHello
 
 
-//nested functions
-//可以使用函数类型作为返回函数。
-//在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
+//: ## nested functions
+//: 可以使用函数类型作为返回函数。
+//: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
 func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
     func stepForward(input: Int) -> Int { return input + 1 }
     func stepBackward(input: Int) -> Int { return input - 1 }

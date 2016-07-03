@@ -142,7 +142,6 @@ extension Int {
  变异实例方法
  Structure and enumeration methods that modify self or its properties must mark the instance method as mutating, just like mutating methods from an original implementation.
  */
-
 extension Int {
     mutating func square() {
         self = self * self

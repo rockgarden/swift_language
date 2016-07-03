@@ -4,6 +4,7 @@ import UIKit
 
 var result = [1,2,3,4,5].flatMap{$0 * 2}
 result
+//数组中的每个元素乘以2
 result = [1,2,3,4,5,6].map{$0 * 2}
 result
 result = [1,2,3,4,5,6].filter{$0 > 2}

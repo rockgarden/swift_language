@@ -1,7 +1,6 @@
 // Created by Tien Vu - https://github.com/Tj3n
 
-//: HIGH ORDER FUNCTIONS
-// Playground - noun: a place where people can play
+//: # HIGH ORDER FUNCTIONS 高阶函数
 
 import UIKit
 

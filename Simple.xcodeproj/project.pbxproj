@@ -28,7 +28,6 @@
 		44A11AF81D032DD000C8A97D /* SwiftLocalizedString.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftLocalizedString.playground; sourceTree = "<group>"; };
 		44B7B00F1D0326F20030EC8D /* UIStackView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = UIStackView.playground; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
-		44DCB24F1CF9C20C001B82D9 /* 22_Generics.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = 22_Generics.playground; sourceTree = "<group>"; };
 		44DCB2501CF9C20C001B82D9 /* 23_Access Control.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "23_Access Control.playground"; sourceTree = "<group>"; };
 		44DCB2511CF9C20C001B82D9 /* 24_Higher Order Functions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "24_Higher Order Functions.playground"; sourceTree = "<group>"; };
 		F1E89DB71A37AD53007C4166 /* Simple */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simple; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +48,6 @@
 		F1E89DAE1A37AD53007C4166 = {
 			isa = PBXGroup;
 			children = (
-				44DCB24F1CF9C20C001B82D9 /* 22_Generics.playground */,
 				44DCB2501CF9C20C001B82D9 /* 23_Access Control.playground */,
 				44DCB2511CF9C20C001B82D9 /* 24_Higher Order Functions.playground */,
 				44A11AF81D032DD000C8A97D /* SwiftLocalizedString.playground */,

@@ -2,10 +2,15 @@
 
 import CoreData
 import Foundation
+import UIKit
 
+var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
+UIColor.redColor().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+red
+green
+blue
+alpha
 
-//数组中的每个元素乘以2
-(1...1024).map{$0 * 2}
 
 //数组中的元素求和
 (1...1024).reduce(0,combine: +)

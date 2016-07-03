@@ -1,7 +1,9 @@
 //: [Previous](@previous)
 
 //: # Error Handling
-
+import CoreData
+import Foundation
+import UIKit
 /*:
  ## Representing and Throwing Errors
  Swift enumerations are particularly well suited to modeling a group of related error conditions,
@@ -92,6 +94,20 @@ do {
 } catch VendingMachineError.InsufficientFunds(let coinsNeeded) {
     print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
 }
+
+// 异常Catch
+enum Error:ErrorType {
+    case WrongJSON
+}
+func testTry() throws {
+    do {
+        try NSJSONSerialization.JSONObjectWithData(NSData(), options: .AllowFragments)
+    } catch {
+        throw Error.WrongJSON
+    }
+}
+
+do {try testTry()} catch Error.WrongJSON {}
 
 
 //: ## Converting Errors to Optional Values
