@@ -23,6 +23,7 @@
         <page name='Extensions'/>
         <page name='Protocols'/>
         <page name='Generics'/>
+        <page name='Access Control'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='singleton'/>
