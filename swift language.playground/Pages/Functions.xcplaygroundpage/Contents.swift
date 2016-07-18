@@ -1,6 +1,6 @@
 //: [Previous](@previous)
-
-import Foundation
+import UIKit
+//: # Functions
 
 func sayHello(personName: String) -> String{
     return "Hello \(personName)!"
@@ -12,20 +12,26 @@ func minMax(array: [Int]) -> (min: Int, max:Int)? {
     if array.isEmpty {return nil}
     return (0,1)
 }
-minMax([])
-
-//Note: returning void translates in returning an empty tuple: ()
-
-//外部和本地参数名称
-//Here we are using external and local params names.
-//最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
-//注意外部名称将自动提供给每一个预定义的参数.
+/*:
+ - Note: returning void translates in returning an empty tuple: ()
+ - 外部和本地参数名称
+ Here we are using external and local params names.
+ - 最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
+ - Note: 注意外部名称将自动提供给每一个预定义的参数.
+ */
 func join(string s1: String, toString s2: String, withJoiner joiner: String = "only")
     -> String {
         return s1 + joiner + s2
 }
 join(string: "Hello", toString: "World", withJoiner: "New")
 join(string: "", toString: "")
+
+var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
+UIColor.redColor().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+red
+green
+blue
+alpha
 
 //variadic param 可变的参数,可以获取指定类型的多个值.
 func arithmeticMean(numbers: Double...) -> Double {

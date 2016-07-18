@@ -4,36 +4,6 @@ import CoreData
 import Foundation
 import UIKit
 
-var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
-UIColor.redColor().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-red
-green
-blue
-alpha
-
-
-//数组中的元素求和
-(1...1024).reduce(0,combine: +)
-
-//验证在字符串中是否存在指定单词
-let words = ["Swift","iOS","cocoa","OSX","tvOS"]
-let tweet = "This is an example tweet larking about Swift"
-let valid = !words.filter({tweet.containsString($0)}).isEmpty
-valid
-words.contains(tweet.containsString)
-tweet.characters
-    .split(" ")
-    .lazy
-    .map(String.init)
-    .contains(Set(words).contains)
-
-
-
-
-//map以及范围和三元运算符的简单使用
-let name = "uraimo"
-(1...4).forEach{print("Happy Birthday " + (($0 == 3) ? "dear \(name)":"to You"))}
-
 //过滤数组中的数字
 extension SequenceType{
     typealias Element = Self.Generator.Element
@@ -88,11 +58,7 @@ sameprimes.subtractInPlace((2...Int(sqrt(Double(n))))
     .flatMap{(2*$0).stride(through:n, by:$0)})
 sameprimes.sort()
 
-//通过解构元组交换
-var a=1,b=2
-(a,b) = (b,a)
-a //2
-b //1
+
 
 //swift 数组\struct\enum是值类型 速度快 但数据变化频繁 用NS 引用类型数据
 var array = [1,2,3]
@@ -106,22 +72,5 @@ var nsArray2 = nsArray
 nsArray2.addObject(4)
 nsArray
 
-
-/*: @available
- @available放在函数（方法），类或者协议前面。表明这些类型适用的平台和操作系统。
- 特性参数：星号（*），表示包含了所有平台，目前有以下几个平台：
- iOS
- iOSApplicationExtension
- OSX
- OSXApplicationExtension
- watchOS
- watchOSApplicationExtension
- tvOS
- tvOSApplicationExtension
- */
-@available(iOS 9, *)
-func myMethod() {
-    // do something
-}
 
 //: [Next](@next)

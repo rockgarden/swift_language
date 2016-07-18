@@ -20,13 +20,14 @@
         <page name='Error_Handling'/>
         <page name='Type Casting copy'/>
         <page name='Extensions'/>
+        <page name='Protocols'/>
+        <page name='Generics'/>
+        <page name='Access Control'/>
+        <page name='Higher Order Functions'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='singleton'/>
-        <page name='Generics'/>
-        <page name='Other'/>
-        <page name='Access Control'/>
-        <page name='Protocols'/>
-        <page name='Higher Order Functions'/>
+        <page name='SequenceType'/>
+        <page name='annotation'/>
     </pages>
 </playground>

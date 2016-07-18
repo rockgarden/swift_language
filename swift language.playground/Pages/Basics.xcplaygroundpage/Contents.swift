@@ -1,24 +1,30 @@
 //: [Previous](@previous)
 
-//THE BASICS
+//: # THE BASICS
 
 import Foundation
 import UIKit
 
-//变量var和常量let
-//不能包含数学符号,箭头,连线与制表符,不能以数字开头*/
+/*: 
+ ## 变量var和常量let
+ 不能包含数学符号,箭头,连线与制表符,不能以数字开头
+ */
 let 你好 = "nihao"
 var 😊 = "笑"
-debugPrint("\u{02197}") //颜字符
+("\u{02197}") //颜字符
 var 眼睛 = "👀"
 var str = "Hello, playground"
 let hello = "Hola, qué tal"
-
 //var b11=a11=20  不支持连续赋值
 //一行中声明多个变量或者常量，用逗号隔开
 var a = 3, b = 4, c = 5, d = "反斜杠"
 ("占位符: \(d)")
-//: 三目运算符
+
+//: ## 三目(元)运算符
+let name = "uraimo"
+var happyStr = ""
+(1...4).forEach{ happyStr = ("Happy Birthday " + (($0 == 3) ? "dear \(name)":"to You"))}
+happyStr
 var ab = a>b ? "a>b":"a<b"
 
 //: 类型转换
@@ -73,7 +79,7 @@ let result = anotherNumber + number
 typealias AudioResolution = UInt16
 AudioResolution.min
 
-//元组
+//: ## 元组
 //Tuples can be of any kind and of any number of elements
 let success = (200, "Success")
 typealias Success = (Int, String)
@@ -85,8 +91,8 @@ let (code, message) = success
 //分解时候要忽略的部分用 _ 表示
 //If you just need one value.
 let (response, _) = success
-print("The code is \(response)")
-print("\(success.0)")
+("The code is \(response)")
+("\(success.0)")
 
 //Values can be accessed like indexes:
 success.0
@@ -102,10 +108,14 @@ someTuple.assertion
 var scorKey:(math:Int,english:Int,assessment:String)
 scorKey = (english:80,math:89,assessment:"A")
 
-//元组(元组)
 var peopleRec:(Int,String,(Int,Int))
 peopleRec = (10,"元组元组",(28,32))
-print(peopleRec.2.0)
+(peopleRec.2.0)
+//: ### 通过解构元组交换
+var aa=1,bb=2
+(aa,bb) = (bb,aa)
+aa
+bb
 
 //Optionals whether have a value or not.
 let optional: Int? = 2
@@ -138,7 +148,7 @@ let age2 = 10
 assert(age2 >= 0, "年龄要大于0") //<0时可触发
 assert(true == true, "True isn't equal to false")
 
-//注释 多行注释可以嵌套
+//: 注释 多行注释可以嵌套
 /*
  /*
  第一层注释

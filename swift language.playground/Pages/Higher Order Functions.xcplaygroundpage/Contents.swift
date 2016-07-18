@@ -53,6 +53,17 @@ let filtered = array.filter { (value) -> Bool in
 }
 let filteredShort = array.filter({ $0 > 2 })
 filteredShort
+// 验证在字符串中是否存在指定单词
+let words = ["Swift", "iOS", "cocoa", "OSX", "tvOS"]
+let tweet = "This is an example about Swift"
+let valid = words.filter({tweet.containsString($0)}).isEmpty
+valid
+words.contains(tweet.containsString)
+tweet.characters
+    .split(" ")
+    .lazy
+    .map(String.init)
+    .contains(Set(words).contains)
 
 /*: 
  ## Reduce
@@ -65,6 +76,7 @@ let reduced = array.reduce(0) { (value1, value2) -> Int in
 }
 let reducedShort = array.reduce(0, combine: ({ $0 + $1 }))
 reducedShort
+array.reduce(0, combine: +)
 // "test" is starting value
 let reducedShort2 = array.reduce("test", combine: ({ "\($0)\($1)"}))
 reducedShort2
@@ -80,12 +92,13 @@ array.reduce(0, combine: combinator)
  重新定义一个 map 函数
  */
 func rmap(elements: [Int], transform: (Int) -> Int) -> [Int] {
-    return elements.reduce([Int](), combine: { (var acc: [Int], obj: Int) -> [Int] in
-        acc.append(transform(obj))
-        return acc
+    return elements.reduce([Int](), combine: { (acc: [Int], obj: Int) -> [Int] in
+        var accvar = acc
+        accvar.append(transform(obj))
+        return accvar
     })
 }
-(rmap([1, 2, 3, 4], transform: { $0 * 2}))
+(rmap([1, 2, 3, 4], transform: { $0 * 3}))
 //var parameters are deprecated and will be removed in swift 3
 
 
