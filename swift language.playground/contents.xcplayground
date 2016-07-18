@@ -4,7 +4,6 @@
         <page name='Basics'/>
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
-        <page name='map'/>
         <page name='Control Flow'/>
         <page name='Functions'/>
         <page name='Closures'/>
@@ -21,12 +20,13 @@
         <page name='Error_Handling'/>
         <page name='Type Casting copy'/>
         <page name='Extensions'/>
-        <page name='Protocols'/>
-        <page name='Generics'/>
-        <page name='Access Control'/>
         <page name='didSet'/>
         <page name='guard'/>
         <page name='singleton'/>
+        <page name='Generics'/>
         <page name='Other'/>
+        <page name='Access Control'/>
+        <page name='Protocols'/>
+        <page name='Higher Order Functions'/>
     </pages>
 </playground>
