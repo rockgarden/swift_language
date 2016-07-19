@@ -91,6 +91,7 @@ extension Stack {
 
 /*
  ## Type Constraints 类型约束
+ T占位符后面添加冒号和协议类型，这种表示方式被称为泛型约束
  */
 
 protocol SomeProtocol {}
@@ -113,6 +114,10 @@ func findIndex<T: Equatable>(array: [T], _ valueToFind: T) -> Int? {
         }
     }
     return nil
+}
+
+func isEquals<T: Comparable>(a: T, b: T) -> Bool {
+    return (a == b)
 }
 
 /*

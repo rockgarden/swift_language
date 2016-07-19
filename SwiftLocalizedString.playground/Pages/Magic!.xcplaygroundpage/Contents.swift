@@ -57,6 +57,8 @@ enum Swift: String, LocalizedEnum {
 }
 
 print(Swift.Awesome)
+print(Swift.Awesome.rawValue)
 print(Swift.Magic)
+print(Swift.Magic.rawValue)
 print(Swift.Powerful)
 print(Swift.Powerful.rawValue)
