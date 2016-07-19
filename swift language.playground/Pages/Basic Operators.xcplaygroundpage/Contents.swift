@@ -1,12 +1,10 @@
 //: [Previous](@previous)
-
-// BASIC OPERATORS
-
 import UIKit
-
+//: # BASIC OPERATORS
+let hello = "Hola, qué tal"
+var word = "world"
 let (x, y) = (1, 2)
-
-// 运算符
+//: ## 运算符
 var c1 = 19/4
 var ww = 4.0/0.0
 var fff = 0.0/0.0 //非数
@@ -19,24 +17,28 @@ var a111 = 5
 var b111 = a111++ + 6 //先计算再自增
 var c111 = ++a111 + 6 //自增再计算
 
-// 溢出运算符 &+,&-,&*,&/,&%
+//: ## 溢出运算符 &+,&-,&*,&/,&%
 var cmin = UInt8.min
 //var f = cmin-1 //error
 cmin = cmin &- 1 //下溢
 
-// 浮点数求余
+//: ## 浮点数求余
 var rem=10%2.3
 
-/*: 特征运算符
+/*: 
+ ## 特征运算符
  - 等价于 ( === )
  - 不等价于 ( !== )
  */
 //var c = (a === b) //ab指向的类型实例相同时c为ture
 
-//: 字符串String可用+拼接
-let string = "hello, " + "world"
-
-//: 字符串String插值
+/*
+ ## 字符串拼接
+ strings can be achieved by "sum" or by \()
+ */
+(hello + " " + word)
+("\(hello) \(word)")
+//: ### 字符串String插值
 var apples = 10
 var oranges = 4
 ("I have \(apples + oranges) fruits") //自动转型
@@ -46,14 +48,18 @@ var i = 200
 var strI = "Hello Swift" as NSString //转成Foundation
 strI = "\(strI),\(i)"
 strI.substringWithRange(NSRange(location: 0, length: 5)) //可用NSString的相关方法
-
+//: ## 三目(元)运算符
+let name = "uraimo"
+var happyStr = ""
+(1...4).forEach{ happyStr = ("Happy Birthday " + (($0 == 1) ? "dear \(name)":"to You"))}
+happyStr
+var ab = a > b ? "a>b":"a<b"
 /*:
  Nil Coalescing Operator
  - It's equivalent to (a ? b : c), but for optionals
  - 空合并运算符 (a ?? b)对a进行空判断,若a有值就解封,否则返回b
  - 表达式a必是可选类型 默认值b的类型必须要和a存储的类型保持一致
  */
-let word="hello"
 var say:String?
 var content = say ?? word
 
