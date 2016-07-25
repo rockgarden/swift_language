@@ -4,6 +4,7 @@ public var pastAllowedLengthFunction: ((String) -> Range<String.Index>?)?
 
 private let messageCellIdentifier = "MessageCell"
 
+/// Table用法的范例
 private class GroupChatController: UITableViewController {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,8 +43,7 @@ private class GroupChatController: UITableViewController {
     }
 }
 
-
-
+//TODO: 自定义style
 private let chatController = GroupChatController(style: .Plain)
 private var chatView: UIView {
     return chatController.view

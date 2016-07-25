@@ -1,7 +1,7 @@
 /*:
 [Table of Contents](Table%20of%20Contents) | [Previous](@previous) | [Next](@next)
 ****
-# Understanding Value Semantics
+# Understanding Value Semantics 理解值语义
 Sequences and collections in the standard library use _value semantics_, which makes it easy to reason about your code. Every variable has an independent value, and references to that value aren't shared. For example, when you pass an array to a function, that function can't accidentally modify the caller's copy of the array.
 
 Over the next few pages, we'll use a recipe app with a shopping list feature to illustrate how collections work in the standard library.

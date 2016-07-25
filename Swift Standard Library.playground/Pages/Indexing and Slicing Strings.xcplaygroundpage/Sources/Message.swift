@@ -23,7 +23,6 @@ private var dateFormatter: NSDateFormatter = {
     formatter.doesRelativeDateFormatting = true
     formatter.dateStyle = .ShortStyle
     formatter.timeStyle = .ShortStyle
-    
     return formatter
 }()
 
