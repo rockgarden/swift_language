@@ -1,11 +1,9 @@
 /*:
  [Table of Contents](Table%20of%20Contents) | [Previous](@previous) | [Next](@next)
  ****
- # Indexing and Slicing Strings
+ # Indexing and Slicing Strings 索引和切片字符串
  It's common to think of a string as a sequence of the characters you see on screen. However, what you perceive as a character may in some cases be represented by multiple, variable-length Unicode scalars in memory. For example, it requires more bits to encode a character like the top hat emoji (`🎩`) than a simple character like the letter `A`, and it requires multiple Unicode scalars to represent characters with combining marks, such as é⃝. For more information about Unicode support in Swift, see [Strings and Characters](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/StringsAndCharacters.html#//apple_ref/doc/uid/TP40014097-CH7-ID285) in _The Swift Programming Language_.
- 
  In Swift, the `String` type handles these details for you. Each [Character](xcdoc://?url=developer.apple.com/library/etc/redirect/xcode/ios/1048/documentation/Swift/Reference/Swift_Character_Structure/index.html) value in a string represents any user-perceived Unicode character, regardless of the character's length or representation in memory. However, because of this abstraction, it doesn't make sense to index into a string using integers. Instead, the standard library includes [String.Index](xcdoc://?url=developer.apple.com/library/etc/redirect/xcode/ios/1048/documentation/Swift/Reference/Swift_CharacterView-Index_Structure/index.html), a type that better represents a position in any string, regardless of its representation in memory.
- 
  Take a look at the string below, which contains various Unicode characters of different sizes and complexity.
  */
 var str = "Héllo, 🇺🇸laygr😮und!"
@@ -13,9 +11,7 @@ var str = "Héllo, 🇺🇸laygr😮und!"
  Here's what it looks like when you plot the string's characters against their user-perceived indexes. Notice that even though the flag (🇺🇸) is actually a grapheme cluster made up of two combining Unicode scalars, Swift counts the flag as just one user-perceived character. This makes tasks like form validation, cursor positioning, and text wrapping much simpler to implement. Counting, indexing, and slicing are all based on user-perceived character indexes, rather than the layout of the string in memory.
  */
 visualize(str)
-
 /*:
- 
  - Experiment: Try changing the `str` variable and see how the string visualizations in the playground change. You can add special characters by placing your cursor inside the string and going to Edit > Emoji & Symbols in the menu bar.
  When you're done, you can copy and paste the original string back into the variable: `"Héllo, 🇺🇸laygr😮und!"`
  Take a look at the string counts in the code below. The `characters` property contains a collection of the Unicode characters in the string, while the `utf16` property contains a collection of the UTF-16 code points. If you compare the number of user-perceived characters with the number of UTF-16 code points in the string, you'll find that the number of UTF-16 code points is higher than the number of Unicode characters.
@@ -62,11 +58,9 @@ showChatView { (contents: String) -> Range<String.Index>? in
     let range = contents.startIndex.advancedBy(messageCharacterLimit, limit: contents.endIndex)..<contents.endIndex
     return !range.isEmpty ? range : nil
 }
-
 /*:
  - Experiment: Try changing the `messageCharacterLimit` variable. Notice how messages that are less than the character limit are handled properly by the `advancedBy` method.
  **Checkpoint:**
  At this point, you've read about the `String` type's Unicode character handling and learned how to index into and slice strings. On the next page, you'll learn how to customize the way your types are printed and displayed.
- 
  [Table of Contents](Table%20of%20Contents) | [Previous](@previous) | [Next](@next)
  */

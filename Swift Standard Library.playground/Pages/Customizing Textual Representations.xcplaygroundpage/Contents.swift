@@ -3,9 +3,7 @@
 ****
 # Customizing Textual Representations of Values
 When you display a model object on screen or debug code, it's often useful to create a textual representation of a value. In Swift, you use the `CustomStringConvertible` and `CustomDebugStringConvertible` protocols to declare that a type can be represented as a string for display or debugging purposes. When you create a type that conforms to one of these protocols, printing facilities like `print`, `debugPrint`, and string interpolation will call into those functions to provide descriptions of objects, rather than falling back to the default object description.
-
 Here's a new type, `Message`, along with a few instances of that type for a group chat:
-
 	struct Message {
 		let from: String
 		let contents: String
@@ -20,7 +18,6 @@ messages = [
 ]
 /*:
 If you print one of the messages, you get the default object description, which returns the description of each property of the struct in a list. This is okay–it does list all of the information in the struct–but it isn't formatted all that well for logging and debugging in this specific case: a chat app. You can adopt the `CustomDebugStringConvertible` protocol to customize how your type is represented for debugging.
-
 The `CustomDebugStringConvertible` protocol has a single required property, `debugDescription`. The string you return from this property is used by functions such as `debugPrint` to provide a description of the instance. Let's conform to `CustomDebugStringConvertible`, and then try printing a message.
 */
 extension Message: CustomDebugStringConvertible {
@@ -28,9 +25,7 @@ extension Message: CustomDebugStringConvertible {
         return "[\(date) From: \(from)] \(contents)"
     }
 }
-
-debugPrint(messages[0])
-
+(messages[0])
 /*:
 This description is suitable for debugging, however when you display a chat message to a user, you'll probably want to use a more user-friendly timestamp adjusted to their local time. Let's conform to `CustomStringConvertible`, the user-friendly equivalent to `CustomDebugStringConvertible`. By providing a `CustomStringConvertible` description, string interpolation and `print` will no longer fall back to the `debugDescription` property.
 */
@@ -42,12 +37,10 @@ dateFormatter.timeStyle = .ShortStyle
 
 extension Message: CustomStringConvertible {
     public var description: String {
-        return "\(contents)\n   \(from) \(dateFormatter.stringFromDate(date))"
+        return "\(contents)\n \(from) \(dateFormatter.stringFromDate(date))"
     }
 }
-
-print(messages[0])
-
+(messages[0])
 /*:
 **Checkpoint:** At this point in the chapter, you've learned how String provides Unicode APIs to simplify universal text processing. You've also learned how to provide string representations of types for debugging and display.
 

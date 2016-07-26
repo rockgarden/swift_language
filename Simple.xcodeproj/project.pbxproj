@@ -10,6 +10,23 @@
 		F1E89DBB1A37AD53007C4166 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E89DBA1A37AD53007C4166 /* main.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		446250BA1D47BA7B005D0B5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 446250B41D47BA7B005D0B5F /* CExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 467E3DED1CB55A6D002188E2;
+			remoteInfo = CExample;
+		};
+		446250C51D47BA82005D0B5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 46323CE01BE3D95B0086B6BC;
+			remoteInfo = ErrorHandling;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		F1E89DB51A37AD53007C4166 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -25,6 +42,25 @@
 /* Begin PBXFileReference section */
 		44460DEF1CF89B0F008BE7E1 /* swift language.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "swift language.playground"; sourceTree = "<group>"; };
 		44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Swift Standard Library.playground"; sourceTree = "<group>"; };
+		446250A51D47BA0F005D0B5F /* 2016-05-05-recursive-trampoline.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-05-05-recursive-trampoline.playground"; sourceTree = "<group>"; };
+		446250A61D47BA0F005D0B5F /* 2015-09-VariancePlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-09-VariancePlayground.playground"; sourceTree = "<group>"; };
+		446250A71D47BA0F005D0B5F /* 2015-10-MapFlatMapPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-10-MapFlatMapPlayground.playground"; sourceTree = "<group>"; };
+		446250A81D47BA0F005D0B5F /* 2015-11-12-SequenceTypeGeneratorTypePlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-11-12-SequenceTypeGeneratorTypePlayground.playground"; sourceTree = "<group>"; };
+		446250A91D47BA24005D0B5F /* 2015-11-Swift2ErrorHandlingPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-11-Swift2ErrorHandlingPlayground.playground"; sourceTree = "<group>"; };
+		446250AA1D47BA24005D0B5F /* 2016-01-6-Swift-One-Liners-Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-01-6-Swift-One-Liners-Playground.playground"; sourceTree = "<group>"; };
+		446250AB1D47BA24005D0B5F /* 2016-02-5-Bitwise-Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-02-5-Bitwise-Playground.playground"; sourceTree = "<group>"; };
+		446250AC1D47BA5A005D0B5F /* SwiftAndCPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftAndCPlayground.playground; sourceTree = "<group>"; };
+		446250B01D47BA7B005D0B5F /* CExample.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CExample.c; sourceTree = "<group>"; };
+		446250B11D47BA7B005D0B5F /* CExample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CExample.h; sourceTree = "<group>"; };
+		446250B21D47BA7B005D0B5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		446250B31D47BA7B005D0B5F /* module.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
+		446250B41D47BA7B005D0B5F /* CExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = CExample.xcodeproj; sourceTree = "<group>"; };
+		446250B71D47BA7B005D0B5F /* SwiftAndC.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = SwiftAndC.xcworkspace; sourceTree = "<group>"; };
+		446250B81D47BA7B005D0B5F /* SwiftAndCPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftAndCPlayground.playground; sourceTree = "<group>"; };
+		446250BE1D47BA82005D0B5F /* ErrorHandling-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ErrorHandling-Bridging-Header.h"; sourceTree = "<group>"; };
+		446250BF1D47BA82005D0B5F /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		446250C01D47BA82005D0B5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ErrorHandling.xcodeproj; sourceTree = "<group>"; };
 		44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Swift_LocalizedString.playground; sourceTree = "<group>"; };
 		44B7B00F1D0326F20030EC8D /* UIStackView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = UIStackView.playground; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
@@ -43,9 +79,84 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		446250AD1D47BA7B005D0B5F /* 2016-04-07-Swift-And-C */ = {
+			isa = PBXGroup;
+			children = (
+				446250AE1D47BA7B005D0B5F /* CExample */,
+				446250B71D47BA7B005D0B5F /* SwiftAndC.xcworkspace */,
+				446250B81D47BA7B005D0B5F /* SwiftAndCPlayground.playground */,
+			);
+			path = "2016-04-07-Swift-And-C";
+			sourceTree = "<group>";
+		};
+		446250AE1D47BA7B005D0B5F /* CExample */ = {
+			isa = PBXGroup;
+			children = (
+				446250AF1D47BA7B005D0B5F /* CExample */,
+				446250B41D47BA7B005D0B5F /* CExample.xcodeproj */,
+			);
+			path = CExample;
+			sourceTree = "<group>";
+		};
+		446250AF1D47BA7B005D0B5F /* CExample */ = {
+			isa = PBXGroup;
+			children = (
+				446250B01D47BA7B005D0B5F /* CExample.c */,
+				446250B11D47BA7B005D0B5F /* CExample.h */,
+				446250B21D47BA7B005D0B5F /* Info.plist */,
+				446250B31D47BA7B005D0B5F /* module.map */,
+			);
+			path = CExample;
+			sourceTree = "<group>";
+		};
+		446250B51D47BA7B005D0B5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				446250BB1D47BA7B005D0B5F /* CExample.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		446250BC1D47BA82005D0B5F /* 2015-11-ErrorHandlingConsole */ = {
+			isa = PBXGroup;
+			children = (
+				446250BD1D47BA82005D0B5F /* ErrorHandling */,
+				446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */,
+			);
+			path = "2015-11-ErrorHandlingConsole";
+			sourceTree = "<group>";
+		};
+		446250BD1D47BA82005D0B5F /* ErrorHandling */ = {
+			isa = PBXGroup;
+			children = (
+				446250BE1D47BA82005D0B5F /* ErrorHandling-Bridging-Header.h */,
+				446250BF1D47BA82005D0B5F /* Errors.swift */,
+				446250C01D47BA82005D0B5F /* main.m */,
+			);
+			path = ErrorHandling;
+			sourceTree = "<group>";
+		};
+		446250C21D47BA82005D0B5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				446250C61D47BA82005D0B5F /* ErrorHandling */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F1E89DAE1A37AD53007C4166 = {
 			isa = PBXGroup;
 			children = (
+				446250BC1D47BA82005D0B5F /* 2015-11-ErrorHandlingConsole */,
+				446250AD1D47BA7B005D0B5F /* 2016-04-07-Swift-And-C */,
+				446250AC1D47BA5A005D0B5F /* SwiftAndCPlayground.playground */,
+				446250A91D47BA24005D0B5F /* 2015-11-Swift2ErrorHandlingPlayground.playground */,
+				446250AA1D47BA24005D0B5F /* 2016-01-6-Swift-One-Liners-Playground.playground */,
+				446250AB1D47BA24005D0B5F /* 2016-02-5-Bitwise-Playground.playground */,
+				446250A51D47BA0F005D0B5F /* 2016-05-05-recursive-trampoline.playground */,
+				446250A61D47BA0F005D0B5F /* 2015-09-VariancePlayground.playground */,
+				446250A71D47BA0F005D0B5F /* 2015-10-MapFlatMapPlayground.playground */,
+				446250A81D47BA0F005D0B5F /* 2015-11-12-SequenceTypeGeneratorTypePlayground.playground */,
 				44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */,
 				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,
@@ -118,12 +229,39 @@
 			mainGroup = F1E89DAE1A37AD53007C4166;
 			productRefGroup = F1E89DB81A37AD53007C4166 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 446250B51D47BA7B005D0B5F /* Products */;
+					ProjectRef = 446250B41D47BA7B005D0B5F /* CExample.xcodeproj */;
+				},
+				{
+					ProductGroup = 446250C21D47BA82005D0B5F /* Products */;
+					ProjectRef = 446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F1E89DB61A37AD53007C4166 /* Simple */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		446250BB1D47BA7B005D0B5F /* CExample.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CExample.framework;
+			remoteRef = 446250BA1D47BA7B005D0B5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		446250C61D47BA82005D0B5F /* ErrorHandling */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = ErrorHandling;
+			remoteRef = 446250C51D47BA82005D0B5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F1E89DB31A37AD53007C4166 /* Sources */ = {
