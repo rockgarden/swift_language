@@ -18,7 +18,10 @@ enum CompassPointA {
 
 var someEnum = CompassPoint.East
 var someEnumA = CompassPointA.East
-//Once the type is known, it can be omitted for reassignment.
+/*: 
+ 一旦类型是已知的，可以省略多次赋值
+ Once the type is known, it can be omitted for reassignment.
+ */
 someEnum = .West
 ("This is the enum: \(someEnum)")
 (someEnum == .West) ? ("Equal") : ("Not Equal")
@@ -32,8 +35,6 @@ case .East:
 case .West:
     CompassPoint.West
 }
-
-
 /*:
  显式定义枚举成员
  - Defines an enum with members with explicit types.
@@ -44,8 +45,7 @@ enum Barcode {
 }
 var newEnum = Barcode.QRCode("162534")
 newEnum = Barcode.QRCode("692438")
-
-/*
+/*:
  在这种情况下,枚举与原始值的定义必须是独一无二的
  In this case, the enum is defined with raw values.
  They must be unique
@@ -57,27 +57,25 @@ enum ASCIIControlCharacter: Character {
 }
 let asciiCode = ASCIIControlCharacter.Tab
 ("Code is \(asciiCode.rawValue)")
-
-//In this case, since it's not guaranteed to find an enum for the specified rawValue, the initializer returns an optional
+//: In this case, since it's not guaranteed to find an enum for the specified rawValue, the initializer returns an optional
 if let lineFeed = ASCIIControlCharacter(rawValue: "\r") {
     //Do something
     lineFeed
 }
-
-// 赋值
+//: 赋值
 enum season: Character{
     case spring="春"
     case summer="夏"
     case fall="秋"
     case winter="冬"
 }
-// 赋值推断
+//: 赋值推断
 enum weekday: Int {
     case mon, tur, wen=3, thur, fri, sat, sum //杖举值的类型为整型时才可
 }
 weekday.sum.rawValue //获取原始值
 
-// 取值
+//: 取值
 var mySeason = season(rawValue: "秋")
 if mySeason != nil {
     switch(mySeason!) {
@@ -90,7 +88,7 @@ if mySeason != nil {
     }
 }
 
-//关联值
+//: 关联值
 enum planet {
     case earth(weight: Double, name: String)
     case mars(density: Double, name: String, weight: Double)

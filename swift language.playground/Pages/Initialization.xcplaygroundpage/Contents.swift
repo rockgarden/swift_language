@@ -31,7 +31,7 @@ struct Point {
     var x = 0.0, y = 0.0
 }
 
-/*
+/*:
  In this case, the second initializer performs delegation, which is
  calling another initializer within the struct. This is only valid for
  value types, and not classes!

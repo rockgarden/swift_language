@@ -2,36 +2,24 @@
 
 /*:
  # Classes and structures
- */
-
-
-
-/*:
  Classes and structures in Swift have many things in common. Both can:
- 
  - Define properties to store values
  - Define methods to provide functionality
  - Define subscripts to provide access to their values using subscript syntax
  - Define initializers to set up their initial state
  - Be extended to expand their functionality beyond a default implementation
  - Conform to protocols to provide standard functionality of a certain kind
- 
  Classes have additional capabilities that structures do not:
- 
  - Inheritance enables one class to inherit the characteristics of another.
  - Type casting enables you to check and interpret the type of a class instance at runtime.
  - Deinitializers enable an instance of a class to free up any resources it has assigned.
  - Reference counting allows more than one reference to a class instance.
- 
  - Note: Structures are always copied when they are passed around in your code, and do not use reference counting.
  The same applies to Enums
- 
  类和结构体的选择
- 
  在你的代码中,你可以使用类和结构体来定义你的自定义数据类型.
  然而,结构体实例总是通过值传递,类实例总是通过引用传递.
  这意味两者适用不同的任务.当你的在考虑一个工程项目的数据构造和功能的时候,你需要决定每个数据构造是定义成类还是结构体.
- 
  按照通用的准则,当符合一条或多条以下条件时,请考虑构建结构体:
  - 结构体的主要目的是用来封装少量相关简单数据值。
  - 有理由预计一个结构体实例在赋值或传递时，封装的数据将会被拷贝而不是被引用。
@@ -42,11 +30,8 @@
  - 一定范围内的路径，封装一个start属性和length属性，两者均为Int类型。
  - 三维坐标系内一点，封装x，y和z属性，三者均为Double类型。
  在所有其它案例中,定义一个类,生成一个它的实例,并通过引用来管理和传递.实际中,这意味着绝大部分的自定义数据构造都应该是类,而非结构体。
- 
  Assignment and Copy Behavior for Strings, Arrays, and Dictionaries
- 
  Swift’s String, Array, and Dictionary types are implemented as structures. This means that strings, arrays, and dictionaries are copied when they are assigned to a new constant or variable, or when they are passed to a function or method.
- 
  This behavior is different from NSString, NSArray, and NSDictionary in Foundation, which are implemented as classes, not structures. NSString, NSArray, and NSDictionary instances are always assigned and passed around as a reference to an existing instance, rather than as a copy.
  */
 import UIKit
