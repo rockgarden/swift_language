@@ -45,7 +45,6 @@
 		446250A51D47BA0F005D0B5F /* 2016-05-05-recursive-trampoline.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-05-05-recursive-trampoline.playground"; sourceTree = "<group>"; };
 		446250A61D47BA0F005D0B5F /* 2015-09-VariancePlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-09-VariancePlayground.playground"; sourceTree = "<group>"; };
 		446250A71D47BA0F005D0B5F /* 2015-10-MapFlatMapPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-10-MapFlatMapPlayground.playground"; sourceTree = "<group>"; };
-		446250A81D47BA0F005D0B5F /* 2015-11-12-SequenceTypeGeneratorTypePlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-11-12-SequenceTypeGeneratorTypePlayground.playground"; sourceTree = "<group>"; };
 		446250A91D47BA24005D0B5F /* 2015-11-Swift2ErrorHandlingPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2015-11-Swift2ErrorHandlingPlayground.playground"; sourceTree = "<group>"; };
 		446250AA1D47BA24005D0B5F /* 2016-01-6-Swift-One-Liners-Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-01-6-Swift-One-Liners-Playground.playground"; sourceTree = "<group>"; };
 		446250AB1D47BA24005D0B5F /* 2016-02-5-Bitwise-Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-02-5-Bitwise-Playground.playground"; sourceTree = "<group>"; };
@@ -156,7 +155,6 @@
 				446250A51D47BA0F005D0B5F /* 2016-05-05-recursive-trampoline.playground */,
 				446250A61D47BA0F005D0B5F /* 2015-09-VariancePlayground.playground */,
 				446250A71D47BA0F005D0B5F /* 2015-10-MapFlatMapPlayground.playground */,
-				446250A81D47BA0F005D0B5F /* 2015-11-12-SequenceTypeGeneratorTypePlayground.playground */,
 				44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */,
 				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,

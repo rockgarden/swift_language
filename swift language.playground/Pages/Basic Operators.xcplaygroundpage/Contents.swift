@@ -53,7 +53,7 @@ let name = "uraimo"
 var happyStr = ""
 (1...4).forEach{ happyStr = ("Happy Birthday " + (($0 == 1) ? "dear \(name)":"to You"))}
 happyStr
-var ab = a > b ? "a>b":"a<b"
+var ab = a>b ? "a>b":"a<b"
 /*:
  Nil Coalescing Operator
  - It's equivalent to (a ? b : c), but for optionals
