@@ -1,34 +1,30 @@
 //: [Previous](@previous)
 
 
-//For
-
-//Index is implicitly declared
+//: # Control Flow
+//: ## For
+// Index is implicitly declared 隐式声明
 for index in 1...5 {
-    print("Index is \(index)")
+    ("Index is \(index)")
 }
-
-//In this case, we don't care about the value.
+// In this case, we don't care about the value.
 let base=3
 let power=11
 var answer=1
 for _ in 1..<power { //下划线符号_代替循环中的变量,能够忽略具体的值,并且不对值进行访问
     answer *= base
 }
-
-//Use dictionary
+// Use dictionary
 let dictionary = ["one": 1, "two": 2, "three": 3]
 for (numberName, numberValue) in dictionary {
-    print("\(numberName) is \(numberValue)")
+    ("\(numberName) is \(numberValue)")
 }
-
-//Go through a string
+// Go through a string
 var char = "e"
-for char in "Yes".characters {
-    print("\(char)")
+for char in "Yes".characters { //char != char
+    ("\(char)")
 }
-
-//break标签:仅用于for或swith
+// break标签: 仅用于for或swith
 outer: for i in 0 ..< 5  {
     for j in 0 ..< 3 {
         if j == i {
@@ -36,47 +32,45 @@ outer: for i in 0 ..< 5  {
         }
     }
 }
-
-
-//Switches
+//: ## Switches
 
 // No need for break, and every case must have some code.
 let someChar = "e"
 switch someChar {
 case "a", "e", "i", "o", "u":
-    print("\(someChar) is a vowel")
+    ("\(someChar) is a vowel")
 default:
-    print("\(someChar) is a consonant")
+    ("\(someChar) is a consonant")
 }
 
-//There can also be range matching
+// There can also be range matching
 let count = 3_000_000_000_000
 let countedThings = "stars"
 switch count {
 case 0...9:
-    print("a few")
+    ("a few")
 case 10...10_000:
-    print("many")
+    ("many")
 default:
-    print("a lot of")
+    ("a lot of")
 }
 
-//Use tuples
+// Use tuples
 let coord = (1,1)
 switch coord {
 case (0,0):
-    print("Origin")
+    ("Origin")
 case (_, 0):
-    print("x axis")
+    ("x axis")
 case (0, _):
-    print("y axis")
+    ("y axis")
 case (-2...2, -3...3):
-    print("within boundries")
+    ("within boundries")
 default:
-    print("out of bounds")
+    ("out of bounds")
 }
 
-//Value binding: Assign temp values to variables inside the cases.
+// Value binding: Assign temp values to variables inside the cases.
 let anotherPoint = (0, 0)
 var position = ""
 switch anotherPoint {
@@ -89,12 +83,12 @@ case (0, let y):
 case (0...Int.max,0...Int.max):
     position = "第一象限"
 case let (z, w): //This acts as the default case. Since it is only assigning a tuple, any value matches.
-    print("somewhere else at (\(z), \(w))") //相当于 default:break
+    ("somewhere else at (\(z), \(w))") //相当于 default:break
 }
 
 switch anotherPoint {
 case let (x, y) where x == y:
-    print("x = y")
+    ("x = y")
 default:
     break
 }
@@ -115,14 +109,14 @@ default:
 // The fallthrough line forces the switch statement to fall into the default case after a previous case.
 switch anotherPoint {
 case let (x, y) where x == y:
-    print("x = y")
+    ("x = y")
     fallthrough
 default:
-    print(" are equal")
+    (" are equal")
 }
 
-//Nesting while, for and switches can be confusing sometimes
-//Use labels to better use the break and continue statements
+// Nesting while, for and switches can be confusing sometimes
+// Use labels to better use the break and continue statements
 master: while true {
     loop: for rats in 1...5{
         continue master
@@ -140,6 +134,5 @@ case 4,6,8:
 default:
     desc += "整数"
 }
-
 
 //: [Next](@next)
