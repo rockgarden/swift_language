@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-//: # subscripts
+//: # subscripts 下标
 
 
 struct Matrix {
