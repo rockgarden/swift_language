@@ -53,7 +53,7 @@ let name = "uraimo"
 var happyStr = ""
 (1...4).forEach{ happyStr = ("Happy Birthday " + (($0 == 1) ? "dear \(name)":"to You"))}
 happyStr
-var ab = a>b ? "a>b":"a<b"
+//var ab = a>b ? "a>b":"a<b"
 /*:
  Nil Coalescing Operator
  - It's equivalent to (a ? b : c), but for optionals
@@ -78,20 +78,87 @@ if optional != nil {
 //Range operators
 //闭区间运算符 a...b
 for index in 1...5 {
-    print(index, terminator: "")//It will iterate 5 times.
+    //It will iterate 5 times.
 }
 //半开区间运算符 a..<b
 var array = [1,2,3]
-for index in 0..<array.count{
-    print(index, terminator: "")//It will iterate (array.count - 1) times.
+for index in 1..<array.count{
+    //It will iterate (array.count - 1) times.
 }
 
 //枚举Enumerate array with index and value, C loop will be removed soon
 for (index, value) in array.enumerate() {
-    print("value \(value) at index \(index)")
+    ("value \(value) at index \(index)")
 }
 
 var image = UIImage(named: "1")
 
+//: ## Operator Overloading
+// 运算符重载函数
+func * (lhs: String, rhs: Int) -> String {
+    var result = lhs
+    for _ in 2...rhs {
+        result += lhs
+    }
+    return result
+}
+let u = "abc"
+let v = u * 5
 
+// 定义Type协议
+protocol Type {
+    func += (inout lhs: Self, rhs: Self)
+}
+// 扩展支持Type协议
+extension String: Type {}
+extension Int: Type {}
+extension Double: Type {}
+extension Float: Type {}
+// 泛型函数实现运算符重载
+func *<T: Type>(lhs: T, rhs: Int) -> T {
+    var result = lhs
+    for _ in 2...rhs {
+        result += lhs
+    }
+    return result
+}
+let x1 = "abc"
+let y1 = x1 * 5
+let a = 2
+let b = a * 5
+let c = 3.14
+let d = c * 5
+let e: Float = 4.56
+let f = e * 5
+//???: 这是什么
+infix operator ** {associativity left precedence 150}
+
+func **<T: Type>(lhs: T, rhs: Int) -> T {
+    var result = lhs
+    for _ in 2...rhs {
+        result += lhs
+    }
+    return result
+}
+let g1 = "abc"
+let h1 = g1 ** 5
+let i1 = 2
+let j = i1 ** 5
+let k = 3.14
+let l = k ** 5
+let m: Float = 4.56
+let n = m ** 5
+
+infix operator **= {associativity left precedence 150}
+func **=<T: Type>(inout lhs: T, rhs: Int) {
+    lhs = lhs ** rhs
+}
+var o = "abc"
+o **= 5
+var q = 2
+q **= 5
+var s = 3.14
+s **= 5
+var w: Float = 4.56
+w **= 5
 //: [Next](@next)
