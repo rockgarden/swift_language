@@ -1,8 +1,7 @@
 //: [Previous](@previous)
 //: # Initialization 初始化
-
 import UIKit
-
+//: ## struct
 struct Celsius {
     var temperatureInCelsius: Double
     init(fromFahrenheit fahrenheit: Double) {
@@ -51,7 +50,8 @@ struct Rect {
     }
 }
 
-/*:
+/*: 
+ ## class
  For a class, every stored property must have an initial value, or have a value assigned to it inside the initializer.
  This reference image explains the relationship between designated initializers and convenience initializers.
  https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation01_2x.png
@@ -85,6 +85,8 @@ class Human {
         self.gender = "Female"
     }
 }
+let h1 = Human()
+let h2 = Human.init() //definitely permitted in Swift 2.0
 
 class Person: Human {
     var name: String

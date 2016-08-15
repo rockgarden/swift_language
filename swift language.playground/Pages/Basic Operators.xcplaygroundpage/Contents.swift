@@ -161,4 +161,7 @@ var s = 3.14
 s **= 5
 var w: Float = 4.56
 w **= 5
+
+let t = 1.successor()
+
 //: [Next](@next)
