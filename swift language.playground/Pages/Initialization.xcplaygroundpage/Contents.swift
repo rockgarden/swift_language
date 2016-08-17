@@ -87,6 +87,7 @@ class Human {
 }
 let h1 = Human()
 let h2 = Human.init() //definitely permitted in Swift 2.0
+h1.self
 
 class Person: Human {
     var name: String

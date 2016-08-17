@@ -7,11 +7,32 @@ func sayHello(personName: String) -> String{
 }
 sayHello("Juan")
 
-//In this case we return a tuple
+func sum (x:Int, _ y:Int) -> Int {
+    let result = x + y
+    return result
+}
+
+// In this case we return a tuple
 func minMax(array: [Int]) -> (min: Int, max:Int)? {
     if array.isEmpty {return nil}
     return (0,1)
 }
+
+// 声明语法: the rest just illustrates some declaration syntax
+func say1(s:String) -> Void { print(s) }
+func say2(s:String) -> () { print(s) }
+func say3(s:String) { print(s) }
+say3("sss")
+let pointless : Void = say1("howdy")
+print(pointless)
+func greet1(unused:Void) -> String { return "howdy" }
+func greet2() -> String { return "howdy" }
+func greeet1(unused:Void) -> Void { print("howdy") }
+func greeet2() -> () { print("howdy") }
+func greeet3() { print("howdy") }
+let v : Void = () //passing a void is the same as no parameters
+greet1(v)
+greet2(v)
 /*:
  - Note: returning void translates in returning an empty tuple: ()
  - 外部和本地参数名称
@@ -120,7 +141,7 @@ debugPrint("getMathFunc result:\(mathFunc(5))")
  函数重载
  - 外部参数可reload
  - 局部参数不能reload
-*/
+ */
 func test(){
     print("return void")
 }

@@ -36,28 +36,17 @@
  */
 import UIKit
 
+/*:
+ ## structures
+ */
 struct Resolution {
     var width = 0
     var height = 0
 }
 
 class ViewController: UIViewController {
-    
     var resolution = Resolution()
-    var interlaced = false
-    var frameRate = 0.0
-    var name: String?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 }
-
 
 struct Dog {
     var name: String
@@ -73,6 +62,31 @@ var dog2 = dog //struct copy!
 dog2.name = "snoopy"
 dog2.name
 dog.name
+
+/*:
+ ## Classes
+ */
+// class与struct不能重名
+class Dog_c {
+    var name = ""
+    var whatADogSays = "woof"
+    func bark() {
+        print(self.whatADogSays)
+    }
+    func speak() {
+        self.bark()
+    }
+}
+let dog_c_1 = Dog_c()
+dog_c_1.name = "Fido"
+var dog_c_2 = Dog_c()
+dog_c_2.name = "Rover"
+dog_c_2 = dog_c_1 //指针
+(dog_c_2.name)
+(dog_c_1.self) //the magic word "self"
+dog_c_1.bark()
+dog_c_1.speak()
+
 
 //: 定义抽象类
 final class A {
