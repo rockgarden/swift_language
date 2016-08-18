@@ -33,6 +33,34 @@ func greeet3() { print("howdy") }
 let v : Void = () //passing a void is the same as no parameters
 greet1(v)
 greet2(v)
+
+func repeatString(s:String, times:Int) -> String {
+    var result = ""
+    for _ in 1...times { result += s }
+    return result
+}
+let s = repeatString("hi", times:3)
+s
+func repeatString2(s:String, times n:Int) -> String {
+    var result = ""
+    for _ in 1...n { result += s}
+    return result
+}
+let s2 = repeatString2("hi", times:3)
+s2
+func say2(s:String, _ times:Int) {
+    for _ in 1...times {
+        print(s)
+    }
+}
+say2("woof", 3)
+
+do {
+    let s = "hello"
+    let s2 = s.stringByReplacingOccurrencesOfString("ell", withString:"ipp")
+    // s2 is now "hippo"
+    print(s2)
+}
 /*:
  - Note: returning void translates in returning an empty tuple: ()
  - 外部和本地参数名称
