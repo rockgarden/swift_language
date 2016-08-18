@@ -12,17 +12,45 @@ func sum (x:Int, _ y:Int) -> Int {
     return result
 }
 
+//使用元组作为返回参数,返回多个参数
+func count(string: String) -> (vowels: Int, consonants: Int, others: Int) {
+    var vowels = 0, consonants = 0, others = 0
+    for character in string.characters { // 也可通过extension String: SequenceType {}
+        switch String(character).lowercaseString {
+        case "a", "e", "i", "o", "u":
+            vowels += 1
+
+        case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+             "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+            consonants += 1
+        default:
+            others += 1
+        }
+    }
+    return (vowels, consonants, others)
+}
+
+func reverseString(string: String) -> String {
+    return String(string.characters.reverse())
+}
+
 // In this case we return a tuple
 func minMax(array: [Int]) -> (min: Int, max:Int)? {
     if array.isEmpty {return nil}
     return (0,1)
 }
 
-// 声明语法: the rest just illustrates some declaration syntax
+/*:
+ ## Void
+ returning void translates in returning an empty tuple: ()
+ 没有定义返回类型的函数会返回特殊的值Void,它其实是一个空的元组tuple,没有任何元素,也可简写成()
+ Void声明语法:illustrates some declaration syntax
+ */
 func say1(s:String) -> Void { print(s) }
 func say2(s:String) -> () { print(s) }
 func say3(s:String) { print(s) }
 say3("sss")
+
 let pointless : Void = say1("howdy")
 print(pointless)
 func greet1(unused:Void) -> String { return "howdy" }
@@ -34,11 +62,11 @@ let v : Void = () //passing a void is the same as no parameters
 greet1(v)
 greet2(v)
 /*:
- - Note: returning void translates in returning an empty tuple: ()
- - 外部和本地参数名称
+ ## 外部和本地参数名称
  Here we are using external and local params names.
- - 最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
- - Note: 注意外部名称将自动提供给每一个预定义的参数.
+ - 外部参数名,是为了调用该函数时让其参数更为有表现力,更为通顺，同时还保持了函数体是可读的和有明确意图的,让别人阅读整段代码时更方便
+ - 注意外部名称将自动提供给每一个预定义的参数.
+ - 下面join最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
  */
 func join(string s1: String, toString s2: String, withJoiner joiner: String = "only")
     -> String {
