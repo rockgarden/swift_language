@@ -143,7 +143,7 @@ func factorial( max: Int) -> Int {
 ("factorial Result:\(factorial(6))") //注意不要Int超界
 
 
-// 函数作参数
+//: 函数作参数
 func addInts(a:Int,b:Int)->Int{
     return a+b
 }
@@ -161,20 +161,8 @@ printMathResult(multiplyInts,a: 2,b: 3)
 
 //定义类型函数的变量
 var stringFunction: (String) -> String = sayHello
-
-
 //: ## nested functions
-//: 可以使用函数类型作为返回函数。
-//: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
-func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
-    func stepForward(input: Int) -> Int { return input + 1 }
-    func stepBackward(input: Int) -> Int { return input - 1 }
-    return backwards ? stepBackward : stepForward
-}
-var stepFunction = chooseStepFunction(true)
-debugPrint("chooseStepFunction result: \(stepFunction(5))")
-
-//函数作返回值
+//: 函数作返回值: 可以使用函数类型作为返回函数。
 func squre(num: Int) -> Int {
     return num*num
 }
@@ -190,11 +178,36 @@ func getMathFunc(type: String) -> (Int) -> Int {
     }
 }
 var mathFunc = getMathFunc("other")
-debugPrint("getMathFunc result:\(mathFunc(5))")
+("getMathFunc result:\(mathFunc(5))")
+//: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
+func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
+    func stepForward(input: Int) -> Int { return input + 1 }
+    func stepBackward(input: Int) -> Int { return input - 1 }
+    return backwards ? stepBackward : stepForward
+}
+var stepFunction = chooseStepFunction(true)
+("chooseStepFunction result: \(stepFunction(5))")
 
-
+func getMathFunc(type type:String)->(Int)->Int{
+    func squre(num: Int) -> Int {
+        return num*num
+    }
+    func cube(num: Int) -> Int {
+        return num*num*num
+    }
+    switch(type){
+    case "squre":
+        return squre
+    default:
+        return cube
+    }
+}
+var mathFunc1=getMathFunc(type: "squre")
+(mathFunc1(4))
+var mathFunc2=getMathFunc(type: "other")
+(mathFunc2(4))
 /*:
- 函数重载
+ ## 函数重载
  - 外部参数可reload
  - 局部参数不能reload
  */
@@ -215,31 +228,6 @@ test()
 var result: Void = test(msg:"swift")
 var result1: String = test("swfit")
 //func test(msg1:String){} //Error
-
-
-/*:
- func嵌套
- */
-func getMathFunc(type type:String)->(Int)->Int{
-    func squre(num: Int) -> Int {
-        return num*num
-    }
-    func cube(num: Int) -> Int {
-        return num*num*num
-    }
-    switch(type){
-    case "squre":
-        return squre
-    default:
-        return cube
-    }
-}
-var mathFunc1=getMathFunc(type: "squre")
-(mathFunc1(4))
-var mathFunc2=getMathFunc(type: "other")
-(mathFunc2(4))
-
-
 //: [Next](@next)
 
 

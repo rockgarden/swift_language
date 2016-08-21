@@ -18,7 +18,7 @@
  内联闭包
  */
 let array = ["John", "Tim", "Steve", "Wangkan"]
-
+// (@noescape isOrderedBefore: (Self.Generator.Element, Self.Generator.Element) -> Bool) -> [Self.Generator.Element]
 var reversed = array.sort({(s1: String, s2: String) -> Bool in return s1 > s2})
 reversed
 /*:
@@ -170,7 +170,7 @@ let alsoIncrementByTen = incrementByTen
 alsoIncrementByTen()
 
 //: ## 示例
-func doThis(f:()->()) {
+func doThis(f:()->()) { // f : Void -> Void
     f()
 }
 doThis { // no parentheses!
@@ -202,6 +202,107 @@ let image = imageOfSize(CGSizeMake(45,20), {
     p.stroke()
 })
 
+func makeRoundedRectangle(sz:CGSize) -> UIImage {
+    let image = imageOfSize(sz) {
+        let p = UIBezierPath(
+            roundedRect: CGRect(origin:CGPointZero, size:sz),
+            cornerRadius: 8)
+        p.stroke()
+    }
+    return image
+}
+
+// 嵌套函数 f
+func makeRoundedRectangleMakerPrelim(sz:CGSize) -> () -> UIImage {
+    func f () -> UIImage {
+        let im = imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: 8)
+            p.stroke()
+        }
+        return im
+    }
+    return f
+}
+
+
+func makeRoundedRectangleMakerPrelim2(sz:CGSize) -> () -> UIImage {
+    func f () -> UIImage {
+        return imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: 8)
+            p.stroke()
+        }
+    }
+    return f
+}
+
+func makeRoundedRectangleMakerPrelim3(sz:CGSize) -> () -> UIImage {
+    return {
+        return imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: 8)
+            p.stroke()
+        }
+    }
+}
+
+func makeRoundedRectangleMaker(sz:CGSize) -> () -> UIImage {
+    return {
+        imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: 8)
+            p.stroke()
+        }
+    }
+}
+
+// stop hard-coding the radius
+func makeRoundedRectangleMaker2(sz:CGSize, _ r:CGFloat) -> () -> UIImage {
+    return {
+        imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: r)
+            p.stroke()
+        }
+    }
+}
+
+// explicit curry
+func makeRoundedRectangleMaker3(sz:CGSize) -> (CGFloat) -> UIImage {
+    return {
+        r in
+        imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPointZero, size:sz),
+                cornerRadius: r)
+            p.stroke()
+        }
+    }
+}
+
+
+// implicit curry: deprecated in Swift 2.2, slated for removal in Swift 3
+
+/*
+
+ func makeRoundedRectangleMaker4(sz:CGSize)(_ r:CGFloat) -> UIImage {
+ return imageOfSize(sz) {
+ let p = UIBezierPath(
+ roundedRect: CGRect(origin:CGPointZero, size:sz),
+ cornerRadius: r)
+ p.stroke()
+ }
+ }
+
+ */
+
+
 func test(h:(Int, Int, Int) -> Int) {}
 test {
     _ in // showing that _ can mean "ignore _all_ parameters"
@@ -216,5 +317,4 @@ let arr2 = arr.map(doubleMe) // [4, 8, 12, 16]
 (arr2)
 let arr3 = arr.map {$0*2} // it doesn't get any Swiftier than this
 (arr3)
-
 //: [Next](@next)
