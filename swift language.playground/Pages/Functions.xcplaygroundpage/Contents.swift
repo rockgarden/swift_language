@@ -1,7 +1,6 @@
 //: [Previous](@previous)
 import UIKit
 //: # Functions
-
 func sayHello(personName: String) -> String{
     return "Hello \(personName)!"
 }
@@ -12,7 +11,7 @@ func sum (x:Int, _ y:Int) -> Int {
     return result
 }
 
-//使用元组作为返回参数,返回多个参数
+//: 使用元组作为返回参数,返回多个参数
 func count(string: String) -> (vowels: Int, consonants: Int, others: Int) {
     var vowels = 0, consonants = 0, others = 0
     for character in string.characters { // 也可通过extension String: SequenceType {}
@@ -38,6 +37,111 @@ func reverseString(string: String) -> String {
 func minMax(array: [Int]) -> (min: Int, max:Int)? {
     if array.isEmpty {return nil}
     return (0,1)
+}
+
+//: ## var modifiable Parameters
+//: This will go away, because it is, after all, rather misleading
+/*
+ func say(s:String, times:Int, var loudly:Bool) {
+ loudly = true // can't do this without "var"
+ }
+ */
+// instead, write this:
+func say(s:String, times:Int, loudly:Bool) {
+    var loudly = loudly
+    loudly = true
+    _ = loudly
+}
+// This will go away, because it is, after all, rather misleading
+/*
+ func removeFromStringNot(var s:String, character c:Character) -> Int {
+ var howMany = 0
+ while let ix = s.characters.indexOf(c) {
+ s.removeRange(ix...ix)
+ howMany += 1
+ }
+ return howMany
+ }
+ */
+// instead, write this:
+func removeFromStringNot(s:String, character c:Character) -> Int {
+    var s = s
+    var howMany = 0
+    while let ix = s.characters.indexOf(c) {
+        s.removeRange(ix...ix)
+        howMany += 1
+    }
+    return howMany
+}
+let sStringNot = "hello"
+print(removeFromStringNot(sStringNot, character:Character("l")))
+print(sStringNot) // no effect on s
+//: 传类 Parameters 就可 modifiable
+class Dog {
+    var name = ""
+}
+func changeNameOfDog(d:Dog, to tostring:String) {
+    d.name = tostring // no "var", no "inout" needed
+}
+
+/*:
+ ## inout
+ inout传的是对象引用
+ 声明函数时，在参数前面用inout修饰，在函数内部实现改变外部参数;
+ 注意，这里只能传入变量，不能传入常量和字面量，因为这些是不能变的一旦定义，当我们传入的时候，在变量名字前面用&符号修饰表示，传递给inout参数，表明这个变量在参数内部是可以被改变的
+ 注意：inout修饰的参数是不能有默认值的，有范围的参数集合也不能被修饰，另外，一个参数一旦被inout修饰，就不能再被var和let修饰了
+ */
+func removeFromString(inout s:String, character c:Character) -> Int {
+    var howMany = 0
+    while let ix = s.characters.indexOf(c) {
+        s.removeRange(ix...ix)
+        howMany += 1
+    }
+    return howMany
+}
+var someString = "swift func inout"
+removeFromString(&someString, character: "i")
+var sInout = "hello"
+(removeFromString(&sInout, character:Character("l")))
+sInout // this is the important part!
+//: inout跨线程调用
+func myTest(inout a: Int, inout arr: [Int]) {
+    a += 1
+    arr[0] += 1
+    arr = [0, 0, 0]
+    }
+// 然后在任一函数中对myTest进行如下调用：
+var x = 10
+var y = [1, 2, 3]
+myTest(&x, arr: &y)
+
+// 调用完之后，x值为11，y的值为[0, 0, 0]，没有任何问题。
+// 然后，如果使用内嵌闭包，也没有问题：
+func test(inout t:[String]){
+    {
+        t = ["1","2","3"]
+        print("\(t)")
+    }()
+}
+// 调用
+var tempData:[String] = []
+test(&tempData)
+// 异步tempData 异常
+func testAsync(inout t:[String]){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)) { () -> Void in
+        t = ["1","2","3"]
+        print("\(t)")
+        print("\(tempData)")
+    }
+}
+// 所以问题出在dispatch一个线程的时候，当前主线程的闭包执行上下文没有映射到新用户线程的上下文中去
+// 把dispatch_async 改成dispatch_sync（异步改为同步），之后再log 所需要的tempData，就会发现输出正常，下面是我的代码：
+print("tempData  : \(tempData)")
+func testAync(inout t:[String]){
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)) { () -> Void in
+        t = ["1","2","3"]
+        print("\(t)")
+    }
 }
 
 /*:

@@ -63,6 +63,14 @@ dog2.name = "snoopy"
 dog2.name
 dog.name
 
+let rect = CGRectZero
+var arrow = CGRectZero
+var body = CGRectZero
+struct Arrow {
+    static let ARHEIGHT : CGFloat = 0
+}
+CGRectDivide(rect, &arrow, &body, Arrow.ARHEIGHT, .MinYEdge)
+
 /*:
  ## Classes
  */
