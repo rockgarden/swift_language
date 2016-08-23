@@ -68,16 +68,26 @@ squreContent3(100)
 /*:
  ## TRAILING CLOSURES
  闭包特性四:尾随（Trailing）闭包语法
+ Closures which are too long to be defined inline.当闭包太长,不适合定义为内联.
  如果您需要将一个很长的闭包表达式作为最后一个参数传递给函数,可以使用尾随闭包来增强函数的可读性.
  尾随闭包是一个书写在函数括号之后的闭包表达式,函数支持将其作为最后一个参数调用.
+ 
  */
 func someFunctionThatTakesAClosure(closure: () -> ()) {
     // function body goes here
 }
+// 不使用一个尾随闭包: here's how you call this function without using a trailing closure:
+someFunctionThatTakesAClosure({
+    // closure's body goes here
+})
+// 使用一个尾随闭包: here's how you call this function with a trailing closure instead:
+someFunctionThatTakesAClosure() {
+    // trailing closure's body goes here
+}
 
 func someFunc(num:Int,fn:(Int)->()){}
-//someFunc(20 , {})
-//someFunc(20){}
+someFunc(20, fn: {_ in })
+someFunc(20){_ in }
 
 func makeArr(ele: String) -> () -> [String] {
     var arr: [String] = []
@@ -87,20 +97,6 @@ func makeArr(ele: String) -> () -> [String] {
     }
     return addElement
 }
-//Closures which are too long to be defined inline.
-//闭包太长,可被定义为内联
-//here's how you call this function without using a trailing closure:
-//如何调用这个函数,而不使用一个尾随闭包
-someFunctionThatTakesAClosure({
-    // closure's body goes here
-})
-// here's how you call this function with a trailing closure instead:
-someFunctionThatTakesAClosure() {
-    // trailing closure's body goes here
-}
-
-//Note: In case the function doesn't take any params other than a trailing closure,
-//there's no need for parenthesis.
 
 let digitNames = [
     0: "Zero", 1: "One", 2: "Two",   3: "Three", 4: "Four",
@@ -108,14 +104,14 @@ let digitNames = [
 ]
 let numbers = [16, 58, 510]
 
+//: - Note: In case the function doesn't take any params other than a trailing closure, there's no need for parenthesis.如果函数除了trailing closure不接受任何参数，就不需要括号。
 let stringsArray = numbers.map {
     (number) -> String in
     var number = number
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output
-        //Note how the optional value returned from the dic subscript is force-unwrapped,
-        //since a value is guaranteed.
+        // Note how the optional value returned from the dic subscript is force-unwrapped,since a value is guaranteed.
         number /= 10
     }
     return output
@@ -189,19 +185,43 @@ performAndPrint {
 }
 
 import UIKit
+
 func imageOfSize(size:CGSize, _ whatToDraw:() -> ()) -> UIImage {
     UIGraphicsBeginImageContextWithOptions(size, false, 0)
-    whatToDraw()
+    whatToDraw() //block
     let result = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     return result
 }
 let image = imageOfSize(CGSizeMake(45,20), {
-    let p = UIBezierPath(
-        roundedRect: CGRectMake(0,0,45,20), cornerRadius: 8)
+    let p = UIBezierPath(roundedRect: CGRectMake(0,0,45,20), cornerRadius: 8)
     p.stroke()
 })
+do {
+    func drawing() {
+        let p = UIBezierPath(roundedRect: CGRectMake(0,0,45,20), cornerRadius: 8)
+        p.stroke()
+    }
+    let image = imageOfSize(CGSizeMake(45,20), drawing)
+    _ = image
+}
+do {
+    let image = imageOfSize(CGSizeMake(45,20)) {
+        let p = UIBezierPath(roundedRect: CGRectMake(0,0,45,20), cornerRadius: 8)
+        p.stroke()
+    }
+    _ = image
+}
+do {
+    let sz = CGSizeMake(45,20)
+    let image = imageOfSize(sz) {
+        let p = UIBezierPath(roundedRect: CGRect(origin:CGPointZero, size:sz), cornerRadius: 8)
+        p.stroke()
+    }
+    _ = image
+}
 
+var myImageView = UIImageView (frame: CGRect(x: 0, y: 0, width: 45, height: 20))
 func makeRoundedRectangle(sz:CGSize) -> UIImage {
     let image = imageOfSize(sz) {
         let p = UIBezierPath(
@@ -211,8 +231,8 @@ func makeRoundedRectangle(sz:CGSize) -> UIImage {
     }
     return image
 }
-
-// 嵌套函数 f
+myImageView.image = makeRoundedRectangle(CGSizeMake(45,20))
+//: 嵌套函数 f
 func makeRoundedRectangleMakerPrelim(sz:CGSize) -> () -> UIImage {
     func f () -> UIImage {
         let im = imageOfSize(sz) {
@@ -225,8 +245,10 @@ func makeRoundedRectangleMakerPrelim(sz:CGSize) -> () -> UIImage {
     }
     return f
 }
-
-
+do {
+    let maker = makeRoundedRectangleMakerPrelim(CGSizeMake(45,20))
+    _ = maker
+}
 func makeRoundedRectangleMakerPrelim2(sz:CGSize) -> () -> UIImage {
     func f () -> UIImage {
         return imageOfSize(sz) {
@@ -238,7 +260,6 @@ func makeRoundedRectangleMakerPrelim2(sz:CGSize) -> () -> UIImage {
     }
     return f
 }
-
 func makeRoundedRectangleMakerPrelim3(sz:CGSize) -> () -> UIImage {
     return {
         return imageOfSize(sz) {
@@ -250,6 +271,7 @@ func makeRoundedRectangleMakerPrelim3(sz:CGSize) -> () -> UIImage {
     }
 }
 
+var myImageView2 = UIImageView (frame: CGRect(x: 0, y: 20, width: 45, height: 20))
 func makeRoundedRectangleMaker(sz:CGSize) -> () -> UIImage {
     return {
         imageOfSize(sz) {
@@ -260,7 +282,8 @@ func makeRoundedRectangleMaker(sz:CGSize) -> () -> UIImage {
         }
     }
 }
-
+let maker = makeRoundedRectangleMaker(CGSizeMake(45,20))
+myImageView2.image = maker()
 // stop hard-coding the radius
 func makeRoundedRectangleMaker2(sz:CGSize, _ r:CGFloat) -> () -> UIImage {
     return {
@@ -272,7 +295,8 @@ func makeRoundedRectangleMaker2(sz:CGSize, _ r:CGFloat) -> () -> UIImage {
         }
     }
 }
-
+let maker2 = makeRoundedRectangleMaker2(CGSizeMake(45,20), 8)
+_ = maker2
 // explicit curry
 func makeRoundedRectangleMaker3(sz:CGSize) -> (CGFloat) -> UIImage {
     return {
@@ -285,12 +309,14 @@ func makeRoundedRectangleMaker3(sz:CGSize) -> (CGFloat) -> UIImage {
         }
     }
 }
-
+let maker3 = makeRoundedRectangleMaker3(CGSizeMake(45,20))
+myImageView.image = maker3(8)
+let image1 = makeRoundedRectangleMaker3(CGSizeMake(45,20))(8)
+_ = image1
 
 // implicit curry: deprecated in Swift 2.2, slated for removal in Swift 3
 
 /*
-
  func makeRoundedRectangleMaker4(sz:CGSize)(_ r:CGFloat) -> UIImage {
  return imageOfSize(sz) {
  let p = UIBezierPath(
@@ -298,9 +324,16 @@ func makeRoundedRectangleMaker3(sz:CGSize) -> (CGFloat) -> UIImage {
  cornerRadius: r)
  p.stroke()
  }
- }
-
  */
+
+
+//        let maker4 = makeRoundedRectangleMaker4(CGSizeMake(45,20))
+//        self.myImageView.image = maker4(8)
+//
+//        let image2 = makeRoundedRectangleMaker4(CGSizeMake(45,20))(8)
+//        _ = image2
+
+
 
 
 func test(h:(Int, Int, Int) -> Int) {}
