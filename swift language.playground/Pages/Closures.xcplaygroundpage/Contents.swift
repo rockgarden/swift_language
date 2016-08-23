@@ -127,21 +127,62 @@ var resultContent: Int = {
 }(4,3)
 resultContent
 
-/*
- ## 捕获值
+/*:
+ ## 捕获值 closure Capture
  闭包可以在其定义的上下文中捕获常量或变量.
  即使定义这些常量和变量的原域已经不存在,闭包仍然可以在闭包函数体内引用和修改这些值.
  闭包是引用类型,但是注意,当一个嵌套函数内的函数作为返回值的时候实际上是创建了一个新的函数.
  */
-// 全局函数
+//: ### 全局函数
+// Demo1
+func pass100 (f:(Int)->()) {
+    f(100)
+}
+var x = 0
+(x)
+func setX(newX: Int) {
+    x = newX
+}
+pass100(setX)
+(x)
+
+// Demo2
 var str = "Hello, playground"
 func test(a: String = "") -> String {
     return str
 }
 test()
-str = "Hello";
+str = "Hello"
 test()
-// 嵌套函数
+
+//: ### 嵌套函数
+// Demo1:
+func countAdder(f:()->()) -> () -> () { // last () = () -> Void
+    var ct = 0
+    return {
+        ct = ct + 1
+        print("count is \(ct)")
+        f()
+    }
+}
+func greet () {
+    print("howdy")
+}
+do {
+    let countedGreet = countAdder(greet)
+    let countedGreet2 = countAdder(greet)
+    countedGreet() //count is 1
+    countedGreet() //count is 2
+    countedGreet2() //count is 1
+}
+do { // showing that functions are reference types
+    let countedGreet = countAdder(greet)
+    let countedGreet2 = countedGreet
+    countedGreet() // count is 1
+    countedGreet2() // count is 2
+}
+
+// Demo2: 函数作为返回值
 func makeIncrementor(forIncrement amount: Int) -> () -> Int {
     var runningTotal = 0
     func incrementor() -> Int {
@@ -150,9 +191,7 @@ func makeIncrementor(forIncrement amount: Int) -> () -> Int {
     }
     return incrementor
 }
-
 let incrementByTen = makeIncrementor(forIncrement: 10)
-incrementByTen()
 incrementByTen()
 incrementByTen()
 
