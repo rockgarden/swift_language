@@ -1,5 +1,6 @@
 //: [Previous](@previous)
 import Foundation
+import MediaPlayer
 //: # THE BASICS
 /*: 
  ## 变量var和常量let
@@ -137,6 +138,73 @@ if knownString != nil {
 let age2 = 10
 assert(age2 >= 0, "年龄要大于0") //<0时可触发
 assert(true == true, "True isn't equal to false")
+//: ## computed Variables
+var now : String {
+get {
+    return NSDate().description
+}
+set {
+    print(newValue)
+}
+}
+now = "Howdy"
+(now)
+
+var now2 : String { // showing you can omit "get" if there is no "set"
+    return NSDate().description
+}
+
+var mp : MPMusicPlayerController {
+    return MPMusicPlayerController.systemMusicPlayer()
+}
+
+// typical "facade" structure
+private var _p : String = ""
+var p : String {
+get {
+    return _p //在类里加self._p
+}
+set {
+    _p = newValue
+}
+}
+
+// observer
+var s = "whatever" {
+willSet {
+    print(newValue)
+}
+didSet {
+    print(oldValue)
+    // self.s = "something else"
+}
+}
+s = "Hello"
+s = "Bonjour"
+
+private var myBigDataReal : NSData! = nil
+var myBigData : NSData! {
+set (newdata) {
+    myBigDataReal = newdata
+}
+get {
+    if myBigDataReal == nil {
+        let fm = NSFileManager()
+        let f = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent("myBigData")
+        if fm.fileExistsAtPath(f) {
+            print("loading big data from disk")
+            myBigDataReal = NSData(contentsOfFile: f)
+            do {
+                try fm.removeItemAtPath(f)
+                print("deleted big data from disk")
+            } catch {
+                print("Couldn't remove temp file")
+            }
+        }
+    }
+    return myBigDataReal
+}
+}
 
 //: 注释 多行注释可以嵌套
 /*
