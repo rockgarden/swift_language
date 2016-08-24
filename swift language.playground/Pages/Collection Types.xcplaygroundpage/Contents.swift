@@ -160,7 +160,7 @@ airports["LAX"] = nil
 airports.removeValueForKey("LAX") //Both remove the key-value pair
 airports["HZ"] = "Hang Zhou" //不存在的Key设置Value,dict自动添加k-v对
 
-//迭代
+//:迭代
 //Iterating over the whole dictionary
 for (key, value) in airports {
     ("\(key): \(value)")
@@ -174,8 +174,7 @@ for airportName in airports.values {
     ("Airport name: \(airportName)")
 }
 
-//空字典
-//Empty Dictionaries
+//:空字典 Empty Dictionaries
 var numbers = [Int: String]()
 numbers = [:] //Both do the same
 numbers[16] = "sixteen"
@@ -185,14 +184,11 @@ emptyDic=[:]
 
 var personErr = ["age":18,"name":"Jack","height":178] //NSObject类型
 var person = ["age":"18","name":"Jack","height":"178"] //String类型
-
 person["age"]
-
 var height:String? = person["height"]
 if height != nil {
     (height)
 }
-
 var dict = Dictionary<String,Int>()
 dict["age"] = 16
 
@@ -201,8 +197,6 @@ scores = Dictionary<String,Int>(minimumCapacity: 5)
 
 let keyArr = [String](person.keys)
 let keyValue = [String](person.values)
-
-
 /*:
  - NOTE:
   You can use your own custom types as dictionary key types by making them conform to the Hashable protocol from Swift’s standard library.
