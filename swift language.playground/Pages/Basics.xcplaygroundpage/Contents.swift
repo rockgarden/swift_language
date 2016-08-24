@@ -168,6 +168,7 @@ set {
     _p = newValue
 }
 }
+p="test"
 
 // observer
 var s = "whatever" {
