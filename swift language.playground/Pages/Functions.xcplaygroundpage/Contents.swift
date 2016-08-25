@@ -77,10 +77,10 @@ let sStringNot = "hello"
 print(removeFromStringNot(sStringNot, character:Character("l")))
 print(sStringNot) // no effect on s
 //: 传类 Parameters 就可 modifiable
-class Dog {
+class Dog0 {
     var name = ""
 }
-func changeNameOfDog(d:Dog, to tostring:String) {
+func changeNameOfDog(d:Dog0, to tostring:String) {
     d.name = tostring // no "var", no "inout" needed
 }
 
@@ -247,7 +247,15 @@ func factorial( max: Int) -> Int {
 ("factorial Result:\(factorial(6))") //注意不要Int超界
 
 
-//: 函数作参数
+//: ## 函数作参数
+func doThis(f:()->()) {
+    f()
+}
+func whatToDo() {
+    print("I did it")
+}
+doThis(whatToDo)
+
 func addInts(a:Int,b:Int)->Int{
     return a+b
 }
@@ -257,11 +265,101 @@ debugPrint("addInts Result:\(mathFunction(2,3))")
 func multiplyInts(a:Int,b:Int)->Int{
     return a*b
 }
-
 func printMathResult(mathFunction:(Int,Int)->Int,a:Int,b:Int){
     ("MathResult:\(mathFunction(a,b))")
 }
 printMathResult(multiplyInts,a: 2,b: 3)
+
+class Cat {
+    func purr () {}
+}
+class Dog {
+    let cat = Cat()
+    func bark() {
+        print("woof")
+    }
+    func bark(loudly:Bool) {
+        if loudly {
+            print("WOOF")
+        } else {
+            self.bark()
+        }
+    }
+    func test() {
+        // let barkFunction = bark
+        let barkFunction1 = bark(_:)
+        let barkFunction2 = bark as Void -> Void
+        let barkFunction3 = bark as Bool -> Void
+        let barkFunction4 : Bool -> Void = bark
+        let barkFunction5 = self.bark(_:)
+        let barkFunction6 = self.dynamicType.bark(_:)
+        let barkFunction7 = Dog.bark(_:)
+        
+        _ = barkFunction1
+        _ = barkFunction2
+        _ = barkFunction3
+        _ = barkFunction4
+        _ = barkFunction5
+        _ = barkFunction6
+        _ = barkFunction7
+        
+        let f = {
+            // return bark(_:) // error
+            return self.bark(_:)
+        }
+        _ = f
+        
+        let purrFunction1 = cat.purr
+        let purrFunction2 = self.cat.purr
+        let purrFunction3 = Cat.purr
+        _ = purrFunction1
+        _ = purrFunction2
+        _ = purrFunction3
+    }
+}
+
+class NoisyDog : Dog {
+    func test2() {
+        let barkFunction1 = bark(_:)
+        let barkFunction2 = self.bark(_:)
+        let barkFunction3 = super.bark(_:)
+        _ = barkFunction1
+        _ = barkFunction2
+        _ = barkFunction3
+    }
+}
+
+class Dog2 {
+    func bark() {}
+    func bark(loudly:Bool) {}
+    func bark(times:Int) {}
+    func test() {
+        // let barkFunction = bark(_:)
+        let barkFunction = bark(_:) as Int -> Void
+        _ = barkFunction
+    }
+}
+
+//: ### 实例
+var myButton: UIButton!
+func moveMyButton (sender:AnyObject!) {
+    func whatToAnimate() {
+        myButton.frame.origin.y += 20
+    }
+    func whatToDoLater(finished:Bool) {
+        print("finished: \(finished)")
+    }
+    UIView.animateWithDuration(
+        0.4, animations: whatToAnimate, completion: whatToDoLater)
+}
+
+func test() {
+    let vc = UIViewController()
+    func whatToDoLater() {
+        print("I finished!")
+    }
+    vc.presentViewController(vc, animated:true, completion:whatToDoLater)
+}
 
 //定义类型函数的变量
 var stringFunction: (String) -> String = sayHello
