@@ -239,8 +239,6 @@ extension String {
 var strEnum: String.suit? = String.judgeSuits("♣︎")
 var strEnum1: String.suit? = String.judgeSuits("j")
 
-
-
 //: [Next](@next)
 
 

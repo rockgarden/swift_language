@@ -31,5 +31,6 @@
         <page name='SequenceType'/>
         <page name='annotation'/>
         <page name='Define and call'/>
+        <page name='typealias'/>
     </pages>
 </playground>

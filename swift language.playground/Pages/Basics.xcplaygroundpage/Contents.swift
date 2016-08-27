@@ -61,10 +61,6 @@ var cc = "rockgarden"
 let number = 6745
 let result = anotherNumber + number
 
-//: 类型别名
-//:typealias is a convenient way to refer to another type in a contextual way.
-typealias AudioResolution = UInt16
-AudioResolution.min
 //: ## 元组
 //: Tuples can be of any kind and of any number of elements
 let success = (200, "Success")
