@@ -4,11 +4,9 @@ import UIKit
 protocol SomeProtocol {
     // protocol definition goes here
 }
-
 protocol AnotherProtocol {
     // protocol definition goes here
 }
-
 class SomeSuperclass {}
 //: 如果一个类有一个父类superclass，父类的名称列在任何协议的前，中间采用逗号分隔。
 class SomeClass: SomeSuperclass, SomeProtocol, AnotherProtocol {
@@ -19,7 +17,6 @@ class SomeClass: SomeSuperclass, SomeProtocol, AnotherProtocol {
  ## Property Requirements
  If a protocol requires a property to be gettable and settable, that property requirement cannot be fulfilled by a constant stored property or a read-only computed property. If the protocol only requires a property to be gettable, the requirement can be satisfied by any kind of property, and it is valid for the property to be also settable if this is useful for your own code.
  */
-
 protocol SomeOtherProtocol {
     var mustBeSettable: Int { get set }
     var doesNotNeedToBeSettable: Int { get }
@@ -30,7 +27,6 @@ protocol FullyNamed {
 }
 
 //: Here’s an example of a simple structure that adopts and conforms to the FullyNamed protocol.
-
 struct Person: FullyNamed {
     var fullName: String
 }
@@ -51,7 +47,6 @@ class Starship: FullyNamed {
 var ncc1701 = Starship(name: "Enterprise", prefix: "USS")
 ncc1701.fullName
 
-
 //: ## Method Requirements
 protocol RandomNumberGenerator {
     func random() -> Double
@@ -70,7 +65,6 @@ class LinearCongruentialGenerator: RandomNumberGenerator {
 var generator = LinearCongruentialGenerator()
 ("Here's a random number: \(generator.random())")
 ("And another one: \(generator.random())")
-
 
 /*:
  ## Mutating Method Requirements
@@ -99,7 +93,6 @@ enum OnOffSwitch: Togglable {
 }
 var lightSwitch = OnOffSwitch.Off
 lightSwitch.toggle()
-
 
 //: ## Initializer Requirements
 protocol SomeNewProtocol {
@@ -453,6 +446,7 @@ let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
  */
 
 //: ## Protocol Example
+//: ### Example 1
 protocol Strokable {
     var strokeWidth: Double {get set}
 }
@@ -492,5 +486,49 @@ struct Rect: HasArea, Mathable {
     static var e: Double = 2.71828
 }
 
+//: ### Example 2
+protocol Flier {
+    func fly()
+}
+struct Bird: Flier {
+    func fly() {
+    }
+    func getWorm() {
+    }
+}
+struct Bee {
+    func fly() {
+    }
+}
+func tellToFly(f: Flier) {
+    f.fly()
+}
+enum Filter: String, CustomStringConvertible {
+    case Albums = "Albums"
+    case Playlists = "Playlists"
+    case Podcasts = "Podcasts"
+    case Books = "Audiobooks"
+    var description: String { return self.rawValue }
+}
+func isBird(f: Flier) -> Bool {
+    return f is Bird
+}
+func tellGetWorm(f: Flier) {
+    (f as? Bird)?.getWorm()
+}
+struct Insect: Flier {
+    func fly() {
+    }
+}
+
+let b = Bird()
+tellToFly(b)
+let b2 = Bee()
+// tellToFly(b2) //compile error
+let type = Filter.Albums
+"It is \(type)"
+let ok = isBird(Bird())
+let ok2 = isBird(Insect())
+_ = b2
 
 //: [Next](@next)
