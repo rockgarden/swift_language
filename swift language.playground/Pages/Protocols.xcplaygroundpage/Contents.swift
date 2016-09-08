@@ -12,7 +12,6 @@ class SomeSuperclass {}
 class SomeClass: SomeSuperclass, SomeProtocol, AnotherProtocol {
     // class definition goes here
 }
-
 /*: 
  ## Property Requirements
  If a protocol requires a property to be gettable and settable, that property requirement cannot be fulfilled by a constant stored property or a read-only computed property. If the protocol only requires a property to be gettable, the requirement can be satisfied by any kind of property, and it is valid for the property to be also settable if this is useful for your own code.
@@ -25,13 +24,12 @@ protocol SomeOtherProtocol {
 protocol FullyNamed {
     var fullName: String { get }
 }
-
-//: Here’s an example of a simple structure that adopts and conforms to the FullyNamed protocol.
+// Here’s an example of a simple structure that adopts and conforms to the FullyNamed protocol.
 struct Person: FullyNamed {
     var fullName: String
 }
 let john = Person(fullName: "John Appleseed")
-
+// Here’s an example of a simple class that adopts and conforms to the FullyNamed protocol.
 class Starship: FullyNamed {
     var prefix: String?
     var name: String
@@ -45,13 +43,13 @@ class Starship: FullyNamed {
     }
 }
 var ncc1701 = Starship(name: "Enterprise", prefix: "USS")
+var ncc1702 = Starship(name: "Enterprise")
 ncc1701.fullName
-
+ncc1702.fullName
 //: ## Method Requirements
 protocol RandomNumberGenerator {
     func random() -> Double
 }
-
 class LinearCongruentialGenerator: RandomNumberGenerator {
     var lastRandom = 42.0
     let m = 139968.0
@@ -65,69 +63,6 @@ class LinearCongruentialGenerator: RandomNumberGenerator {
 var generator = LinearCongruentialGenerator()
 ("Here's a random number: \(generator.random())")
 ("And another one: \(generator.random())")
-
-/*:
- ## Mutating Method Requirements
- If you define a protocol instance method requirement that is intended to mutate instances
- of any type that adopts the protocol, mark the method with the mutating keyword as part
- of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement.
- - NOTE:
- If you mark a protocol instance method requirement as mutating, you do not need to
- write the mutating keyword when writing an implementation of that method for a class.
- The mutating keyword is only used by structures and enumerations.
- */
-protocol Togglable {
-    mutating func toggle()
-}
-
-enum OnOffSwitch: Togglable {
-    case Off, On
-    mutating func toggle() {
-        switch self {
-        case Off:
-            self = On
-        case On:
-            self = Off
-        }
-    }
-}
-var lightSwitch = OnOffSwitch.Off
-lightSwitch.toggle()
-
-//: ## Initializer Requirements
-protocol SomeNewProtocol {
-    init(someParameter: Int)
-}
-
-/*:
- You can implement a protocol initializer requirement on a conforming class as either a designated initializer or a convenience initializer. In both cases, you must mark the initializer implementation with the required modifier:
- */
-
-class SomeNewClass: SomeNewProtocol {
-    required init(someParameter: Int) {
-        // initializer implementation goes here
-    }
-}
-
-/*:
- - NOTE:
- You do not need to mark protocol initializer implementations with the required modifier on classes that are marked with the final modifier, because final classes cannot be subclassed. For more on the final modifier, see Preventing Overrides.
- */
-
-class SomeSuperClass {
-    init() {
-        // initializer implementation goes here
-    }
-}
-
-class SomeSubClass: SomeSuperClass, SomeProtocol {
-    // "required" from SomeProtocol conformance; "override" from SomeSuperClass
-    required override init() {
-        // initializer implementation goes here
-    }
-}
-
-
 /*:
  ## Protocols as Types
  Because it is a type, you can use a protocol in many places where other types are allowed, including:
@@ -137,7 +72,6 @@ class SomeSubClass: SomeSuperClass, SomeProtocol {
  - NOTE:
  Because protocols are types, begin their names with a capital letter (such as FullyNamed and RandomNumberGenerator) to match the names of other types in Swift (such as Int, String, and Double).
  */
-
 class Dice {
     let sides: Int
     let generator: RandomNumberGenerator
@@ -146,21 +80,17 @@ class Dice {
         self.generator = generator
     }
     func roll() -> Int {
-        return Int(generator.random() * Double(sides)) + 1
+        return Int(generator.random()*Double(sides)) + 1
     }
 }
-
-var d6 = Dice(sides: 6, generator: LinearCongruentialGenerator())
-for _ in 1...5 {
-    ("Random dice roll is \(d6.roll())")
+// class support protocol is Protocol
+// 10 以内的随机数
+var d6 = Dice(sides: 10, generator: LinearCongruentialGenerator())
+for _ in 0...9 {
+    print("Random dice roll is \(d6.roll())")
 }
-// Random dice roll is 3
-// Random dice roll is 5
-// Random dice roll is 4
-// Random dice roll is 5
-// Random dice roll is 4
-
-
+// just showing the notation
+func f(f:protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
 //: # Delegation
 protocol DiceGame {
     var dice: Dice { get }
@@ -171,7 +101,6 @@ protocol DiceGameDelegate {
     func game(game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)
     func gameDidEnd(game: DiceGame)
 }
-
 class SnakesAndLadders: DiceGame {
     let finalSquare = 25
     let dice = Dice(sides: 6, generator: LinearCongruentialGenerator())
@@ -181,6 +110,7 @@ class SnakesAndLadders: DiceGame {
         board = [Int](count: finalSquare + 1, repeatedValue: 0)
         board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
         board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+        print(board)
     }
     var delegate: DiceGameDelegate?
     func play() {
@@ -207,7 +137,6 @@ class SnakesAndLadders: DiceGame {
  - Note:
  that the delegate property is defined as an optional DiceGameDelegate, because a delegate isn’t required in order to play the game. Because it is of an optional type, the delegate property is automatically set to an initial value of nil. Thereafter, the game instantiator has the option to set the property to a suitable delegate.
  */
-
 class DiceGameTracker: DiceGameDelegate {
     var numberOfTurns = 0
     func gameDidStart(game: DiceGame) {
@@ -225,19 +154,84 @@ class DiceGameTracker: DiceGameDelegate {
         ("The game lasted for \(numberOfTurns) turns")
     }
 }
-
 //: In action:
-
-let tracker = DiceGameTracker()
+let tracker = DiceGameTracker() //new instance
 let game = SnakesAndLadders()
 game.delegate = tracker
 game.play()
-
+/*:
+ ## Mutating Method Requirements
+ If you define a protocol instance method requirement that is intended to mutate instances
+ of any type that adopts the protocol, mark the method with the mutating keyword as part
+ of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement.
+ - NOTE:
+ If you mark a protocol instance method requirement as mutating, you do not need to
+ write the mutating keyword when writing an implementation of that method for a class.
+ The mutating keyword is only used by structures and enumerations.
+ */
+protocol Togglable {
+    mutating func toggle()
+}
+enum OnOffSwitch: Togglable {
+    case Off, On
+    mutating func toggle() {
+        switch self {
+        case Off:
+            self = On
+        case On:
+            self = Off
+        }
+    }
+}
+var lightSwitch = OnOffSwitch.Off
+lightSwitch.toggle()
+//: ## Initializer Requirements
+protocol SomeNewProtocol {
+    init(someParameter: Int)
+}
+/*:
+ You can implement a protocol initializer requirement on a conforming class as either a designated initializer or a convenience initializer. In both cases, you must mark the initializer implementation with the required modifier:
+ */
+class SomeNewClass: SomeNewProtocol {
+    // init(someParameter: Int) {} // compile error
+    required init(someParameter: Int) {
+        // initializer implementation goes here
+    }
+}
+final class SomeFinalClass : SomeNewProtocol {
+    init(someParameter: Int) {}
+}
+/*:
+ - NOTE:
+ You do not need to mark protocol initializer implementations with the required modifier on classes that are marked with the final modifier, because final classes cannot be subclassed. For more on the final modifier, see Preventing Overrides.
+ */
+class SomeSuperClass {
+    init() {
+        // initializer implementation goes here
+    }
+}
+class SomeSubClass: SomeSuperClass, SomeProtocol {
+    // "required" from SomeProtocol conformance; "override" from SomeSuperClass
+    required override init() {
+        // initializer implementation goes here
+    }
+}
+// system protocol
+struct Nest : IntegerLiteralConvertible {
+    var eggCount : Int = 0
+    init() {}
+    init(integerLiteral val: Int) {
+        self.eggCount = val
+    }
+}
+func reportEggs(nest: Nest) {
+    ("this nest contains \(nest.eggCount) eggs")
+}
+reportEggs(4)
 /*: ## Adding Protocol Conformance with an Extension
  You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type.
  Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand
  */
-
 protocol TextRepresentable {
     var textualDescription: String { get }
 }
@@ -250,9 +244,7 @@ extension Dice: TextRepresentable {
 
 let d12 = Dice(sides: 12, generator: LinearCongruentialGenerator())
 (d12.textualDescription)
-
 /*: Declaring Protocol Adoption with an Extension */
-
 struct Hamster {
     var name: String
     var textualDescription: String {
@@ -260,10 +252,7 @@ struct Hamster {
     }
 }
 extension Hamster: TextRepresentable {}
-
-
 //: Protocols can also be added to collections
-
 let simon = Hamster(name: "Simon")
 let things: [TextRepresentable] = [d12, simon]
 
@@ -310,15 +299,12 @@ extension SnakesAndLadders: PrettyTextRepresentable {
 
 /*:
  ## Class-Only Protocols
- You can limit protocol adoption to class types (and not structures or enumerations) by adding the class keyword to a protocol’s inheritance list. The class keyword must always appear first in a protocol’s inheritance list, before any inherited protocols
+ You can limit protocol adoption采用 to class types (and not structures or enumerations) by adding the class keyword to a protocol’s inheritance list. The class keyword must always appear first in a protocol’s inheritance list, before any inherited protocols
  */
-
 protocol SomeInheritedProtocol {}
-
 protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
     // class-only protocol definition goes here
 }
-
 /*:
  ## Protocol Composition
  It can be useful to require a type to conform to multiple protocols at once.
@@ -326,7 +312,6 @@ protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
  Protocol compositions have the form protocol<SomeProtocol, AnotherProtocol>.
  You can list as many protocols within the pair of angle brackets (<>) as you need, separated by commas.
  */
-
 protocol Named {
     var name: String { get }
 }

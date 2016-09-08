@@ -61,10 +61,10 @@ var cc = "rockgarden"
 let number = 6745
 let result = anotherNumber + number
 
-//: ## 元组
+//: ## Tuple 元组
 //: Tuples can be of any kind and of any number of elements
 let success = (200, "Success")
-typealias Success = (Int, String)
+typealias Success = (Int, String) //用typealias定义
 let exito: Success = success
 //: If you receive a response in this format, it can be conveniently stored like this.
 let (code, message) = success
@@ -72,6 +72,11 @@ let (code, message) = success
 let (response, _) = success
 ("The code is \(response)")
 ("\(success.0)")
+do {
+    let pair = (1, "One")
+    let (_, s) = pair // now s is "One"
+    _ = s
+}
 //: Values can be accessed like indexes:
 success.0
 success.1
@@ -79,23 +84,160 @@ success.1
  定义元组的时候,给单个元素命名
  names can be added upon declaration
  Invalid redeclaration of name 不能多次命名
-*/
+ */
 let someTuple = (number: 456, assertion: "Yes")
 someTuple.number
 someTuple.assertion
 
-var scorKey:(math:Int,english:Int,assessment:String)
-scorKey = (english:80,math:89,assessment:"A")
+var scorKey:(math:Int, english:Int, assessment:String)
+scorKey = (english:80, math:89, assessment:"A")
 
 var peopleRec:(Int,String,(Int,Int))
 peopleRec = (10,"元组元组",(28,32))
 (peopleRec.2.0)
-//: ### 通过解构元组交换
-var aa=1,bb=2
+//: 通过解构元组交换变量
+var aa=1, bb=2
 (aa,bb) = (bb,aa)
 aa
 bb
+do {
+    var s1 = "Hello"
+    var s2 = "world"
+    (s1, s2) = (s2, s1) // now s1 is "world" and s2 is "Hello"
+}
+//: ### Use Example
+do {
+    let pair : (Int, String) = (1, "One")
+    _ = pair
+}
+do {
+    let pair = (1, "One")
+}
+do {
+    var ix: Int
+    var s: String
+    (ix, s) = (1, "One")
+    _ = ix
+    _ = s
+}
+do {
+    let (ix, s) = (1, "One") // can use let or var here
+    _ = ix
+    _ = s
+}
 
+
+do {
+    let s = "hello"
+    for (ix,c) in s.characters.enumerate() {
+        print("character \(ix) is \(c)")
+    }
+}
+do {
+    var pair = (1, "One")
+    let ix = pair.0 // now ix is 1
+    pair.0 = 2 // now pair is (2, "One")
+    (pair)
+    _ = ix
+}
+do {
+    let pair : (first:Int, second:String) = (1, "One")
+    _ = pair
+}
+do {
+    let pair = (first:1, second:"One")
+    _ = pair
+}
+do {
+    var pair = (first:1, second:"One")
+    let x = pair.first // 1
+    pair.first = 2
+    let y = pair.0 // 2
+    _ = x
+    _ = y
+}
+do {
+    let pair = (1, "One")
+    let pairWithNames : (first:Int, second:String) = pair
+    let ix = pairWithNames.first // 1
+    _ = pair
+    _ = pairWithNames
+    _ = ix
+}
+do {
+    var pairWithoutNames = (1, "One")
+    pairWithoutNames = (first:2, second:"Two")
+    (pairWithoutNames)
+    // let ix = pairWithoutNames.first // compile error, we stripped the names
+}
+do {
+    func tupleMaker() -> (first:Int, second:String) {
+        return (1, "One")
+    }
+    let ix = tupleMaker().first // 1
+    (ix)
+}
+
+
+//: parameter list in function call is actually a tuple
+// however, new in Swift 2.2, these two calls now get a warning:
+// "Passing 2 arguments to a callee as a single tuple value is deprecated"
+// so is this "feature" going away? If so, you could _store_ as a tuple ...
+// ...but _pass_ as individual arguments
+func f (i1:Int, _ i2:Int) -> () {}
+func f2 (i1 i1:Int, i2:Int) -> () {}
+do {
+    let tuple = (1,2)
+    f(tuple)
+}
+do {
+    let tuple = (i1:1, i2:2)
+    f2(tuple)
+}
+do {
+    //            var tuple = (i1:1, i2:2)
+    //            f2(tuple) // compile error
+}
+do { // examples from the dev forums
+    var array: [(Int, Int)] = []
+    // Error - literals
+    // array.append(1, 1)
+    // Error - let integer
+    // let int_const = 1
+    // array.append(int_const, 1)
+    
+    // OK - let tuple
+    let const_tuple: (Int, Int) = (1, 1)
+    array.append(const_tuple)
+    
+    // NOK - var integer
+    // var int_var = 1
+    // array.append(int_var, 1)
+    
+    // OK - var tuple
+    var var_tuple: (Int, Int) = (1, 1)
+    array.append(var_tuple)
+}
+do {
+    var array: [(Int, Int)] = []
+    // OK - literals
+    array.append((1,1))
+    // OK - let integer
+    let int_const = 1
+    array.append((int_const, 1))
+    // OK - let tuple
+    let const_tuple: (Int, Int) = (1, 1)
+    array.append(const_tuple)
+    // OK - var integer
+    var int_var = 1
+    array.append((int_var, 1))
+    // OK - var tuple
+    var var_tuple: (Int, Int) = (1, 1)
+    array.append(var_tuple)
+    // shut the compiler up
+    int_var = 0
+    var_tuple = (0,0)
+}
 /*:
  ## Optionals
  Optionals whether have a value or not.

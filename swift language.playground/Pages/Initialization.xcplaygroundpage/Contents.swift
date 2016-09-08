@@ -168,7 +168,18 @@ let other = Other(temp: 20, otherProp: 10)
 if let product = Product(name: "Apple"){
     ("Product is not nil. Names \(product.name)")
 }
-
+//: ### Example
+struct DigitFailable {
+    var number : Int
+    var meaningOfLife : Bool
+    init?(number:Int) {
+        if number != 42 {
+            return nil // early exit is legal for a struct in Swift 2.0
+        }
+        self.number = number
+        self.meaningOfLife = false
+    }
+}
 //: ## conditional Initialization
 // showing that Swift no longer warns when AnyObject is implicitly assigned
 let arr = [1 as AnyObject, "howdy" as AnyObject]
@@ -234,7 +245,108 @@ func btiExample() {
                 UIApplication.sharedApplication().endBackgroundTask(bti)
             })
     }
+}
 
+//: ### Example
+class Dog {
+}
+
+class Dog2 {
+    var name = ""
+    var license = 0
+    init() {
+    }
+    init(name:String) {
+        self.name = name
+    }
+    init(license:Int) {
+        self.license = license
+    }
+    init(name:String, license:Int) {
+        self.name = name
+        self.license = license
+    }
+}
+
+class Dog4 {
+//    var name = ""
+//    var license = 0
+    var name : String // no default value!
+    var license : Int // no default value!
+    init(name:String = "", license:Int = 0) {
+        self.name = name
+        self.license = license
+    }
+}
+
+//Error: initalizer without initializing all stored properties
+// class Dog5not {
+// var name : String
+// var license : Int
+// init(name:String = "") {
+// self.name = name  }
+// }
+
+class DogReal {
+    let name : String
+    let license : Int
+    init(name:String, license:Int) {
+        self.name = name
+        self.license = license
+    }
+}
+
+
+struct Cat {
+    var name : String
+    var license : Int
+    init(name:String, license:Int) {
+        self.name = name
+        // meow() // too soon - compile error
+        self.license = license
+    }
+    func meow() {
+        print("meow")
+    }
+}
+
+struct Digit {
+    var number : Int
+    var meaningOfLife : Bool
+    // let meaningOfLife : Bool // would be legal but delegating initializer cannot set it
+    init(number:Int) {
+        self.number = number
+        self.meaningOfLife = false
+    }
+    init() { // delegating initializer
+        self.init(number:42)
+        self.meaningOfLife = true
+    }
+}
+
+struct Digit2 { // I regard the legality of this as a compiler bug
+    var number : Int = 100
+    init(value:Int) {
+        self.init(number:value)
+    }
+    init(number:Int) {
+        self.init(value:number)
+    }
+}
+
+class DogFailable {
+    let name : String
+    let license : Int
+    init!(name:String, license:Int) {
+        if name.isEmpty {
+            return nil // early exit is legal for a class in Swift 2.2
+        }
+        if license <= 0 {
+            return nil
+        }
+        self.name = name
+        self.license = license
+    }
 }
 
 /*:
