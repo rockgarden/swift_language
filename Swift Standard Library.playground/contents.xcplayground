@@ -12,5 +12,6 @@
         <page name='Understanding Sequence and Collection Protocols'/>
         <page name='Revision History'/>
         <page name='License'/>
+        <page name='String'/>
     </pages>
 </playground>

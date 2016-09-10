@@ -126,7 +126,6 @@ do {
     _ = s
 }
 
-
 do {
     let s = "hello"
     for (ix,c) in s.characters.enumerate() {
@@ -237,6 +236,9 @@ do {
     // shut the compiler up
     int_var = 0
     var_tuple = (0,0)
+    array
+    array[2].1 = 13
+    array
 }
 /*:
  ## Optionals
