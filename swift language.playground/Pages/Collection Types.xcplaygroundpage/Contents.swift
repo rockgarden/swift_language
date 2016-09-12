@@ -138,9 +138,6 @@ let aFibseq = Array(fibseq)
 var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
 nsArray.componentsJoinedByString("-")
 
-
-
-
 //: ## Dictionaries
 
 var airports: [String: String] = ["JFK": "John F. Kennedy", "SCL": "Arturo Merino Benitez"]
@@ -159,8 +156,7 @@ if let airportName = airports["LAX"] { //Subscript always returns optional in ca
 airports["LAX"] = nil
 airports.removeValueForKey("LAX") //Both remove the key-value pair
 airports["HZ"] = "Hang Zhou" //不存在的Key设置Value,dict自动添加k-v对
-
-//:迭代
+//: ### 迭代
 //Iterating over the whole dictionary
 for (key, value) in airports {
     ("\(key): \(value)")
@@ -173,8 +169,7 @@ for airportCode in airports.keys {
 for airportName in airports.values {
     ("Airport name: \(airportName)")
 }
-
-//:空字典 Empty Dictionaries
+//: 空字典 Empty Dictionaries
 var numbers = [Int: String]()
 numbers = [:] //Both do the same
 numbers[16] = "sixteen"
@@ -194,13 +189,13 @@ dict["age"] = 16
 
 var scores: [String: Int]
 scores = Dictionary<String,Int>(minimumCapacity: 5)
-
+//: 获取keys或values可用计数
 let keyArr = [String](person.keys)
 let keyValue = [String](person.values)
 /*:
  - NOTE:
-  You can use your own custom types as dictionary key types by making them conform to the Hashable protocol from Swift’s standard library.
-  Types that conform to the Hashable protocol must provide a gettable Int property called hashValue, and must also provide an implementation of the “is equal” operator (==). The value returned by a type’s hashValue property is not required to be the same across different executions of the same program, or in different programs.
+ You can use your own custom types as dictionary key types by making them conform to the Hashable protocol from Swift’s standard library.
+ Types that conform to the Hashable protocol must provide a gettable Int property called hashValue, and must also provide an implementation of the “is equal” operator (==). The value returned by a type’s hashValue property is not required to be the same across different executions of the same program, or in different programs.
  */
 //: All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default
 
