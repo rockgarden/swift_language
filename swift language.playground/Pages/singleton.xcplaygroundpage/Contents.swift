@@ -1,6 +1,11 @@
 //: [Previous](@previous)
 
+//: #singleton
 import Foundation
+
+class MyClass {
+    static let sharedMyClassSingleton = MyClass()
+}
 
 class TestObject {
     private static let testObject = TestObject()
@@ -8,7 +13,6 @@ class TestObject {
         return testObject
     }
     private init(){
-
     }
 }
 
@@ -25,6 +29,7 @@ class UserDefault: NSObject {
     override init() {
         super.init()
         self.defaults = NSUserDefaults.standardUserDefaults()
+    }
 }
 
 //: [Next](@next)

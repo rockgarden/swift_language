@@ -2,6 +2,7 @@
 <playground version='6.0' target-platform='ios' display-mode='raw'>
     <pages>
         <page name='Basics'/>
+        <page name='boolAndNumbers'/>
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
         <page name='recursion'/>
@@ -32,5 +33,6 @@
         <page name='annotation'/>
         <page name='Define and call'/>
         <page name='typealias'/>
+        <page name='lazy'/>
     </pages>
 </playground>

@@ -94,7 +94,7 @@ array.reduce(0, combine: combinator)
 
 /* 划分（Partition）处理
  为元组定义个别名，此外 Acc 也是闭包传入的 accumulator 的类型
-*/
+ */
 typealias Acc = (l: [Int], r: [Int])
 func partition(lst: [Int], criteria: (Int) -> Bool) -> Acc {
     return lst.reduce((l: [Int](), r: [Int]()), combine: { (ac: Acc, o: Int) -> Acc in
@@ -129,7 +129,8 @@ array.reduce(Int.max, combine: min)
     }
 })
 
-/* Group By
+/*: 
+ ### Group By 分组
  遍历整个列表，通过一个鉴别函数对列表中元素进行分组，将分组后的列表作为结果值返回。
  问题中的鉴别函数返回值类型需要遵循 Hashable 协议，这样我们才能拥有不同的键值。此外保留元素的排序，而组内元素排序则不一定被保留下来。*/
 func groupby<T, H: Hashable>(items: [T], f: (T) -> H) -> [H: [T]] {
