@@ -274,6 +274,48 @@ if knownString != nil {
     knownString // No need for explicit unwrapping
 }
 
+//: ### Example
+var stringMaybe = Optional("howdy")
+stringMaybe = Optional("farewell")
+//print(stringMaybe) // 包含Optional("farewell")
+stringMaybe = "farewell" // wrapped implicitly as it is assigned
+func optionalExpecter(s:String?) { print(s) }
+func realStringExpecter(s:String) {}
+let stringMaybe2 : String? = "howdy"
+optionalExpecter(stringMaybe)
+optionalExpecter("howdy") // wrapped implicitly as it is passed
+// realStringExpecter(stringMaybe) // compile error, no implicit unwrapping
+realStringExpecter(stringMaybe!)
+let upper = stringMaybe!.uppercaseString
+let stringMaybe3 : ImplicitlyUnwrappedOptional<String> = "howdy"
+realStringExpecter(stringMaybe3) // no problem
+let stringMaybe4 : String! = "howdy"
+realStringExpecter(stringMaybe4)
+var stringMaybe5 : String? = "Howdy"
+stringMaybe5 = nil
+
+var crash : Bool {return false}
+if crash {
+    var stringMaybe6 : String?
+    optionalExpecter(stringMaybe6) // legal because of implicit initialization
+    let s = stringMaybe6! // crash!
+    _ = s
+    _ = stringMaybe6
+    stringMaybe6 = "howdy"
+}
+
+let stringMaybe7 : String?
+// optionalExpecter(stringMaybe7) // compile error; can't do that with a `let`
+
+do {
+    var stringMaybe : String?
+    if stringMaybe != nil {
+        let s = stringMaybe!
+        _ = s
+    }
+    stringMaybe = "howdy"
+}
+
 //: ## 断言
 let age2 = 10
 assert(age2 >= 0, "年龄要大于0") //<0时可触发

@@ -98,6 +98,7 @@ enum planet {
 }
 var p1 = planet.earth(weight: 1.0, name: "地球")
 var p3 = planet.mars(density: 3.95, name: "火星", weight: 0.1)
+var p2: planet = .venus(3.95, "水星")
 
 switch(p3){
 case planet.earth(var weight, var name):
@@ -108,5 +109,23 @@ default:
     break
 }
 
+enum Error2 {
+    case Number(Int)
+    case Message(String)
+    case Fatal(n:Int, s:String)
+}
+do {
+    let fatalMaker = Error2.Fatal
+    let err = fatalMaker(n:-1000, s:"Unbelievably bad error")
+    _ = err
+}
+
+var s : String? = "howdy"
+switch s {
+case .Some(let theString):
+    (theString) // howdy
+case .None:
+    ("it's nil")
+}
 
 //: [Next](@next)
