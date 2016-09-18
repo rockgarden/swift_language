@@ -282,6 +282,11 @@ stringMaybe = "farewell" // wrapped implicitly as it is assigned
 func optionalExpecter(s:String?) { print(s) }
 func realStringExpecter(s:String) {}
 let stringMaybe2 : String? = "howdy"
+do {
+    let stringMaybe2: String? = nil
+    let upper4 = stringMaybe2?.uppercaseString // no crash!
+    print(upper4)
+}
 optionalExpecter(stringMaybe)
 optionalExpecter("howdy") // wrapped implicitly as it is passed
 // realStringExpecter(stringMaybe) // compile error, no implicit unwrapping
@@ -314,6 +319,32 @@ do {
         _ = s
     }
     stringMaybe = "howdy"
+}
+
+do {
+    let v = UIView()
+    let c = v.backgroundColor
+    // let c2 = c.colorWithAlphaComponent(0.5) // compile error
+    let c2 = c?.colorWithAlphaComponent(0.5)
+}
+do {
+    let arr = [1, 2, 3]
+    let ix = (arr as NSArray).indexOfObject(4)
+    if ix == NSNotFound { print("not found") }
+    
+    let arr2 = [1, 2, 3]
+    let ix2 = arr2.indexOf(4)
+    if ix2 == nil { print("not found") }
+}
+do {
+    class Dog {
+        var noise: String?
+        func speak() -> String? {
+            return self.noise
+        }
+    }
+    let d = Dog()
+    let bigname = d.speak()?.uppercaseString
 }
 
 //: ## 断言

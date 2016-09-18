@@ -12,6 +12,13 @@ import UIKit
  method, or subscript you are querying returns a nonoptional value.
  Specifically, the result of an optional chaining call is of the same type as the expected return value, but wrapped in an optional.
  */
+//: like this:
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        // longer chain - still just one Optional results
+        _ = self.view.window?.rootViewController?.view.frame
+    }
+}
 
 class Person {
     var residence: Residence?
@@ -116,11 +123,11 @@ bob.residence?.address = someAddress
 
 func createAddress() -> Address {
     print("Function was called.")
-
+    
     let someAddress = Address()
     someAddress.buildingNumber = "29"
     someAddress.street = "Acacia Road"
-
+    
     return someAddress
 }
 

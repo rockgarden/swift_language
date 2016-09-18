@@ -1,5 +1,5 @@
 //: [Previous](@previous)
-
+import UIKit
 //: # Enum
 /*:
  Definition of an Enum
@@ -11,7 +11,7 @@ enum CompassPoint {
     case East
     case West
 }
-//:等效于
+//: 等效于
 enum CompassPointA {
     case North, South, East, West
 }
@@ -61,6 +61,48 @@ let asciiCode = ASCIIControlCharacter.Tab
 if let lineFeed = ASCIIControlCharacter(rawValue: "\r") {
     //Do something
     lineFeed
+}
+do {
+    enum Filter : String {
+        case Albums = "Albums"
+        case Playlists = "Playlists"
+        case Podcasts = "Podcasts"
+        case Books = "Audiobooks"
+        static var cases : [Filter] = [Albums, Playlists, Podcasts, Books]
+        init!(_ ix: Int) {
+            if !(0...3).contains(ix) {
+                return nil
+            }
+            self = Filter.cases[ix]
+        }
+        init!(_ rawValue: String) {
+            self.init(rawValue: rawValue)
+        }
+        var description : String { return self.rawValue }
+        var s : String {
+            get { return "howdy" }
+            set {}
+        }
+        mutating func advance() {
+            var ix = Filter.cases.indexOf(self)!
+            ix = (ix + 1) % 4
+            self = Filter.cases[ix]
+        }
+        
+    }
+    let type1 = Filter.Albums
+    let type2 = Filter(rawValue: "Playlists")! //???: init
+    let type3 = Filter(2) // .Podcasts
+    let type4 = Filter(5) // nil
+    let type5 = Filter("Playlists")
+    (type5.description)
+    // type5.s = "test" // compile error
+    var type6 = type5
+    type6.s = "test" //no set, so still type5
+    (type6.s)
+    var type7 = Filter.Books
+    type7.advance() // Filter.Albums, 返回0 = Albums
+    (type7)
 }
 //: 赋值
 enum season: Character{
@@ -127,5 +169,24 @@ case .Some(let theString):
 case .None:
     ("it's nil")
 }
-
+//: # Example
+enum ShapeMaker {
+    case Rectangle
+    case Ellipse
+    case Diamond
+    func drawShape (p: CGMutablePath, inRect r : CGRect) -> () {
+        switch self {
+        case Rectangle:
+            CGPathAddRect(p, nil, r)
+        case Ellipse:
+            CGPathAddEllipseInRect(p, nil, r)
+        case Diamond:
+            CGPathMoveToPoint(p, nil, r.minX, r.midY)
+            CGPathAddLineToPoint(p, nil, r.midX, r.minY)
+            CGPathAddLineToPoint(p, nil, r.maxX, r.midY)
+            CGPathAddLineToPoint(p, nil, r.midX, r.maxY)
+            CGPathCloseSubpath(p)
+        }
+    }
+}
 //: [Next](@next)
