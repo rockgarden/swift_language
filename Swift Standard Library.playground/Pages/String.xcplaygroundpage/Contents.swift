@@ -141,11 +141,11 @@ do {
 }
 
 do {
-    let s = "hello: ello: ekjfwijfiwjqifj"
-    let firstL = s.characters.indexOf(":")?.successor() // Optional(2), meaning the third character
+    let s = "hello: ello: ekjfwijfiwjqifj!"
+    let firstL = s.characters.indexOf("!")?.successor() // Optional(2), meaning the third character
     firstL
     s.substringToIndex(firstL!)
-    s.substringFromIndex(firstL!)
+    print(s.substringFromIndex(firstL!))
     firstL
     let lastL = String(s.characters.reverse()).characters.indexOf("l")
 }

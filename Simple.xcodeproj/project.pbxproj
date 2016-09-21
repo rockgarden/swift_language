@@ -61,7 +61,6 @@
 		446250C01D47BA82005D0B5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ErrorHandling.xcodeproj; sourceTree = "<group>"; };
 		44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Swift_LocalizedString.playground; sourceTree = "<group>"; };
-		44B7B00F1D0326F20030EC8D /* UIStackView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = UIStackView.playground; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
 		C20B83D21D6ADF7500C12286 /* KVOPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = KVOPlayground.playground; sourceTree = "<group>"; };
 		F1E89DB71A37AD53007C4166 /* Simple */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simple; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +156,6 @@
 				446250A61D47BA0F005D0B5F /* 2015-09-VariancePlayground.playground */,
 				446250A71D47BA0F005D0B5F /* 2015-10-MapFlatMapPlayground.playground */,
 				44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */,
-				44B7B00F1D0326F20030EC8D /* UIStackView.playground */,
 				44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */,
 				C20B83D21D6ADF7500C12286 /* KVOPlayground.playground */,
 				44D7694E1CFDD9680031291B /* Help.playground */,
