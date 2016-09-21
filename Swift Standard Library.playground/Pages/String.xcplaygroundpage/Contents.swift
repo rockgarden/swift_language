@@ -141,8 +141,12 @@ do {
 }
 
 do {
-    let s = "hello"
-    let firstL = s.characters.indexOf("l") // Optional(2), meaning the third character
+    let s = "hello: ello: ekjfwijfiwjqifj"
+    let firstL = s.characters.indexOf(":")?.successor() // Optional(2), meaning the third character
+    firstL
+    s.substringToIndex(firstL!)
+    s.substringFromIndex(firstL!)
+    firstL
     let lastL = String(s.characters.reverse()).characters.indexOf("l")
 }
 
@@ -250,8 +254,9 @@ do {
 }
 
 do {
-    let s = "hello Hello"
-    let r = s.rangeOfString("ell") // a Swift Range (wrapped in an Optional)
+    let s = "hello : Hello :"
+    let r = s.rangeOfString(":") // a Swift Range (wrapped in an Optional)
+    print(r)
 }
 
 do {
