@@ -39,38 +39,171 @@ import UIKit
 /*:
  ## structures
  */
-struct Resolution {
-    var width = 0
-    var height = 0
-}
-
-class ViewController: UIViewController {
-    var resolution = Resolution()
-}
-
-struct Dog {
-    var name: String
-    var age: Int
-    func run() {
-        name
+do {
+    struct Resolution {
+        var width = 0
+        var height = 0
+    }
+    class ViewController: UIViewController {
+        var resolution = Resolution()
     }
 }
-var dog = Dog(name: "rock", age: 2)
-dog.name
-dog.run()
-var dog2 = dog //struct copy!
-dog2.name = "snoopy"
-dog2.name
-dog.name
-
-let rect = CGRectZero
-var arrow = CGRectZero
-var body = CGRectZero
-struct Arrow {
-    static let ARHEIGHT : CGFloat = 0
+do {
+    struct Dog {
+        var name: String
+        var age: Int
+        func run() {
+            name
+        }
+    }
+    var dog = Dog(name: "rock", age: 2)
+    dog.name
+    dog.run()
+    var dog2 = dog //struct copy!
+    dog2.name = "snoopy"
+    dog2.name
+    dog.name
 }
-CGRectDivide(rect, &arrow, &body, Arrow.ARHEIGHT, .MinYEdge)
-
+do {
+    let rect = CGRectZero
+    var arrow = CGRectZero
+    var body = CGRectZero
+    struct Arrow {
+        static let ARHEIGHT : CGFloat = 0
+    }
+    CGRectDivide(rect, &arrow, &body, Arrow.ARHEIGHT, .MinYEdge)
+}
+do {
+    struct Digit3 {
+        var number = 42
+        init() {}
+        init(number:Int) {
+            self.number = number
+        }
+    }
+}
+do {
+    struct Thing {
+        var rawValue : Int = 0
+        static var One = Thing(rawValue:1)
+        static var Two = Thing(rawValue:2)
+    }
+    let t = Thing.One
+    t.rawValue
+    //t.One //static member 'One' cannot be used on instance of type 'Thing'
+    let thing : Thing = .Two // no need to say Thing.One here
+    thing.rawValue
+    let th = Thing.init(rawValue: 10)
+    th.rawValue
+}
+do {
+    struct DigitReplacer {
+        var number = 42
+        mutating func replace() {
+            self = DigitReplacer(number:86)
+        }
+    }
+    var d = DigitReplacer()
+    d.number
+    d.replace()
+    d.number
+}
+//: ## 值类型和引用类型 value Types And Reference Types
+do {
+    struct Digit {
+        var number: Int
+        init(_ n: Int) {
+            self.number = n
+        }
+        mutating func changeNumberTo(n: Int) {
+            self.number = n
+        }
+        // illegal without "mutating"
+        /*
+         func changeNumberTo2(n:Int) {
+         self.number = n // compile error
+         }
+         */
+    }
+    class Dog {
+        var name : String = "Fido"
+    }
+    /*
+     func digitChanger(d:Digit) {
+     d.number = 42 // compile error: cannot assign to 'number' in 'd'
+     }
+     */
+    // currently works, but deprecated in Swift 2.2 and will be removed in Swift 3
+    // the example exactly illustrates the reason: you probably _think_ you are changing the original Digit object...
+    // but you're just changing a copy
+    // hence you now have two options: either redeclare var d = d to make local d mutable...
+    // or, if you really intended to change the original Digit, use inout
+    func digitChangerO(inout d: Digit) {
+        d.number = 42
+    }
+    func digitChanger(d: Digit) {
+        var d = d
+        d.number = 42
+    }
+    func dogChanger(d: Dog) {
+        d.name = "Rover"
+    }
+    //???: this is now legal:
+    enum Node {
+        case None(Int)
+        indirect case Left(Int, Node)
+        indirect case Right(Int, Node)
+        indirect case Both(Int, Node, Node)
+    }
+    let d = Digit(123)
+    //d.number = 42 // compile error: cannot assign to property: 'd' is a 'let' constant need change to var
+    var d2: Digit = Digit(123) {
+        didSet {
+            ("d2 was set")
+        }
+    }
+    d2.number = 42 // "d2 was set"
+    do {
+        var d = Digit(123)
+        // let d = Digit(123)
+        d.changeNumberTo(42) // compile error if d is `let`
+    }
+    let rover = Dog()
+    rover.name = "Rover" // fine
+    var rover2 = Dog() {
+        didSet {
+            ("did set rover2")
+        }
+    }
+    rover2.name = "Rover" // nothing in console
+    do {
+        let d = Digit(123)
+        (d.number) // 123
+        var d2 = d // assignment! Struct value
+        d2.number = 42
+        (d.number) // 123
+    }
+    do {
+        let fido = Dog()
+        (fido.name) // Fido
+        let rover = fido // assignment! Class Reference
+        rover.name = "Rover"
+        (fido.name) // Rover
+    }
+    
+    do {
+        let d = Digit(123)
+        (d.number) // 123
+        digitChanger(d)
+        (d.number) // 123
+    }
+    do {
+        let fido = Dog()
+        (fido.name) // "Fido"
+        dogChanger(fido)
+        (fido.name) // "Rover"
+    }
+}
 /*:
  ## Classes
  */

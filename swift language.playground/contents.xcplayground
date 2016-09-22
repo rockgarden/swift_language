@@ -12,6 +12,7 @@
         <page name='Enumerations'/>
         <page name='Methods'/>
         <page name='Classes &amp; Structs'/>
+        <page name='Set'/>
         <page name='Properties'/>
         <page name='Subscripts'/>
         <page name='Inheritance'/>
