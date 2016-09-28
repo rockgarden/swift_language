@@ -261,7 +261,6 @@ var p2=p
 p2.name = "rock"
 p.name //class reference!
 
-
 class user {
     let name: String //注意在init里多对let的实例常量进行赋值,这是初始化方法的重要特点
     let age: Int
@@ -282,7 +281,6 @@ u3 === u1
 var u4 = user(name:"lily", age:10)
 u4.info() //???
 
-
 class pm {
     var name: String!
     init?(name: String) { //?可失败的初始化方法,即不保证所有Optional的实例变量被赋值初始化,可返回nil
@@ -292,6 +290,7 @@ class pm {
         self.name = name
     }
 }
+
 class subPM: pm {
     var grade: Int!
     init!(name: String, grade: Int) { //!=?
@@ -317,46 +316,86 @@ class myDog{
     }
 }
 
-
-class Bird {
-    var name: String!
-    init(){}
-    init?(name: String) {
-        if name.isEmpty {
-            return nil
+//: ### Sub Class
+do {
+    class Quadruped {
+        func walk () {
+            ("walk walk walk")
         }
-        self.name = name
     }
-    func fly() {
+    class Dog : Quadruped {
+        func bark () {
+            ("woof")
+        }
+        func bark2 () {
+            ("woof")
+        }
+        func barkAndWalk() {
+            self.bark()
+            self.walk()
+        }
     }
+    class Cat : Quadruped {}
+    class NoisyDog : Dog {
+        override func bark () {
+            ("woof woof woof")
+        }
+        override func bark2 () {
+            for _ in 1...3 {
+                super.bark()
+            }
+        }
+    }
+    let fido = Dog()
+    fido.walk() // walk walk walk
+    fido.bark() // woof
+    fido.barkAndWalk() // woof walk walk walk
+    
+    let rover = NoisyDog()
+    rover.bark() // woof woof woof
+    rover.bark2() // woof woof woof
 }
-class Sparrow: Bird {
-    var weight: Double!
-    init?(name: String, weight: Double) { //init?可调用super.init?
-        super.init(name: name)
-        if weight <= 0 {
-            return nil
+do {
+    class Bird {
+        var name: String!
+        init(){}
+        init?(name: String) {
+            if name.isEmpty {
+                return nil
+            }
+            self.name = name
         }
-        self.weight = weight
-        self.name = name
-    }
-    override init(name: String) {
-        super.init()
-        if name.isEmpty {
-            super.name = "麻雀"
+        func fly() {
         }
-        self.name = name
     }
-    override func fly() {
-        print("fly bird")
+    
+    class Sparrow: Bird {
+        var weight: Double!
+        init?(name: String, weight: Double) { //init?可调用super.init?
+            super.init(name: name)
+            if weight <= 0 {
+                return nil
+            }
+            self.weight = weight
+            self.name = name
+        }
+        override init(name: String) {
+            super.init()
+            if name.isEmpty {
+                super.name = "麻雀"
+            }
+            self.name = name
+        }
+        override func fly() {
+            print("fly bird")
+        }
     }
+    let sp1 = Sparrow(name: "")
+    let sp2 = Sparrow(name: "", weight: 2.2)
+    let sp3 = Sparrow(name: "小黄嘴", weight: 0)
+    let sp4 = Sparrow(name: "小黄嘴", weight: 2.2)
+    (sp4!.name, sp2 == nil, sp3 == nil)
 }
-let sp1 = Sparrow(name: "")
-let sp2 = Sparrow(name: "", weight: 2.2)
-let sp3 = Sparrow(name: "小黄嘴", weight: 0)
-let sp4 = Sparrow(name: "小黄嘴", weight: 2.2)
-(sp4!.name, sp2 == nil, sp3 == nil)
-
 
 class Fruit {
     var name = ""
@@ -534,7 +573,7 @@ class Manny {
 struct Moe {
     let name = "moe"
     func sayName() {
-        print(name)
+        (name)
     }
     class Klass {}
     struct Struct {}
@@ -545,13 +584,11 @@ enum Jack {
         return "jack"
     }
     func sayName() {
-        print(name)
+        (name)
     }
     class Klass {}
     struct Struct {}
     enum Enum {}
 }
-
-
 
 //: [Next](@next)

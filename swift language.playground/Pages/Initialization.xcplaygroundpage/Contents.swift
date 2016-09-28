@@ -80,33 +80,106 @@ struct Rect {
  per rule 1, or by providing a custom implementation as part of its definition—then it automatically inherits all of the superclass convenience initializers.
  - NOTE: A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2.
  */
-class Human {
-    var gender: String
-    init() {
-        self.gender = "Female"
+do {
+    class Human {
+        var gender: String
+        init() {
+            self.gender = "Female"
+        }
+    }
+    class Person: Human {
+        var name: String
+        init(fullName name: String){
+            //Phase 1: Initialize class-defined properties and call the superclass initializer.
+            self.name = name
+            super.init()
+            //Phase 2: Further customization of local and inherited properties.
+            self.gender = "Male"
+        }
+        convenience init(partialName name: String){
+            //Phase 1: Call designated initializer
+            let newName = "\(name) Karmy"
+            self.init(fullName: newName)
+            //Phase 2: Access to self and properties
+            self.name = "John Karmy"
+        }
+    }
+    do {
+        let h1 = Human()
+        let h2 = Human.init() //definitely permitted in Swift 2.0
+        h1.self
+        let person = Person(fullName: "John")
+        (person.name)
     }
 }
-let h1 = Human()
-let h2 = Human.init() //definitely permitted in Swift 2.0
-h1.self
 
-class Person: Human {
-    var name: String
-    init(fullName name: String){
-        //Phase 1: Initialize class-defined properties and call the superclass initializer.
-        self.name = name
-        super.init()
-        //Phase 2: Further customization of local and inherited properties.
-        self.gender = "Male"
+//: convenience func 参数不同
+do {
+    class Dog6 {
+        var name: String
+        var license: Int
+        init(name: String, license: Int) {
+            self.name = name
+            self.license = license
+        }
+        convenience init(license: Int) {
+            self.init(name: "Fido", license: license)
+        }
     }
-    convenience init(partialName name: String){
-        //Phase 1: Call designated initializer
-        let newName = "\(name) Karmy"
-        self.init(fullName: newName)
-        //Phase 2: Access to self and properties
-        self.name = "John Karmy"
+    class NoisyDog6: Dog6 {
+        convenience init(name: String) {
+            self.init(name: name, license: 1)
+        }
     }
 }
+
+do {
+    class Dog7 {
+        var name: String
+        var license: Int
+        init(name: String, license: Int) {
+            self.name = name
+            self.license = license
+        }
+        convenience init(license: Int) {
+            self.init(name: "Fido", license: license)
+        }
+    }
+    class NoisyDog7: Dog7 {
+        init(name: String) {
+            super.init(name: name, license: 1)
+        }
+    }
+    do {
+        let nd1 = NoisyDog7(name: "Rover")
+        // let nd2 = NoisyDog7(name:"Fido", license:1) // compile error
+        // let nd3 = NoisyDog7(license:2) // compile error
+    }
+}
+
+do {
+    class Dog8 {
+        var name : String
+        var license : Int
+        init(name: String, license: Int) {
+            self.name = name
+            self.license = license
+        }
+        convenience init(license: Int) {
+            self.init(name: "Fido", license: license)
+        }
+    }
+    class NoisyDog8 : Dog8 {
+        override init(name:String, license:Int) {
+            super.init(name: name, license: license)
+        }
+    }
+    do {
+        let nd1 = NoisyDog8(name: "Rover", license: 1)
+        let nd2 = NoisyDog8(license: 2)
+    }
+}
+
 
 /*:
  Failable initializers allow us to return nil during initialization in case there was a problem.
@@ -137,6 +210,45 @@ class Product {
         if name.isEmpty { return nil }
     }
 }
+do {
+    class Dog9 {
+        var name: String
+        var license: Int
+        init(name: String, license: Int) {
+            self.name = name
+            self.license = license
+        }
+    }
+    class NoisyDog9: Dog9 {
+        convenience init?() {
+            return nil //legal
+        }
+        init?(ok: Bool) {
+            if !ok { return nil }
+            // used to give compile error: "all stored properties... must be initialized..."
+            // now legal starting in Swift 2.2
+            super.init(name: "Fido", license: 123)
+        }
+        // illegal: init? cannot override init
+        // override init?(name:String, license:Int) {
+        // super.init(name:name, license:license)
+        // }
+        override init(name: String, license: Int) {
+            super.init(name: name, license: license)
+        }
+    }
+    class ObnoxiousDog9: NoisyDog9 {
+        // legal, init can override init?
+        override init(ok: Bool) {
+            super.init(name: "Fido", license: 123)
+        }
+    }
+    class CrazyDog9: NoisyDog9 {
+        override init(ok: Bool) {
+            super.init(ok: ok)! // legal: call super's designated init? without ? and by adding !
+        }
+    }
+}
 /*:
  You can pre-initialize properties by running code inside a closure. Since the execution happens before all other properties are initialized,
  you can't access other properties nor call self inside the closure.
@@ -161,8 +273,6 @@ struct Checkerboard {
 
 let bodyTemperature = Celsius(37.0)
 ((bodyTemperature.temperatureInCelsius))
-let person = Person(fullName: "John")
-(person.name)
 let other = Other(temp: 20, otherProp: 10)
 (other.otherProp)
 if let product = Product(name: "Apple"){
@@ -269,8 +379,8 @@ class Dog2 {
 }
 
 class Dog4 {
-//    var name = ""
-//    var license = 0
+    //    var name = ""
+    //    var license = 0
     var name : String // no default value!
     var license : Int // no default value!
     init(name:String = "", license:Int = 0) {
