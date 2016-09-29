@@ -113,7 +113,7 @@ do {
     }
 }
 
-//: convenience func 参数不同
+//: convenience init 参数不同
 do {
     class Dog6 {
         var name: String
@@ -179,8 +179,26 @@ do {
         let nd2 = NoisyDog8(license: 2)
     }
 }
-
-
+//: required init
+do {
+    class Dog {
+        var name: String
+        required init(name: String) {
+            self.name = name
+        }
+    }
+    class NoisyDog: Dog {
+        var obedient = false
+        init(obedient: Bool) {
+            self.obedient = obedient
+            super.init(name: "Fido")
+        }
+        // without this override, NoisyDog won't compile
+        required init(name: String) {
+            super.init(name: name)
+        }
+    }
+}
 /*:
  Failable initializers allow us to return nil during initialization in case there was a problem.
  The object being initalized is treated as an optional.
