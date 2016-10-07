@@ -5,6 +5,8 @@
         <page name='boolAndNumbers'/>
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
+        <page name='collection Array'/>
+        <page name='collection Dictionary'/>
         <page name='collection Set'/>
         <page name='recursion'/>
         <page name='Control Flow'/>
@@ -16,6 +18,7 @@
         <page name='Class &amp; Struct Properties'/>
         <page name='Class polymorphism'/>
         <page name='Class type reference'/>
+        <page name='umbrella types'/>
         <page name='Subscripts'/>
         <page name='Inheritance'/>
         <page name='Initialization'/>
@@ -27,6 +30,7 @@
         <page name='Extensions'/>
         <page name='Protocols'/>
         <page name='Generics'/>
+        <page name='Generics where clause'/>
         <page name='Access Control'/>
         <page name='Higher Order Functions'/>
         <page name='didSet'/>
