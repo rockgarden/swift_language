@@ -41,5 +41,6 @@
         <page name='Define and call'/>
         <page name='typealias'/>
         <page name='lazy'/>
+        <page name='branching'/>
     </pages>
 </playground>
