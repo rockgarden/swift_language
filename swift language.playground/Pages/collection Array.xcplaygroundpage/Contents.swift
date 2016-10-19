@@ -205,7 +205,7 @@ do {
     arr.sortInPlace()
     arr.sortInPlace { $0 > $1 } // *** [1, 2, 3, 4, 5, 6]
     arr = [4, 3, 5, 2, 6, 1]
-    arr.sortInPlace( >) // *** [1, 2, 3, 4, 5, 6]
+    arr.sortInPlace(>) // *** [1, 2, 3, 4, 5, 6]
 
 }
 

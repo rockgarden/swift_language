@@ -37,8 +37,8 @@ str1.append(s)
 print(str1)
 print("str1 has \(str1.characters.count) chars")
 
-var strRepeat = String(count:40, repeatedValue: Character("w"))
-var strRepeatU = String(count:40, repeatedValue: UnicodeScalar("\u{3423}"))
+var strRepeat = String(repeating: "w", count: 40)
+var strRepeatU = String(repeating: "\u{3423}", count: 40)
 strRepeat += strRepeatU
 var sum = strRepeat.characters.count
 print(strRepeat, "strPepeat has \(sum) characters")
