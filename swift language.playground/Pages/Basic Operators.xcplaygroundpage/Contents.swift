@@ -11,11 +11,12 @@ var fff = 0.0/0.0 //非数
 
 var g = -5.2
 var h = -3.1
-var mod = g%h //求余结果正负取决于被除数
+//var mod = g%h //求余结果正负取决于被除数
 
 var a111 = 5
-var b111 = a111++ + 6 //先计算再自增
-var c111 = ++a111 + 6 //自增再计算
+//TODO: swift 实现自增
+//var b111 = a111++ + 6 //先计算再自增
+//var c111 = ++a111 + 6 //自增再计算
 
 //: ## 溢出运算符 &+,&-,&*,&/,&%
 var cmin = UInt8.min
@@ -23,7 +24,7 @@ var cmin = UInt8.min
 cmin = cmin &- 1 //下溢
 
 //: ## 浮点数求余
-var rem=10%2.3
+var rem = 10%2
 
 /*: 
  ## 特征运算符
@@ -45,9 +46,13 @@ var oranges = 4
 
 //: 字符串NSString连接
 var i = 200
-var strI = "Hello Swift" as NSString //转成Foundation
-strI = "\(strI),\(i)"
-strI.substringWithRange(NSRange(location: 0, length: 5)) //可用NSString的相关方法
+var str = "Hello Swift"
+var strN: NSString
+strN = str as NSString
+//TODO: String to NSString 转成Foundation
+str = "\(str),\(i)"
+strN.substring(with: NSRange(location: 0, length: 5)) //可用NSString的相关方法
+
 //: ## 三目(元)运算符
 let name = "uraimo"
 var happyStr = ""
@@ -87,7 +92,7 @@ for index in 1..<array.count{
 }
 
 //枚举Enumerate array with index and value, C loop will be removed soon
-for (index, value) in array.enumerate() {
+for (index, value) in array.enumerated() {
     ("value \(value) at index \(index)")
 }
 
@@ -104,64 +109,5 @@ func * (lhs: String, rhs: Int) -> String {
 }
 let u = "abc"
 let v = u * 5
-
-// 定义Type协议
-protocol Type {
-    func += (inout lhs: Self, rhs: Self)
-}
-// 扩展支持Type协议
-extension String: Type {}
-extension Int: Type {}
-extension Double: Type {}
-extension Float: Type {}
-// 泛型函数实现运算符重载
-func *<T: Type>(lhs: T, rhs: Int) -> T {
-    var result = lhs
-    for _ in 2...rhs {
-        result += lhs
-    }
-    return result
-}
-let x1 = "abc"
-let y1 = x1 * 5
-let a = 2
-let b = a * 5
-let c = 3.14
-let d = c * 5
-let e: Float = 4.56
-let f = e * 5
-//???: 这是什么
-infix operator ** {associativity left precedence 150}
-
-func **<T: Type>(lhs: T, rhs: Int) -> T {
-    var result = lhs
-    for _ in 2...rhs {
-        result += lhs
-    }
-    return result
-}
-let g1 = "abc"
-let h1 = g1 ** 5
-let i1 = 2
-let j = i1 ** 5
-let k = 3.14
-let l = k ** 5
-let m: Float = 4.56
-let n = m ** 5
-
-infix operator **= {associativity left precedence 150}
-func **=<T: Type>(inout lhs: T, rhs: Int) {
-    lhs = lhs ** rhs
-}
-var o = "abc"
-o **= 5
-var q = 2
-q **= 5
-var s = 3.14
-s **= 5
-var w: Float = 4.56
-w **= 5
-
-let t = 1.successor()
 
 //: [Next](@next)

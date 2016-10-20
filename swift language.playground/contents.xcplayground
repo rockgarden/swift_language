@@ -5,6 +5,7 @@
         <page name='annotation'/>
         <page name='ARC'/>
         <page name='Basic Operators'/>
+        <page name='operator'/>
         <page name='Basics'/>
         <page name='boolAndNumbers'/>
         <page name='branching'/>
