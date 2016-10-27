@@ -47,5 +47,7 @@
         <page name='Type Casting copy'/>
         <page name='typealias'/>
         <page name='umbrella types'/>
+        <page name='privacy'/>
+        <page name='TypeErasure'/>
     </pages>
 </playground>

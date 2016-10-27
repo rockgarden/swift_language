@@ -40,7 +40,7 @@ func flockTwoTogether<T, U>(f1: T, _ f2: U) { }
 let vd: Void = flockTwoTogether("hey", 1)
 
 protocol Superflier3 { }
-//: 协议在Swift中有两个目的，第一个目的是用来实现多继承(swift语言被设计为单继承的），第二个目的是强制实现者必须准守自己所指定的泛型约束。关键字associatedtype是用来实现第二个目的的。在GeneratorType中由associatedtype指定的Element，是用来控制next()方法的返回类型的。而不是用来指定GeneratorType的类型的。
+//: 协议在Swift中有两个目的，第一个目的是用来实现多继承(swift语言被设计为单继承的），第二个目的是强制实现者必须准守自己所指定的泛型约束。关键字associatedtype是用来实现第二个目的的。在Generator Type中由associatedtype指定的Element，是用来控制next()方法的返回类型的。而不是用来指定GeneratorType的类型的。
 protocol Flier3: Superflier3 {
     associatedtype Other: Superflier3 //声明一个类型的占位符
     func flockTogetherWith(f: Other)
