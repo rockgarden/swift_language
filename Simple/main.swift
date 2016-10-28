@@ -1,5 +1,3 @@
-
-
 import Foundation
 
 // 可选类型:处理值可能缺失的情况
@@ -48,7 +46,3 @@ let sameQu="same"
 if quotation==sameQu{
     print("ture")
 }
-
-
-
-

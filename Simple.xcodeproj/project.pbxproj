@@ -40,6 +40,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		442585431DC37E6E00BFEE7C /* UIApplicationCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIApplicationCategory.h; sourceTree = "<group>"; };
+		442585441DC37E6E00BFEE7C /* UIApplicationCategory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIApplicationCategory.m; sourceTree = "<group>"; };
+		442585451DC37E6E00BFEE7C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44460DEF1CF89B0F008BE7E1 /* swift language.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "swift language.playground"; sourceTree = "<group>"; };
 		44460DF01CF8A3FF008BE7E1 /* Swift Standard Library.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Swift Standard Library.playground"; sourceTree = "<group>"; };
 		446250A51D47BA0F005D0B5F /* 2016-05-05-recursive-trampoline.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "2016-05-05-recursive-trampoline.playground"; sourceTree = "<group>"; };
@@ -78,6 +81,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		442585421DC37E6E00BFEE7C /* backwardCompatibility */ = {
+			isa = PBXGroup;
+			children = (
+				442585431DC37E6E00BFEE7C /* UIApplicationCategory.h */,
+				442585441DC37E6E00BFEE7C /* UIApplicationCategory.m */,
+				442585451DC37E6E00BFEE7C /* ViewController.swift */,
+			);
+			path = backwardCompatibility;
+			sourceTree = "<group>";
+		};
 		446250AD1D47BA7B005D0B5F /* 2016-04-07-Swift-And-C */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +189,7 @@
 		F1E89DB91A37AD53007C4166 /* Simple */ = {
 			isa = PBXGroup;
 			children = (
+				442585421DC37E6E00BFEE7C /* backwardCompatibility */,
 				F1E89DBA1A37AD53007C4166 /* main.swift */,
 			);
 			path = Simple;
