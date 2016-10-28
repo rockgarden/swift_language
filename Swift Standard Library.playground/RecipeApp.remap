@@ -1,0 +1,193 @@
+[
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 499,
+  "text": " as AnyObject",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 537,
+  "text": " as AnyObject",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 569,
+  "text": " as AnyObject",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 609,
+  "text": " as AnyObject",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 1842,
+  "remove": 1,
+  "text": "c",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 1901,
+  "remove": 1,
+  "text": "(o",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 1907,
+  "remove": 1,
+  "text": ": ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 1952,
+  "remove": 1,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 2011,
+  "remove": 1,
+  "text": "f",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 2824,
+  "remove": 1,
+  "text": "p",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 2961,
+  "remove": 6,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3070,
+  "remove": 6,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3167,
+  "remove": 1,
+  "text": "s",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3222,
+  "remove": 6,
+  "text": "e",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3386,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3527,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3562,
+  "remove": 10,
+  "text": "t",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3583,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3749,
+  "remove": 1,
+  "text": "(w",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3763,
+  "remove": 1,
+  "text": ": ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3778,
+  "remove": 10,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3839,
+  "text": "(",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 3848,
+  "text": " as NSIndexPath)",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4080,
+  "text": "(",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4089,
+  "text": " as NSIndexPath)",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4342,
+  "remove": 1,
+  "text": "c",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4383,
+  "remove": 1,
+  "text": "n",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4470,
+  "remove": 8,
+  "text": "e",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4631,
+  "remove": 8,
+  "text": "k",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4654,
+  "remove": 8,
+  "text": "e",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4717,
+  "remove": 8,
+  "text": "e",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4866,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 4981,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/RecipeApp.swift",
+  "offset": 5183,
+  "text": "_ ",
+ }
+]
