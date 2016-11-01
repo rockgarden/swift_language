@@ -49,5 +49,6 @@
         <page name='umbrella types'/>
         <page name='privacy'/>
         <page name='TypeErasure'/>
+        <page name='Foundation Classes'/>
     </pages>
 </playground>

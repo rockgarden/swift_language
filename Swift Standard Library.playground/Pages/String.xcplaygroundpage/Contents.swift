@@ -1,5 +1,76 @@
 //: [Previous](@previous)
-import UIKit
+
+/**
+ var str = "Hello, playground"
+ startIndex and endIndex
+
+ startIndex is the index of the first character
+ endIndex is the index after the last character.
+ Example
+
+ // character
+ str[str.startIndex] // H
+ str[str.endIndex]   // error: after last character
+
+ // range
+ let range = str.startIndex..<str.endIndex
+ str[range]  // "Hello, playground"
+ after
+
+ As in: index(after: String.Index)
+
+ after refers to the index of the character directly after the given index.
+ Examples
+
+ // character
+ let index = str.index(after: str.startIndex)
+ str[index]  // "e"
+
+ // range
+ let range = str.index(after: str.startIndex)..<str.endIndex
+ str[range]  // "ello, playground"
+ before
+
+ As in: index(before: String.Index)
+
+ before refers to the index of the character directly before the given index.
+ Examples
+
+ // character
+ let index = str.index(before: str.endIndex)
+ str[index]  // d
+
+ // range
+ let range = str.startIndex..<str.index(before: str.endIndex)
+ str[range]  // Hello, playgroun
+ offsetBy
+
+ As in: index(String.Index, offsetBy: String.IndexDistance)
+
+ The offsetBy value can be positive or negative and starts from the given index. Although it is of the type String.IndexDistance, you can give it an Int.
+ Examples
+
+ // character
+ let index = str.index(str.startIndex, offsetBy: 7)
+ str[index]  // p
+
+ // range
+ let start = str.index(str.startIndex, offsetBy: 7)
+ let end = str.index(str.endIndex, offsetBy: -6)
+ let range = start..<end
+ str[range]  // play
+ limitedBy
+
+ As in: index(String.Index, offsetBy: String.IndexDistance, limitedBy: String.Index)
+
+ The limitedBy is useful for making sure that the offset does not cause the index to go out of bounds. It is a bounding index. Since it is possible for the offset to exceed the limit, this method returns an Optional. It returns nil if the index is out of bounds.
+ Example
+
+ // character
+ if let index = str.index(str.startIndex, offsetBy: 7, limitedBy: str.endIndex) {
+ str[index]  // p
+ }
+ */
 
 do {
     let greeting = "hello"
@@ -15,9 +86,9 @@ do {
 }
 
 do {
-    let ud = NSUserDefaults.standardUserDefaults()
-    let s0 = "You have \(ud.integerForKey("widgets")) widgets."
-    let n = ud.integerForKey("widgets")
+    let ud = UserDefaults.standard
+    let s0 = "You have \(ud.integer(forKey: "widgets")) widgets."
+    let n = ud.integer(forKey:"widgets")
     let s = "You have \(n) widgets."
 }
 
@@ -31,7 +102,7 @@ do {
     var s = "hello"
     let s2 = " world"
     // "extend" has changed to "appendContentsOf"
-    s.appendContentsOf(s2) // or: sss += sss2
+    s.append(s2) // or: sss += sss2
 }
 
 do {
@@ -39,7 +110,7 @@ do {
     let s2 = "world"
     let space = " "
     // "join" has changed to "joinWithSeparator", which works the other way round
-    let greeting = [s,s2].joinWithSeparator(space)
+    let greeting = [s,s2].joined(separator: space)
 }
 
 do {
@@ -88,7 +159,7 @@ func flag(country: String) -> String {
     let base : UInt32 = 127397
     var s = ""
     for v in country.unicodeScalars {
-        s.append(UnicodeScalar(base + v.value))
+        s.append(UnicodeScalar(base + v.value)!)
     }
     return s
 }
@@ -100,9 +171,9 @@ do {
     for i in s.utf16 {
         (i) // 191, 81, 117, 105, 233, 110, 63
     }
-    
+
     do {
-        let s = flag("CH")
+        let s = flag(country: "CH")
     }
 }
 
@@ -118,20 +189,20 @@ do {
 
 do {
     let s = "hello"
-    let range = (s as NSString).rangeOfString("ell") // (1,3), an NSRange
+    let range = (s as NSString).range(of: "ell") // (1,3), an NSRange
     print(range)
 }
 
 do {
     let s = "hello"
     // let ss = s.substringWithRange(NSMakeRange(1,3)) // compile error
-    let ss = (s as NSString).substringWithRange(NSMakeRange(1,3))
+    let ss = (s as NSString).substring(with: NSMakeRange(1,3))
 }
 
 //: ## String And Range
 do {
     let c = Character("h")
-    let s = (String(c)).uppercaseString
+    let s = (String(c)).uppercased
 }
 
 do {
@@ -142,18 +213,18 @@ do {
 
 do {
     let s = "hello: ello: ekjfwijfiwjqifj!"
-    let firstL = s.characters.indexOf("!")?.successor() // Optional(2), meaning the third character
+    let firstL = s.characters.index(of: "!")?.successor() // Optional(2), meaning the third character
     firstL
     s.substringToIndex(firstL!)
     print(s.substringFromIndex(firstL!))
     firstL
-    let lastL = String(s.characters.reverse()).characters.indexOf("l")
+    let lastL = String(s.characters.reversed()).characters.index(of: "l")
 }
 
 do {
     let s = "hello -> hello -> hello"
-    let firstSmall = s.characters.indexOf {$0 < "f"}
-    let find = s.characters.indexOf {$0 == ">"}
+    let firstSmall = s.characters.index {$0 < "f"}
+    let find = s.characters.index {$0 == ">"}
 }
 
 do {
@@ -175,7 +246,7 @@ do {
 
 do {
     let s = "hello"
-    let ok = s.characters.startsWith("hell".characters)
+    let ok = s.characters.starts(with: "hell".characters)
 }
 
 do {
@@ -221,7 +292,7 @@ do {
     var s = "hello"
     let ix = s.characters.startIndex.advancedBy(1)
     // "splice" is now "insertContentsOf"
-    s.insertContentsOf("ey, h".characters, at: ix)
+    s.insert(contentsOf: "ey, h".characters, at: ix)
 }
 
 do {

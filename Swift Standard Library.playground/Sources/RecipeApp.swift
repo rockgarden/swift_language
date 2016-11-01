@@ -15,10 +15,10 @@ public struct Ingredient: Equatable {
     public var dictionaryRepresentation: [String: AnyObject] {
         get {
             return [
-                "name": name,
-                "quantity": quantity,
-                "price": price,
-                "purchased": purchased
+                "name": name as AnyObject,
+                "quantity": quantity as AnyObject,
+                "price": price as AnyObject,
+                "purchased": purchased as AnyObject
             ]
         }
     }
@@ -49,10 +49,10 @@ class MapCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         middleTextLabel.text = "→"
-        middleTextLabel.textAlignment = .Center
-        middleTextLabel.font = UIFont.boldSystemFontOfSize(20)
-        rightTextLabel.textAlignment = .Right
-        stack.distribution = UIStackViewDistribution.FillEqually
+        middleTextLabel.textAlignment = .center
+        middleTextLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        rightTextLabel.textAlignment = .right
+        stack.distribution = UIStackViewDistribution.fillEqually
         stack.frame = self.contentView.bounds
         stack.addArrangedSubview(leftTextLabel)
         stack.addArrangedSubview(middleTextLabel)
@@ -78,27 +78,27 @@ private class IngredientsListViewController: UITableViewController {
     var transformed: [Int]?
     init(list: [Ingredient]) {
         ingredients = list
-        super.init(style: .Plain)
+        super.init(style: .plain)
         
         self.view.frame = CGRect(x: 0, y: 0, width: 300, height: list.count * 44)
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: IngredientCellIdentifier)
-        self.tableView.registerClass(MapCell.self, forCellReuseIdentifier: "MapCell")
-        self.tableView.separatorStyle = .SingleLine
-        self.tableView.separatorColor = .blueColor()
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: IngredientCellIdentifier)
+        self.tableView.register(MapCell.self, forCellReuseIdentifier: "MapCell")
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.separatorColor = .blue
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return ingredients.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = transformed == nil ? IngredientCellIdentifier : "MapCell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath as IndexPath)
 
         let ingredient = ingredients[indexPath.row]
         
@@ -109,14 +109,14 @@ private class IngredientsListViewController: UITableViewController {
             mapCell.rightTextLabel.text = "$\(transformedValue)"
         } else {
             cell.textLabel!.text = "\(ingredient.quantity)x " + ingredient.name
-            cell.accessoryType = ingredient.purchased ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+            cell.accessoryType = ingredient.purchased ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
             if filteredList != nil {
-                cell.tintColor = UIColor.whiteColor()
+                cell.tintColor = UIColor.white
             }
             let keep = filteredList?.contains(ingredient) ?? true
-            
-            cell.textLabel!.textColor = keep ? UIColor.blackColor() : UIColor.whiteColor()
-            cell.backgroundColor = keep ? UIColor.whiteColor() : UIColor(red: 126/255.0, green: 72/255.0, blue: 229/255.0, alpha: 1.0)
+
+            cell.textLabel!.textColor = keep ? UIColor.black : UIColor.white
+            cell.backgroundColor = keep ? UIColor.white : UIColor(red: 126/255.0, green: 72/255.0, blue: 229/255.0, alpha: 1.0)
         }
         return cell
     }
