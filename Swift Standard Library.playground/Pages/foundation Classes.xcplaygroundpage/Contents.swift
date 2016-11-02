@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 
-import Foundation,UIKit
+import Foundation
+import UIKit
 
 class Dog : NSObject {
     var name : String
@@ -202,6 +203,15 @@ do {
     ) // ["Manny", "Moe"]
     _ = arr
     print(ems)
+
+    /// using Swift's collection methods, rather than using an NSArrays method:
+//    let swift_pep = ["Manny", "Moe", "Jack"]
+//    let swift_ems = swift_pep.enumerated().lazy
+//        .filter {(a, b) in
+//            //...
+//        }.map{$0.offset}
 }
+
+
 
 //: [Next](@next)
