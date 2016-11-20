@@ -250,12 +250,6 @@ let alsoIncrementByTen = incrementByTen
 alsoIncrementByTen()
 
 //: ## 示例
-func doThis(f:()->()) { // f : Void -> Void
-    f()
-}
-doThis { // no parentheses!
-    ("Howdy")
-}
 
 func sayHowdy() -> String {
     return "Howdy"
