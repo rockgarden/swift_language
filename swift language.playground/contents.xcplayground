@@ -9,6 +9,7 @@
         <page name='Basics'/>
         <page name='boolAndNumbers'/>
         <page name='branching'/>
+        <page name='Class'/>
         <page name='Class &amp; Struct Properties'/>
         <page name='Class polymorphism'/>
         <page name='Class type reference'/>
