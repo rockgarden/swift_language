@@ -16,7 +16,7 @@ import UIKit
    - 每个 Playground 都有独立的 Resources 目录,放置到此目录下的资源是可直接通过代码获取.
    - 其中图片文件,可直接使用UIImage(named:)获取
  */
-let path = NSBundle.mainBundle().pathForResource("import-summary", ofType: "txt")
+let path = Bundle.main.path(forResource: "import-summary", ofType: "txt")
 let lines = try? String(contentsOfFile: path!).characters.split{$0 == "\n"}.map(String.init)
 if let lines=lines {
     lines[0]

@@ -8,6 +8,7 @@
  - 双向协变（Bivariate）指既接受子类型，又接受超类型。我想不到在 Objective-C 或 Swift 中的任何例子。
  */
 import Foundation
+import UIKit
 
 //: ## 子类型（Subtypes）和超类型（Supertypes）
 class Biology {}
@@ -52,10 +53,16 @@ class CrazyCatLady: Person {
     override func purchaseAnimal() -> Cat {
         return Cat()
     }
+
+    //override func pet(animal: Cat) {} // error: method does not override any method from its superclass
     /// 子类型用于重写方法的参数类型是不正确的，事实上，重写方法时你需要超类型（Supertype）。举一个例子，Animal 是 Biology 的子类，那么当我们重写 pet 方法时，参数类型变为 Biology。
-    override func purchaseAnimal() -> Biology {
-        return Biology()
-    }
+    override func pet(animal: Biology) {}
+}
+
+do {
+    let person: Person = CrazyCatLady()
+    let animal: Animal = person.purchaseAnimal()
+    person.pet(animal: animal)
 }
 //: Liskov替换原则：被用于指导何时该使用子类。简明扼要的来说，它指出任何子类的实例总是能够替代父类的实例。https://en.wikipedia.org/wiki/Liskov_substitution_principle
 //: 函数的返回值可以换成原类型的子类型，在层级上降了一级；反之函数的参数可以换成原类型的超类型，在层级上升了一级。
@@ -73,20 +80,13 @@ class CrazyCatLady: Person {
 do {
     var animal: Animal
     // 这等价于：
-    func getAnimal() -> Animal
-    func setAnimal(animal: Animal)
+    func getAnimal() -> Animal {
+        return Animal()
+    }
+    func setAnimal(animal: Animal) {}
 }
-//: 函数的参数和返回值需要各自向上和向下改变一级。然而参数和返回值的类型却是固定的，所以它们的类型都不能被改变。
-do {
-    // 注意到 animal 的类型是 Animal
-    // 这样不对（向下）
-    override func getAnimal() -> Cat
-    override func setAnimal(animal: Cat)
-    
-    // 这样也不对（向上）
-    override func getAnimal() -> Biology
-    override func setAnimal(animal: Biology)
-}
+//: 'override' can only be specified on class members
+//: Func的参数和返回值的类型是固定的，所以都不能被改变。
 
 //: ## 泛型（Generics）
 /*:
@@ -111,17 +111,15 @@ do {
  Objective-C 事实上比 Swift 更好一些。一个在 Objective-C 中的泛型参数可以在声明时增加 __covariant 关键字来表示它能够接受子类型，而在声明时增加 __contravariant 关键字来表示它能够接受超类型。这在 NSArray 和其他的类的接口中有所体现：
  - @interface NSArray<__covariant ObjectType> : NSObject ...
  */
-//: Swift 标准库中的 Collection 类型通常情况下是「协变的（Convariance）」
+//: Swift 标准库中的 Collection - Array 类型通常情况下是「协变的（Convariance）」
 do {
-    import UIKit
-    
     class Thing<T> { // 亦可以使用结构体 struct 声明
         var thing: T
         init(_ thing: T) { self.thing = thing }
     }
     var foo: Thing<UIView> = Thing(UIView())
     var bar: Thing<UIButton> = Thing(UIButton())
-    foo = bar // 报错：error: cannot assign value of type 'Thing<UIButton>' to type 'Thing<UIView>'
+    //foo = bar // 报错：error: cannot assign value of type 'Thing<UIButton>' to type 'Thing<UIView>'
     
     // Array 则不会报错
     var views: Array<UIView> = [UIView()]
@@ -133,34 +131,25 @@ do {
 /*:
  Swift 中的 Protocol 不支持这里的类型改变。如果某个协议是继承自另外一个协议而且尝试着「重写」父协议的方法，Swift 会把它当做是另外一个方法。举个例子：
  */
-do {    
-    protocol SuperP {
-        func f(animal: Animal) -> Animal
-    }
-    
-    protocol SubP1: SuperP {
-        func f(thing: Thing) -> Cat
-    }
-    
-    protocol SubP2: SuperP {
-        func f(cat: Cat) -> Thing
-    }
-    
-    class ImplementsSubP1: SubP1 {
-        func f(thing: Thing) -> Cat {
-            return Cat()
-        }
-    }
-    
-    class ImplementsSubP2: SubP2 {
-        func f(cat: Cat) -> Thing {
-            return Thing() 
-        } 
-    } 
-    // ImplementSubP1 和 ImplementSubP2 将不被认为遵循了 SuperP 的协议
+protocol SuperP {
+    func f(animal: Animal) -> Animal
+}
+protocol SubP1: SuperP {
+    func f(thing: Biology) -> Cat
+}
+protocol SubP2: SuperP {
+    func f(cat: Cat) -> Biology
+}
+class ImplementsSubP1: SubP1 {
+    func f(animal: Animal) -> Animal {return Animal()}
+    func f(thing: Biology) -> Cat {return Cat()}
+}
+//class ImplementsSubP2: SubP2 {func f(cat: Cat) -> Biology {return Biology()}} //error: type 'ImplementsSubP2' does not conform to protocol 'SuperP'
+class ImplementsSubP2: SubP2 {
+    func f(animal: Animal) -> Animal {return Animal()}
+    func f(cat: Cat) -> Biology {return Biology()}
 }
 
-http://swift.gg/2015/12/24/friday-qa-2015-11-20-covariance-and-contravariance/
-http://swift.gg/2016/10/10/swift-associated-types/
+//http://swift.gg/2016/10/10/swift-associated-types/
 
 //: [Next](@next)
