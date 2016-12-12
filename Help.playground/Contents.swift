@@ -3,8 +3,8 @@
 */
 
 //import Cocoa //FIXME:xcplaygroundpage中无法引用,Playground中才可引用
-//import XCPlaygroud
-
+import PlaygroundSupport
+import XCPlayground
 import UIKit
 
 /*:
@@ -34,7 +34,8 @@ if let lines=lines {
    - 需要创建~/Documents/Shared Playground Data目录,并将资源放到此目录下,才能在 Playground 中获取到
  */
 
-//let sharedFileURL = XCPlaygroundSharedDataDirectoryURL.URLByAppendingPathComponent("example.json")
+let sharedFileURL = playgroundSharedDataDirectory.appendingPathComponent("example.json")
+//OLD: XCPlaygroundSharedDataDirectoryURL.appendingPathComponent("example.json")
 
 //指定页跳转：
 //: ["Go to The End"](PageName)

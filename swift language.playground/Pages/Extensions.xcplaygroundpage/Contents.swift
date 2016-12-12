@@ -1,12 +1,39 @@
 //: [Previous](@previous)
 
 import UIKit
+//import XCPlayground
+import PlaygroundSupport
 
 //: # Extensions
 /*:
  Extensions add new functionality to an existing class, structure, enumeration, or protocol type.
  Extensions can add new functionality to a type, but they cannot override existing functionality.
+ 
+ 全局量作为静态成员嵌入到类型当中，使得命名空间更加干净、Swift化，并且还让性能开销降到最低；所以只要条件允许，您应该尽量去扩展苹果所提供的类型，而不是创建新的类型。
+ 与此同时，不要强行将常量和函数放到并不适合的类当中。如果您必须要创建一个新的类型来生成一个新的命名空间，那么请使用不包含枚举值的枚举，这将保证这个类型无法被构造出来。
  */
+
+public let π = CGFloat(Double.pi) // 不建议
+public let τ = π * 2.0 // 不建议
+
+public func halt() { // 不建议
+    PlaygroundPage.current.finishExecution()
+}
+
+extension CGFloat {
+    /// 存放 π 常量，建议
+    public static let (pi, π) = (CGFloat(Double.pi), CGFloat(Double.pi))
+    
+    /// 存放 τ 常量，建议
+    public static let (tau, τ) = (2 * pi, 2 * pi)
+}
+
+extension PlaygroundPage {
+    // 这看起来好看不少
+    public static func halt() {
+        current.finishExecution()
+    }
+}
 
 //: ## Extension Syntax
 extension Int/*: SomeProtocol, AnotherProtocol*/ {
@@ -176,7 +203,7 @@ extension Array {
     }
 }
 var books = ["iOS","Android","Swift","Java","Ruby"]
-books.retainAll(["Android","iOS","C"]) {
+books.retainAll(array:["Android","iOS","C"]) {
     return $0 == $1
 }
 (books)
@@ -217,7 +244,7 @@ extension Int {
 //: ## protocol extension
 extension CustomStringConvertible {
     var upperDescription: String {
-        return self.description.uppercaseString
+        return self.description.uppercased()
     }
 }
 ["key":"value"].upperDescription
@@ -246,8 +273,8 @@ extension String {
         }
     }
 }
-var strEnum: String.suit? = String.judgeSuits("♣︎")
-var strEnum1: String.suit? = String.judgeSuits("j")
+var strEnum: String.suit? = String.judgeSuits(s: "♣︎")
+var strEnum1: String.suit? = String.judgeSuits(s: "j")
 
 //: Example
 struct Digit {
@@ -405,13 +432,13 @@ extension Array where Element: Comparable {
 }
 do {
     let m = [4, 1, 5, 7, 2].min() // 1
-    ([4, 1, 5].minElement())
+    ([4, 1, 5].min())
 }
 
 //: Other
 extension Array {
     mutating func shuffle () {
-        for i in (0..<self.count).reverse() {
+        for i in (0..<self.count).reversed() {
             let ix1 = i
             let ix2 = Int(arc4random_uniform(UInt32(i + 1)))
             (self[ix1], self[ix2]) = (self[ix2], self[ix1])
@@ -421,21 +448,21 @@ extension Array {
 
 extension Array {
     mutating func removeAtIndexes (ixs: [Int]) -> () {
-        for i in ixs.sort( >) {
-            self.removeAtIndex(i)
+        for i in ixs.sorted(by: >) {
+            self.remove(at: i)
         }
     }
 }
 
 extension CGRect {
     var center: CGPoint {
-        return CGPointMake(self.midX, self.midY)
+        return CGPoint(x: self.midX, y: self.midY) //CGPointMake(self.midX, self.midY)
     }
 }
 
 extension CGSize {
     func sizeByDelta(dw dw: CGFloat, dh: CGFloat) -> CGSize {
-        return CGSizeMake(self.width + dw, self.height + dh)
+        return CGSize(width: self.width + dw, height: self.height + dh)
     }
 }
 
