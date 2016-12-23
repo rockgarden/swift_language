@@ -3,8 +3,13 @@
 import UIKit
 
 class Dog {
+    var name = ""
+    var whatADogSays = "woof"
     func bark() {
-        print("woof")
+        (self.whatADogSays)
+    }
+    func speak() {
+        self.bark()
     }
 }
 
@@ -12,7 +17,7 @@ class Dog2 { func bark() { print("woof") }}
 
 extension Int {
     func sayHello() {
-        print("Hello, I'm \(self)")
+        ("Hello, I'm \(self)")
     }
 }
 
@@ -51,6 +56,7 @@ do {
     _ = sum
     _ = s
 
+    // the magic word "self"
     1.sayHello() // outputs: "Hello, I'm 1"
 
     let one = 1
@@ -69,6 +75,18 @@ do {
     let rover = Dog.init() // I noticed this in Swift 1.2, definitely permitted in Swift 2.0
     // I'm betting that some day the Dog() syntax will be deprecated
     rover.bark()
+
+    let dog1 = Dog()
+    dog1.name = "Fido"
+    var dog2 = Dog()
+    dog2.name = "Rover"
+    (dog1.name) // "Fido"
+    (dog2.name) // "Rover"
+    dog2 = dog1
+    (dog2.name) // "Fido"
+
+    dog1.bark()
+    dog1.speak()
 }
 
 //: [Next](@next)
