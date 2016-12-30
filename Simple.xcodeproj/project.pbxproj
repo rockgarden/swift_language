@@ -64,6 +64,7 @@
 		446250C01D47BA82005D0B5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		446250C11D47BA82005D0B5F /* ErrorHandling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ErrorHandling.xcodeproj; sourceTree = "<group>"; };
 		44A11AF81D032DD000C8A97D /* Swift_LocalizedString.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Swift_LocalizedString.playground; sourceTree = "<group>"; };
+		44B960EC1E168AC400B872B6 /* Design-Patterns.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Design-Patterns.playground"; sourceTree = "<group>"; };
 		44D7694E1CFDD9680031291B /* Help.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Help.playground; sourceTree = "<group>"; };
 		C20B83D21D6ADF7500C12286 /* KVOPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = KVOPlayground.playground; sourceTree = "<group>"; };
 		F1E89DB71A37AD53007C4166 /* Simple */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simple; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +162,7 @@
 			children = (
 				446250BC1D47BA82005D0B5F /* 2015-11-ErrorHandlingConsole */,
 				446250AD1D47BA7B005D0B5F /* 2016-04-07-Swift-And-C */,
+				44B960EC1E168AC400B872B6 /* Design-Patterns.playground */,
 				446250AC1D47BA5A005D0B5F /* SwiftAndCPlayground.playground */,
 				446250A91D47BA24005D0B5F /* 2015-11-Swift2ErrorHandlingPlayground.playground */,
 				446250AA1D47BA24005D0B5F /* 2016-01-6-Swift-One-Liners-Playground.playground */,
