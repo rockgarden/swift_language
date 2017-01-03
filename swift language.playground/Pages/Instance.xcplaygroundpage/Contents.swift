@@ -88,5 +88,7 @@ do {
     dog1.bark()
     dog1.speak()
 }
-
+let isVersionOrLater10: Bool = (UIDevice().systemVersion as NSString).floatValue >= 10.0
+(UIDevice().systemVersion as NSString).floatValue
+isVersionOrLater10
 //: [Next](@next)

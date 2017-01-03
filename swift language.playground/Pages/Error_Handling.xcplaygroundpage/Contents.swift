@@ -10,7 +10,7 @@ import UIKit
  with associated values allowing for additional information about the nature of an error to be communicated.
  */
 
-enum VendingMachineError: ErrorType {
+enum VendingMachineError: Error {
     case InvalidSelection
     case InsufficientFunds(coinsNeeded: Int)
     case OutOfStock
@@ -67,7 +67,7 @@ class VendingMachine {
         coinsDeposited -= item.price
         item.count -= 1
         inventory[name] = item
-        dispenseSnack(name)
+        dispenseSnack(snack:name)
     }
 }
 
@@ -86,7 +86,7 @@ func buyFavoriteSnack(name: String, vendingMachine: VendingMachine) throws{
 var vendingMachine = VendingMachine()
 vendingMachine.coinsDeposited = 8
 do {
-    try buyFavoriteSnack("Alice", vendingMachine: vendingMachine)
+    try buyFavoriteSnack(name:"Alice", vendingMachine: vendingMachine)
 } catch VendingMachineError.InvalidSelection {
     print("Invalid Selection.")
 } catch VendingMachineError.OutOfStock {
@@ -96,18 +96,18 @@ do {
 }
 
 // 异常Catch
-enum Error:ErrorType {
+enum myError: Error {
     case WrongJSON
 }
 func testTry() throws {
     do {
-        try NSJSONSerialization.JSONObjectWithData(NSData(), options: .AllowFragments)
+        try JSONSerialization.jsonObject(with:Data(), options: .allowFragments)
     } catch {
-        throw Error.WrongJSON
+        throw myError.WrongJSON
     }
 }
 
-do {try testTry()} catch Error.WrongJSON {}
+do {try testTry()} catch myError.WrongJSON {}
 
 
 //: ## Converting Errors to Optional Values
@@ -142,7 +142,7 @@ func loadImage(path: String) throws ->String {
     return "Image"
 }
 
-let photo = try! loadImage("./Resources/John Appleseed.jpg")
+let photo = try! loadImage(path:"./Resources/John Appleseed.jpg")
 
 
 /*:
@@ -166,15 +166,15 @@ func close(file: String) -> Void{
 }
 
 func processFile(filename: String) throws {
-    if exists(filename) {
-        let file = openFile(filename)
+    if exists(file:filename) {
+        let file = openFile(file:filename)
         defer {
-            close(file)
+            close(file: file)
         }
         //        while let line = try file.readline() {
         //            // Work with the file.
         //        }
-        // close(file) is called here, at the end of the scope.
+        // close(file: file) is called here, at the end of the scope.
     }
 }
 
