@@ -1,0 +1,64 @@
+[
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 1115,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 1164,
+  "remove": 6,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 1886,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 1956,
+  "remove": 6,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 2011,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 2094,
+  "remove": 6,
+  "text": "r",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 2143,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 3896,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 3936,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 3976,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/rockgarden/GitHub/swift_language/Swift Standard Library.playground/Sources/StringVisualizations.swift",
+  "offset": 4015,
+  "remove": 3,
+  "text": " ",
+ }
+]

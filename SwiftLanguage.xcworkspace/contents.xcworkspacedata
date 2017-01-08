@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:C-Demo/C-Demo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Demo/Demo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ErrorHandlingConsole/ErrorHandlingConsole.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:Playground"
+      name = "Playground">
+      <FileRef
+         location = "group:2015-09-VariancePlayground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:2015-10-MapFlatMapPlayground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:2015-11-Swift2ErrorHandlingPlayground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:2016-01-6-Swift-One-Liners-Playground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:2016-02-5-Bitwise-Playground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:2016-05-05-recursive-trampoline.playground">
+      </FileRef>
+      <FileRef
+         location = "group:Design-Patterns.playground">
+      </FileRef>
+      <FileRef
+         location = "group:Help.playground">
+      </FileRef>
+      <FileRef
+         location = "group:KVOPlayground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:MyPlayground.playground">
+      </FileRef>
+      <FileRef
+         location = "group:swift language.playground">
+      </FileRef>
+      <FileRef
+         location = "group:Swift Standard Library.playground">
+      </FileRef>
+      <FileRef
+         location = "group:Swift.playground">
+      </FileRef>
+      <FileRef
+         location = "group:Swift_LocalizedString.playground">
+      </FileRef>
+      <FileRef
+         location = "group:SwiftAndCPlayground.playground">
+      </FileRef>
+   </Group>
+</Workspace>
