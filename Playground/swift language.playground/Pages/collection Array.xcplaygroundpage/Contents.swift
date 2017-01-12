@@ -178,26 +178,6 @@ do {
 }
 
 do {
-    let pepboys = ["Manny", "Moe", "Jack"]
-    for pepboy in pepboys {
-        (pepboy) // prints Manny, then Moe, then Jack
-    }
-    for (ix, pepboy) in pepboys.enumerate() { // ***
-        ("Pep boy \(ix) is \(pepboy)") // Pep boy 0 is Manny, etc.
-    }
-    let arr = [1, 2, 3]
-    let arr2 = arr.map { $0 * 2 } // [2,4,6]
-    let arr3 = arr.map { Double($0) } // [1.0, 2.0, 3.0]
-    pepboys.forEach { print($0) } // prints Manny, then Moe, then Jack
-    pepboys.enumerate().forEach { print("Pep boy \($0.0) is \($0.1)") }
-    // pepboys.map(print) // no longer compiles
-    let arr4 = pepboys.filter { $0.hasPrefix("M") } // [Manny, Moe]
-    let arrr = [1, 4, 9, 13, 112]
-    let sum = arrr.reduce(0) { $0 + $1 } // 139
-    let sum2 = arrr.reduce(0, combine: +)
-}
-
-do {
     let arr = [[1, 2], [3, 4], [5, 6]]
     let flat = arr.reduce([], combine: +) // [1, 2, 3, 4, 5, 6]
     let arr2 = [[1, 2], [3, 4], [5, 6], 7]

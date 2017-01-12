@@ -10,7 +10,7 @@ import UIKit
  To remove the observer, release the KeyValueObserver instance (so assign it to an optional so you can assign that to nil to release it).
  */
 
-typealias KVObserver = (kvo: KeyValueObserver, change: [NSObject : AnyObject]) -> Void
+typealias KVObserver = (_ kvo: KeyValueObserver, _ change: [NSObject : AnyObject]) -> Void
 /// KeyValueObserver instance is marshalled unretained into an UnsafeMutablePointer<KeyValueObserver> and passed as the context to addObserver:forKeyPath:options:context:
 class KeyValueObserver {
     let source: NSObject
