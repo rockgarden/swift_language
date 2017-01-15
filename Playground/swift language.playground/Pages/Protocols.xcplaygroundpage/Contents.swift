@@ -217,7 +217,7 @@ class SomeSubClass: SomeSuperClass, SomeProtocol {
     }
 }
 // system protocol
-struct Nest : IntegerLiteralConvertible {
+struct Nest : ExpressibleByIntegerLiteral {
     var eggCount : Int = 0
     init() {}
     init(integerLiteral val: Int) {
@@ -227,7 +227,7 @@ struct Nest : IntegerLiteralConvertible {
 func reportEggs(nest: Nest) {
     ("this nest contains \(nest.eggCount) eggs")
 }
-reportEggs(4)
+reportEggs(nest: 4)
 /*: ## Adding Protocol Conformance with an Extension
  You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type.
  Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand
@@ -326,7 +326,7 @@ func wishHappyBirthday(celebrator: protocol<Named, Aged>) {
     ("Happy birthday \(celebrator.name) - you're \(celebrator.age)!")
 }
 let birthdayPerson = Personn(name: "Malcolm", age: 21)
-wishHappyBirthday(birthdayPerson) //输出wishHappyBirthday
+wishHappyBirthday(celebrator:birthdayPerson) //输出wishHappyBirthday
 
 /*:
  - NOTE:
@@ -361,8 +361,17 @@ wishHappyBirthday(birthdayPerson) //输出wishHappyBirthday
  */
 
 @objc protocol CounterDataSource {
-    optional func incrementForCount(count: Int) -> Int
-    optional var fixedIncrement: Int { get }
+    @objc optional func incrementForCount(count: Int) -> Int
+    @objc optional var fixedIncrement: Int { get }
+}
+/// 通过扩展实现optional
+do {
+    protocol CounterDataSource {
+        func incrementForCount(count: Int) -> Int
+    }
+    extension CounterDataSource {
+        var fixedIncrement: Int { get }
+    }
 }
 
 class Counter {
@@ -411,7 +420,7 @@ generator = LinearCongruentialGenerator()
  When you define a protocol extension, you can specify constraints that conforming types must satisfy before the methods and properties of the extension are available. You write these constraints after the name of the protocol you’re extending using a where clause.
  */
 
-extension CollectionType where Generator.Element: TextRepresentable {
+extension Collection where Generator.Element: TextRepresentable {
     var textualDescription: String {
         let itemsAsText = self.map { $0.textualDescription }
         return "[" + itemsAsText.joinWithSeparator(", ") + "]"

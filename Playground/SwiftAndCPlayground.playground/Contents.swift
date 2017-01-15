@@ -214,7 +214,7 @@ class AClass : CustomStringConvertible {
     var aProperty:Int=0
 
     var description: String {
-        return "A \(self.dynamicType) with property \(self.aProperty)"
+        return "A \(type(of: self)) with property \(self.aProperty)"
     }
 }
 

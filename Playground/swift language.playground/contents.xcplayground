@@ -5,7 +5,6 @@
         <page name='Instance'/>
         <page name='Access Control'/>
         <page name='annotation'/>
-        <page name='ARC'/>
         <page name='Basic Operators'/>
         <page name='operator'/>
         <page name='boolAndNumbers'/>
