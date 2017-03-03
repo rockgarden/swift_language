@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false' last-migration='0810'>
+<playground version='6.0' target-platform='ios' display-mode='rendered' executeOnSourceChanges='false' last-migration='0810'>
     <pages>
         <page name='Basics'/>
         <page name='Instance'/>
@@ -13,6 +13,7 @@
         <page name='Class polymorphism'/>
         <page name='Class type reference'/>
         <page name='Classes &amp; Structs'/>
+        <page name='Functions'/>
         <page name='Closures'/>
         <page name='Temp'/>
         <page name='collection Array'/>
@@ -29,7 +30,6 @@
         <page name='ErrorType'/>
         <page name='Error_Handling'/>
         <page name='Extensions'/>
-        <page name='Functions'/>
         <page name='Generics'/>
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>

@@ -2,21 +2,21 @@
 //: # recursion递归
 import Foundation
 
-func countDownFrom(ix:Int) {
+func countDownFrom(_ ix:Int) {
     print(ix)
     if ix > 0 { // stopper
         countDownFrom(ix-1) // recurse!
     }
 }
 
-func countDownFrom2(ix:Int) {
+func countDownFrom2(_ ix:Int) {
     print(ix)
     if ix > 0 { // stopper
         countDownFrom2(ix-1) // legal
     }
 }
 
-func countDownFrom3(ix:Int) {
+func countDownFrom3(_ ix:Int) {
     print(ix)
     if ix > 0 { // stopper
         countDownFrom3(ix-1) // new: legal in Swift 2.0

@@ -315,7 +315,7 @@ let thing = arr[0] // in Swift 1.2 and before we'd get a warning here
 _ = thing
 
 // var opts = [.Autoreverse, .Repeat] // compile error
-let opts : UIViewAnimationOptions = [.Autoreverse, .Repeat]
+let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
 _ = opts
 var dothis = false
 if dothis {
@@ -368,10 +368,9 @@ func btiExample() {
      */
     do {
         var bti : UIBackgroundTaskIdentifier = 0
-        bti = UIApplication.sharedApplication()
-            .beginBackgroundTaskWithExpirationHandler({
-                UIApplication.sharedApplication().endBackgroundTask(bti)
-            })
+        bti = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+            UIApplication.shared.endBackgroundTask(bti)
+        })
     }
 }
 

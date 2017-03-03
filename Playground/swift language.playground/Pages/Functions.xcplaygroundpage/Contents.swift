@@ -13,7 +13,7 @@ do {
         let result = x + y
         return result
     }
-    let _ = sum(4,5)
+    sum(4,5)
     let x = 4
     let y = 5
     let z = sum(y,x)
@@ -32,7 +32,32 @@ do {
     let pointless : Void = say1("howdy") //showing that we actually return void
     ("pointless is \(pointless)") //showing that we captured the returned void
 }
+do {
+    func echo(_ s:String, times:Int) -> String {
+        var result = ""
+        for _ in 1...times { result += s }
+        return result
+    }
 
+    func echo2(string s:String, times n:Int) -> String {
+        var result = ""
+        for _ in 1...n { result += s}
+        return result
+    }
+
+    let s = echo("hi ", times:3)
+    print(s)
+
+    let s2 = echo2(string: "hi ", times:3)
+    print(s2)
+}
+
+do {
+    let s = "hello"
+    let s2 = s.replacingOccurrences(of: "ell", with:"ipp")
+    // s2 is now "hippo"
+    print(s2)
+}
 
 //: @discardableResult: this is how to prevent the unused result warning
 do {
@@ -76,7 +101,6 @@ do {
         }
         return (vowels, consonants, others)
     }
-
     count(string: "test count")
 }
 
@@ -84,9 +108,9 @@ do {
     func reverseString(string: String) -> String {
         return String(string.characters.reversed())
     }
-
     reverseString(string: "test reverseString")
 }
+
 
 do {
     // In this case we return a tuple
@@ -94,8 +118,22 @@ do {
         if array.isEmpty {return nil}
         return (0,1)
     }
-
     minMax(array: [12,31,2223,323])
+}
+//: 扩展类方法
+do {
+    class Thing: NSObject {
+        func crushingInstances(of otherThing: Thing) -> Thing {
+            return Thing()
+        }
+    }
+    extension Thing {
+        func makingHash(of otherThing:Thing) -> Thing {return Thing()}
+        // renamified as `makingHashOf:`
+        func makingHash(cornedBeef otherThing:Thing) -> Thing {return Thing()}
+        // renamified as `makingHashWithCornedBeef:`
+        func makingHash(thing otherThing:Thing) -> Thing {return Thing()}
+    }
 }
 
 ////: ## var modifiable Parameters
@@ -353,7 +391,7 @@ do {
 //        let barkFunction5 = self.bark(_:)
 //        let barkFunction6 = self.dynamicType.bark(_:)
 //        let barkFunction7 = Dog.bark(_:)
-//        
+//
 //        _ = barkFunction1
 //        _ = barkFunction2
 //        _ = barkFunction3
@@ -361,13 +399,13 @@ do {
 //        _ = barkFunction5
 //        _ = barkFunction6
 //        _ = barkFunction7
-//        
+//
 //        let f = {
 //            // return bark(_:) // error
 //            return self.bark(_:)
 //        }
 //        _ = f
-//        
+//
 //        let purrFunction1 = cat.purr
 //        let purrFunction2 = self.cat.purr
 //        let purrFunction3 = Cat.purr
