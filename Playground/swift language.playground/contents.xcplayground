@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' display-mode='rendered' executeOnSourceChanges='false' last-migration='0810'>
+<playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false' last-migration='0810'>
     <pages>
         <page name='Basics'/>
+        <page name='Basic Operators'/>
         <page name='Instance'/>
         <page name='Access Control'/>
         <page name='annotation'/>
-        <page name='Basic Operators'/>
         <page name='operator'/>
         <page name='boolAndNumbers'/>
         <page name='branching'/>
@@ -14,6 +14,7 @@
         <page name='Class type reference'/>
         <page name='Classes &amp; Structs'/>
         <page name='Functions'/>
+        <page name='Untitled Page 2'/>
         <page name='Closures'/>
         <page name='Temp'/>
         <page name='collection Array'/>

@@ -28,12 +28,22 @@ var rem = 10%2
 
 /*: 
  ## 特征运算符
+ 基于引用的对象比较
  - 等价于 ( === )
  - 不等价于 ( !== )
  */
-//var c = (a === b) //ab指向的类型实例相同时c为ture
+do {
+    class T {}
+    let a = T()
+    var b = a
+    let c = T()
+    // ab指向的类型实例相同时c为ture
+    let bool1 = (a === b)
+    let bool2 = (c !== b)
+}
 
-/*
+
+/*:
  ## 字符串拼接
  strings can be achieved by "sum" or by \()
  */
