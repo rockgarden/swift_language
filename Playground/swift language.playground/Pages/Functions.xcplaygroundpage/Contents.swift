@@ -3,6 +3,10 @@
 import UIKit
 
 //: # Functions
+/*: 
+ ## 语法
+ these DO just illustrates some declaration syntax
+ */
 do {
     func sayHello(personName: String) -> String{
         return "Hello \(personName)!"
@@ -30,39 +34,33 @@ do {
     reverseString(string: "test reverseString")
 }
 
-/// 声明语法 the DO just illustrates some declaration syntax
+//: Closures Functions
 do {
-    do {
-        func say1(_ s:String) -> Void { (s) }
-        func say2(_ s:String) -> () { (s) }
-        func say3(_ s:String) { (s) }
-        say1("howdy")
-        say2("howdy")
-        say3("howdy")
-        let pointless : Void = say1("howdy") //showing that we actually return void
-        ("pointless is \(pointless)") //showing that we captured the returned void
-    }
-    do {
-        func echo(_ s:String, times:Int) -> String {
-            var result = ""
-            for _ in 1...times { result += s }
-            return result
-        }
-
-        func echo2(string s:String, times n:Int) -> String {
-            var result = ""
-            for _ in 1...n { result += s}
-            return result
-        }
-
-        let s = echo("hi ", times:3)
-        print(s)
-
-        let s2 = echo2(string: "hi ", times:3)
-        print(s2)
-    }
+    typealias VoidVoid1 = () -> ()
+    typealias VoidVoid2 = (Void) -> Void
 }
-/// 类方法调用
+
+do {
+    func echo(_ s:String, times:Int) -> String {
+        var result = ""
+        for _ in 1...times { result += s }
+        return result
+    }
+
+    func echo2(string s:String, times n:Int) -> String {
+        var result = ""
+        for _ in 1...n { result += s}
+        return result
+    }
+
+    let s = echo("hi ", times:3)
+    print(s)
+
+    let s2 = echo2(string: "hi ", times:3)
+    print(s2)
+}
+
+//: 类方法调用
 do {
     let s = "hello" //String
     let s2 = s.replacingOccurrences(of: "ell", with:"ipp")
@@ -70,21 +68,15 @@ do {
     print(s2)
 }
 
-//: @discardableResult: this is how to prevent the unused result warning
+//: @discardableResult this is how to prevent the unused result warning
 do {
     @discardableResult
     func greet(_ unused: Void) -> String { return "howdy" }
     greet()
 }
 
-//: Closures Functions
-do {
-    typealias VoidVoid1 = () -> ()
-    typealias VoidVoid2 = (Void) -> Void
-}
-
 /*:
- parameter Void
+ ## parameter Void
  - 无参Function相当于Void参数?
  - passing a void is the same as no parameters
  - Void 可省略
@@ -93,6 +85,16 @@ do {
  - translates in returning an empty tuple: ()
  - 没有定义返回类型的函数会返回特殊的值Void,它其实是一个空的元组tuple,没有任何元素,也可简写成()
  */
+do {
+    func say1(_ s:String) -> Void { (s) }
+    func say2(_ s:String) -> () { (s) }
+    func say3(_ s:String) { (s) }
+    say1("howdy")
+    say2("howdy")
+    say3("howdy")
+    let pointless : Void = say1("howdy") //showing that we actually return void
+    ("pointless is \(pointless)") //showing that we captured the returned void
+}
 do {
     func greet1(_ unused: Void) -> Void { ("howdy") }
     func greet2() -> () { ("howdy") }
@@ -104,57 +106,6 @@ do {
     let v:Void = ()
     greet1(v)
     greet4(v)
-}
-
-
-/*:
- ## overload 函数重载
- - 外部参数可reload
- - 局部参数不能reload
- */
-do {
-    //?
-}
-/// this is legal too, but _calling_ is error, how to call it, trickier!
-func say() -> String { return "one" }
-func say() -> Int { return 1 }
-func giveMeAString(_ s:String) { print("thanks!") }
-do {
-    //say()//error: ambiguous use of 'say()',therefore illegal
-    // but these are fine:
-    giveMeAString(say()) //p:thanks!
-    let result = say() + "two"
-}
-/// this is legal
-func say (_ what:String) { }
-func say (_ what:Int) { }
-/// but in DO this is not legal
-do {
-    func say (_ what:String) { }
-    //func say (_ what:Int) { }
-}
-do {
-    class ViewController: UIViewController {
-        /// if you delete `@nonobjc`, this is not legal, because Objective-C can't deal with it:
-        /// error: method 'sayy(what:)' with Objective-C selector 'sayyWithWhat:' conflicts with previous declaration with the same Objective-C selector
-        func sayy (_ what:String) { }
-        @nonobjc func sayy (_ what:Int) { }
-
-        override func viewDidLoad() {
-            super.viewDidLoad()
-
-            // but overloading is _not_ legal at the local level
-            // I take it that is because we have no dynamic dispatch here?
-            /*
-             func sayyy (what:String) {
-             }
-             func sayyy (what:Int) {
-             }
-             */
-            print(say("howdy")) //()
-            print(say(1)) //()
-        }
-    }
 }
 
 //: ## Parameters
@@ -200,10 +151,33 @@ do {
     say2("hi", times:3, true)
 }
 
+/*:
+ ### 外部和本地参数名称
+ Here we are using external and local params names.
+ - 外部参数名,是为了调用该函数时让其参数更为有表现力,更为通顺，同时还保持了函数体是可读的和有明确意图的,让别人阅读整段代码时更方便
+ - 注意外部名称将自动提供给每一个预定义的参数.
+ - 下面join最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
+ */
+do {
+    func join(string s1: String, toString s2: String, withJoiner joiner: String = "only")
+        -> String {
+            return s1 + joiner + s2
+    }
+    join(string: "Hello", toString: "World", withJoiner: "New")
+    join(string: "", toString: "")
+
+    var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
+    UIColor.red.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+    red
+    green
+    blue
+    alpha
+}
 
 /*:
  ### var modifiable Parameters
- Key word inout
+ 1. copy let Parameter then new var
+ 2. Key word inout
  声明函数时, 在参数前面用inout修饰, 表示传的是对象引用, 从而实现在函数内部实现改变外部参数
  - 传入的时候, 要在变量名字前面用&符号修饰, 表示传递给inout参数, 声明这个变量在参数内部是可以被改变的.
  - 只能传入变量，不能传入常量和字面量，因为这些是不能变的一旦定义.
@@ -215,7 +189,7 @@ do {
  func removeFromStringNot(var s:String, character c:Character) -> Int {
  */
 do {
-    // instead, write this:
+    /// instead copy let then new var
     func say(s:String, times:Int, loudly:Bool) {
         var loudly = loudly
         loudly = true
@@ -230,6 +204,7 @@ do {
         }
         return howMany
     }
+    /// inout key word: 定义传递的参数的值可以被修改,这将反映在函数定义的原始变量上。
     func removeCharacter(_ c:Character, from s: inout String) -> Int {
         var howMany = 0
         while let ix = s.characters.index(of:c) {
@@ -253,6 +228,16 @@ do {
         /// INOUT参数是一定变化的, proving that the inout parameter is always changed
         var ss = "testing" {didSet {print("did")}}
         _ = removeCharacter("X", from:&ss) // "did", even though no change
+    }
+    do {
+        func swapTwoInts(_ a: inout Int, b: inout Int) {
+            let temporaryA = a
+            a = b
+            b = temporaryA
+        }
+        var someInt = 3
+        var anotherInt = 107
+        swapTwoInts(&someInt, b: &anotherInt)
     }
     do {
         let myRect = CGRect.zero
@@ -291,9 +276,20 @@ do {
         x
         y
     }
+    /// 阶乘积:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
+    func factorial(_ max: Int) -> Int {
+        var result: Int = 1
+        var number = max
+        while number > 1 {
+            result = result * number
+            number -= 1
+        }
+        return result
+    }
+    ("factorial Result:\(factorial(10))") //注意不要Int超界
 }
+//: proving that a class instance parameter is mutable in a function without "inout"
 do {
-    /// proving that a class instance parameter is mutable in a function without "inout"
     class Dog {
         var name = ""
     }
@@ -320,8 +316,7 @@ do {
     }
 }
 
-
-//: inout线程调用
+//: ### inout线程调用
 do {
     /// 使用内嵌闭包
     func test(_ t: inout [String]) {
@@ -390,7 +385,327 @@ do {
     }
 }
 
-//: 扩展类方法
+//: ### 函数作参数
+do {
+    func doThis(_ f:()->()) {
+        f()
+    }
+    func whatToDo() {
+        print("I did it")
+    }
+    doThis(whatToDo)
+}
+do {
+    var myButton: UIButton!
+    func moveMyButton (sender:AnyObject!) {
+        func whatToAnimate() {
+            myButton.frame.origin.y += 20
+        }
+        func whatToDoLater(finished:Bool) {
+            print("finished: \(finished)")
+        }
+        UIView.animate(withDuration: 0.4, animations: whatToAnimate, completion: whatToDoLater)
+    }
+    func test() {
+        let vc = UIViewController()
+        func whatToDoLater() {
+            print("I finished!")
+        }
+        vc.present(vc, animated:true, completion:whatToDoLater)
+    }
+}
+do {
+    func imageOfSize(_ size:CGSize, _ whatToDraw:() -> ()) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        whatToDraw()
+        let result = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return result
+    }
+    do {
+        let size = CGSize(width:45, height:20)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        let p = UIBezierPath(
+            roundedRect: CGRect(x:0, y:0, width:45, height:20), cornerRadius: 8)
+        p.stroke()
+        let result = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+    }
+    func drawing() {
+        let p = UIBezierPath( // looks like they've finally cut me off from CGRectMake
+            roundedRect: CGRect(x:0, y:0, width:45, height:20), cornerRadius: 8)
+        p.stroke()
+    }
+    let image = imageOfSize(CGSize(width:45, height:20), drawing)
+
+    // here, I'll prove we really drew it :)
+    let imageView = UIImageView(image:image)
+    imageView.frame.origin = CGPoint(x:100,y:100)
+}
+do {
+    class ViewController: UIViewController {
+
+        @IBOutlet weak var myButton: UIButton!
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+        }
+
+        @IBAction func moveMyButton (_ sender:Any!) {
+            func whatToAnimate() { // self.myButton is a button in the interface
+                self.myButton.frame.origin.y += 20
+            }
+            func whatToDoLater(finished:Bool) {
+                print("finished: \(finished)")
+            }
+            UIView.animate(withDuration:
+                0.4, animations: whatToAnimate, completion: whatToDoLater)
+        }
+
+        func playingWithFunctionSpecifierSyntax() {
+            /*
+             Illustrating ways to refer to a function as a value in Swift 2.2 and later.
+             You can express the signature, e.g. as a way of disambiguating in case of overload.
+             This will also turn out to be essential when using the new #selector syntax.
+             You can precede with an explicit instance.
+             You can precede with an explicit class. This is because an instance method
+             is really a class method; as the calling example shows, this is not the same thing.
+             But it will turn out that this can be used the same way in #selector.
+             */
+
+            let f = moveMyButton
+            let ff = moveMyButton(_:)
+            let f2 = self.moveMyButton
+            let ff2 = self.moveMyButton(_:)
+            let f3 = ViewController.moveMyButton
+            let ff3 = ViewController.moveMyButton(_:)
+
+            // let v = viewDidLoad
+
+            f(self.myButton)
+            ff(self.myButton)
+            f2(self.myButton)
+            ff2(self.myButton)
+            f3(self)(self.myButton)
+            ff3(self)(self.myButton)
+        }
+
+        // I should probably now discuss #selector syntax at this point in the book
+        let b = UIButton(type: .system)
+        func testSelectorSyntax() {
+            /// how to crash the compiler warned you, maybe need @objc key work for buttonPressed
+            self.b.addTarget(self, action: "buttonPressed", for: .touchUpInside)
+            /// the solution:
+            self.b.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+            self.b.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+            self.b.addTarget(self, action: #selector(ViewController.buttonPressed(_:)), for: .touchUpInside)
+            /// #selector the key point is, you just need to provide enough info, then the compiler can resolve this method reference for you and it will then form the actual Selector for you! no more "unrecognized selector"!
+            /// If you can still crash: just specify the wrong target!,like this compiles:
+            self.b.addTarget(self.b, action: #selector(ViewController.buttonPressed(_:)), for: .touchUpInside)
+            // but it would crash if you ran it and tapped the button
+        }
+        
+        func buttonPressed(_ sender:Any) { // must actually exist, or none of the above will compile
+        }
+        
+    }
+}
+
+//: ## 函数变量 function As Value
+do {
+    func addInts(a:Int,b:Int)->Int {return a+b}
+    var mathFunction:(Int,Int)->Int = addInts
+    ("addInts Result:\(mathFunction(2,3))")
+
+    func multiplyInts(a:Int,b:Int)->Int {return a*b}
+    func printMathResult(_ mathFunction:(Int,Int)->Int,a:Int,b:Int){
+        ("MathResult:\(mathFunction(a,b))")
+    }
+    printMathResult(multiplyInts,a: 2,b: 3)
+
+    //定义类型函数的变量
+    func sayHello(personName: String) -> String{
+        return "Hello \(personName)!"
+    }
+    var stringFunction: (String) -> String = sayHello
+}
+
+do {
+    class Cat {
+        func purr () {}
+    }
+
+    class Dog {
+        let cat = Cat()
+        func bark() {print("woof")}
+        func bark(_ loudly:Bool) {
+            if loudly {
+                print("WOOF")
+            } else {
+                self.bark()
+            }
+        }
+        func test() {
+            // let barkFunction = bark
+            let barkFunction1 = bark(_:)
+            let barkFunction2 = bark as (Void) -> Void
+            let barkFunction3 = bark as (Bool) -> Void
+            let barkFunction4 : (Bool) -> Void = bark
+            let barkFunction5 = self.bark(_:)
+            /// Dog === type(of:self)
+            let barkFunction6 = type(of:self).bark(_:)
+            let barkFunction7 = Dog.bark(_:)
+
+            _ = barkFunction1
+            _ = barkFunction2
+            _ = barkFunction3
+            _ = barkFunction4
+            _ = barkFunction5
+            _ = barkFunction6
+            _ = barkFunction7
+
+            let f = {
+                // return bark(_:) // error
+                return self.bark(_:)
+            }
+            _ = f
+
+            let purrFunction1 = cat.purr
+            let purrFunction2 = self.cat.purr
+            let purrFunction3 = Cat.purr
+            
+            _ = purrFunction1
+            _ = purrFunction2
+            _ = purrFunction3
+        }
+    }
+    class NoisyDog : Dog {
+        func test2() {
+            let barkFunction1 = bark(_:)
+            let barkFunction2 = self.bark(_:)
+            let barkFunction3 = super.bark(_:)
+
+            _ = barkFunction1
+            _ = barkFunction2
+            _ = barkFunction3
+        }
+    }
+
+    class Dog2 {
+        func bark() {}
+        func bark(_ loudly:Bool) {}
+        func bark(_ times:Int) {}
+        func test() {
+            // let barkFunction1 = bark // ambiguous
+            // let barkFunction2 = bark(_:) // still ambiguous
+            let barkFunction = bark as (Int) -> Void
+            _ = barkFunction
+        }
+    }
+
+}
+
+
+//: ### nested functions
+//: 函数作返回值: 可以使用函数类型作为返回函数。
+do {
+    func squre(num: Int) -> Int {
+        return num*num
+    }
+    func cube(num: Int) -> Int {
+        return num*num*num
+    }
+    func getMathFunc(_ type: String) -> (Int) -> Int {
+        switch(type){
+        case "squre":
+            return squre
+        default:
+            return cube
+        }
+    }
+    var mathFunc = getMathFunc("other")
+    ("getMathFunc result:\(mathFunc(5))")
+}
+
+//: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
+do {
+    func chooseStepFunction(_ backwards: Bool) -> (Int) -> Int {
+        func stepForward(input: Int) -> Int { return input + 1 }
+        func stepBackward(input: Int) -> Int { return input - 1 }
+        return backwards ? stepBackward : stepForward
+    }
+    var stepFunction = chooseStepFunction(true)
+    ("chooseStepFunction result: \(stepFunction(100))")
+}
+do {
+    func getMathFunc(type type:String)->(Int)->Int{
+        func squre(num: Int) -> Int {return num*num}
+        func cube(num: Int) -> Int {return num*num*num}
+        switch(type){
+        case "squre":
+            return squre
+        default:
+            return cube
+        }
+    }
+    var mathFunc1=getMathFunc(type: "squre")
+    (mathFunc1(4))
+    var mathFunc2=getMathFunc(type: "other")
+    (mathFunc2(4))
+}
+
+/*:
+ ## overload 函数重载
+ - 外部参数可reload
+ - 局部参数不能reload
+ */
+do {
+    //?
+}
+/// this is legal too, but _calling_ is error, how to call it, trickier!
+func say() -> String { return "one" }
+func say() -> Int { return 1 }
+func giveMeAString(_ s:String) { print("thanks!") }
+do {
+    //say()//error: ambiguous use of 'say()',therefore illegal
+    // but these are fine:
+    giveMeAString(say()) //p:thanks!
+    let result = say() + "two"
+}
+/// this is legal
+func say (_ what:String) { }
+func say (_ what:Int) { }
+/// but in DO this is not legal
+do {
+    func say (_ what:String) { }
+    //func say (_ what:Int) { }
+}
+do {
+    class ViewController: UIViewController {
+        /// if you delete `@nonobjc`, this is not legal, because Objective-C can't deal with it:
+        /// error: method 'sayy(what:)' with Objective-C selector 'sayyWithWhat:' conflicts with previous declaration with the same Objective-C selector
+        func sayy (_ what:String) { }
+        @nonobjc func sayy (_ what:Int) { }
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+
+            // but overloading is _not_ legal at the local level
+            // I take it that is because we have no dynamic dispatch here?
+            /*
+             func sayyy (what:String) {
+             }
+             func sayyy (what:Int) {
+             }
+             */
+            print(say("howdy")) //()
+            print(say(1)) //()
+        }
+    }
+}
+
+
+//: ## 扩展类方法
 class Thing {
     func crushingInstances(of otherThing: Thing) -> Thing {
         return Thing()
@@ -401,216 +716,6 @@ extension Thing {
     func makingHash(cornedBeef otherThing:Thing) -> Thing {return Thing()}
     func makingHash(thing otherThing:Thing) -> Thing {return Thing()}
 }
-
-
-
-
-///*:
-// ## 外部和本地参数名称
-// Here we are using external and local params names.
-// - 外部参数名,是为了调用该函数时让其参数更为有表现力,更为通顺，同时还保持了函数体是可读的和有明确意图的,让别人阅读整段代码时更方便
-// - 注意外部名称将自动提供给每一个预定义的参数.
-// - 下面join最后一个参数是预先定义的,这意味着我们可以在调用该函数时省略它.
-// */
-//func join(string s1: String, toString s2: String, withJoiner joiner: String = "only")
-//    -> String {
-//        return s1 + joiner + s2
-//}
-//join(string: "Hello", toString: "World", withJoiner: "New")
-//join(string: "", toString: "")
-//
-//var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
-//UIColor.redColor().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-//red
-//green
-//blue
-//alpha
-
-
-////赋值:前缀定义传递的参数的值可以被修改,这将反映在函数定义的原始变量上。
-//func swapTwoInts(inout a: Int, inout b: Int) {
-//    let temporaryA = a
-//    a = b
-//    b = temporaryA
-//}
-//var someInt = 3
-//var anotherInt = 107
-//swapTwoInts(&someInt, b: &anotherInt)
-//
-////FIXME:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
-//func factorial( max: Int) -> Int {
-//    var result: Int = 1
-//    var number = max
-//    while number > 1 {
-//        result = result * number
-//        number -= 1
-//    }
-//    return result
-//}
-//("factorial Result:\(factorial(6))") //注意不要Int超界
-//
-//
-////: ## 函数作参数
-//func doThis(f:()->()) {
-//    f()
-//}
-//func whatToDo() {
-//    print("I did it")
-//}
-//doThis(whatToDo)
-//
-//func addInts(a:Int,b:Int)->Int{
-//    return a+b
-//}
-//var mathFunction:(Int,Int)->Int = addInts
-//debugPrint("addInts Result:\(mathFunction(2,3))")
-//
-//func multiplyInts(a:Int,b:Int)->Int{
-//    return a*b
-//}
-//func printMathResult(mathFunction:(Int,Int)->Int,a:Int,b:Int){
-//    ("MathResult:\(mathFunction(a,b))")
-//}
-//printMathResult(multiplyInts,a: 2,b: 3)
-//
-//class Cat {
-//    func purr () {}
-//}
-//class Dog {
-//    let cat = Cat()
-//    func bark() {
-//        print("woof")
-//    }
-//    func bark(loudly:Bool) {
-//        if loudly {
-//            print("WOOF")
-//        } else {
-//            self.bark()
-//        }
-//    }
-//    func test() {
-//        // let barkFunction = bark
-//        let barkFunction1 = bark(_:)
-//        let barkFunction2 = bark as Void -> Void
-//        let barkFunction3 = bark as Bool -> Void
-//        let barkFunction4 : Bool -> Void = bark
-//        let barkFunction5 = self.bark(_:)
-//        let barkFunction6 = self.dynamicType.bark(_:)
-//        let barkFunction7 = Dog.bark(_:)
-//
-//        _ = barkFunction1
-//        _ = barkFunction2
-//        _ = barkFunction3
-//        _ = barkFunction4
-//        _ = barkFunction5
-//        _ = barkFunction6
-//        _ = barkFunction7
-//
-//        let f = {
-//            // return bark(_:) // error
-//            return self.bark(_:)
-//        }
-//        _ = f
-//
-//        let purrFunction1 = cat.purr
-//        let purrFunction2 = self.cat.purr
-//        let purrFunction3 = Cat.purr
-//        _ = purrFunction1
-//        _ = purrFunction2
-//        _ = purrFunction3
-//    }
-//}
-//
-//class NoisyDog : Dog {
-//    func test2() {
-//        let barkFunction1 = bark(_:)
-//        let barkFunction2 = self.bark(_:)
-//        let barkFunction3 = super.bark(_:)
-//        _ = barkFunction1
-//        _ = barkFunction2
-//        _ = barkFunction3
-//    }
-//}
-//
-//class Dog2 {
-//    func bark() {}
-//    func bark(loudly:Bool) {}
-//    func bark(times:Int) {}
-//    func test() {
-//        // let barkFunction = bark(_:)
-//        let barkFunction = bark(_:) as Int -> Void
-//        _ = barkFunction
-//    }
-//}
-//
-////: ### 实例
-//var myButton: UIButton!
-//func moveMyButton (sender:AnyObject!) {
-//    func whatToAnimate() {
-//        myButton.frame.origin.y += 20
-//    }
-//    func whatToDoLater(finished:Bool) {
-//        print("finished: \(finished)")
-//    }
-//    UIView.animateWithDuration(
-//        0.4, animations: whatToAnimate, completion: whatToDoLater)
-//}
-//
-//func test() {
-//    let vc = UIViewController()
-//    func whatToDoLater() {
-//        print("I finished!")
-//    }
-//    vc.presentViewController(vc, animated:true, completion:whatToDoLater)
-//}
-//
-////定义类型函数的变量
-//var stringFunction: (String) -> String = sayHello
-////: ## nested functions
-////: 函数作返回值: 可以使用函数类型作为返回函数。
-//func squre(num: Int) -> Int {
-//    return num*num
-//}
-//func cube(num: Int) -> Int {
-//    return num*num*num
-//}
-//func getMathFunc(type: String) -> (Int) -> Int {
-//    switch(type){
-//    case "squre":
-//        return squre
-//    default:
-//        return cube
-//    }
-//}
-//var mathFunc = getMathFunc("other")
-//("getMathFunc result:\(mathFunc(5))")
-////: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
-//func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
-//    func stepForward(input: Int) -> Int { return input + 1 }
-//    func stepBackward(input: Int) -> Int { return input - 1 }
-//    return backwards ? stepBackward : stepForward
-//}
-//var stepFunction = chooseStepFunction(true)
-//("chooseStepFunction result: \(stepFunction(5))")
-//
-//func getMathFunc(type type:String)->(Int)->Int{
-//    func squre(num: Int) -> Int {
-//        return num*num
-//    }
-//    func cube(num: Int) -> Int {
-//        return num*num*num
-//    }
-//    switch(type){
-//    case "squre":
-//        return squre
-//    default:
-//        return cube
-//    }
-//}
-//var mathFunc1=getMathFunc(type: "squre")
-//(mathFunc1(4))
-//var mathFunc2=getMathFunc(type: "other")
-//(mathFunc2(4))
 
 //: [Next](@next)
 
