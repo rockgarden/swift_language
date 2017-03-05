@@ -4,7 +4,7 @@ import UIKit
 
 //: # Functions
 /*: 
- ## Defining and Calling Functions
+ # Defining and Calling Functions
  these DO just illustrates some declaration syntax
  - All of this information is rolled up into the function’s definition, which is prefixed with the func keyword. 
  - You indicate the function’s return type with the return arrow -> (a hyphen followed by a right angle bracket), which is followed by the name of the type to return.
@@ -83,9 +83,9 @@ do {
 }
 
 
-//: ## Function Parameters and Return Values
+//: # Function Parameters and Return Values
 
-//: ### Functions Without Parameters
+//: ## Functions Without Parameters
 do {
     func sayHelloWorld() -> String {
         return "hello, world"
@@ -93,7 +93,7 @@ do {
     print(sayHelloWorld())
 }
 
-//: ### Functions With Multiple Parameters
+//: ## Functions With Multiple Parameters
 func greet(person: String, alreadyGreeted: Bool) -> String {
     if alreadyGreeted {
         return greetAgain(person: person)
@@ -103,7 +103,7 @@ func greet(person: String, alreadyGreeted: Bool) -> String {
 }
 print(greet(person: "Tim", alreadyGreeted: true))
 
-//: ### Functions Without Return Values
+//: ## Functions Without Return Values
 /*:
  - NOTE:
  Strictly speaking, this version of the greet(person:) function does still return a value, even though no return value is defined. Functions without a defined return type return a special value of type Void. This is simply an empty tuple, which is written as ().
@@ -132,7 +132,7 @@ do {
     // prints "hello, world" but does not return a value
 }
 
-//: ### Functions with Multiple Return Values
+//: ## Functions with Multiple Return Values
 do {
     /// returns a tuple containing two Int values.
     func minMax(array: [Int]) -> (min: Int, max: Int) {
@@ -149,9 +149,28 @@ do {
     }
     let bounds = minMax(array: [8, -6, 2, 109, 3, 71])
     print("min is \(bounds.min) and max is \(bounds.max)")
+
+    /// 元组作为返回参数
+    func count(string: String) -> (vowels: Int, consonants: Int, others: Int) {
+        var vowels = 0, consonants = 0, others = 0
+        /// 也可通过extension String: SequenceType {}
+        for character in string.characters {
+            switch String(character).lowercased() {
+            case "a", "e", "i", "o", "u":
+                vowels += 1
+            case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+                 "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+                consonants += 1
+            default:
+                others += 1
+            }
+        }
+        return (vowels, consonants, others)
+    }
+    count(string: "test count")
 }
 
-//: ### Optional Tuple Return Types
+//: ## Optional Tuple Return Types
 /*:
  - NOTE:
  An optional tuple type such as (Int, Int)? is different from a tuple that contains optional types such as (Int?, Int?). With an optional tuple type, the entire tuple is optional, not just each individual value within the tuple.
@@ -176,14 +195,14 @@ do {
 }
 
 
-//: ## Function Argument Labels and Parameter Names
+//: # Function Argument Labels and Parameter Names
 func someFunction(firstParameterName: Int, secondParameterName: Int) {
     // In the function body, firstParameterName and secondParameterName
     // refer to the argument values for the first and second parameters.
 }
 someFunction(firstParameterName: 1, secondParameterName: 2)
 
-//: ### Specifying Argument Labels
+//: ## Specifying Argument Labels
 /*:
  外部参数名称 external and local params names.
  - 外部参数名,是为了调用该函数时让其参数更为有表现力,更为通顺，同时还保持了函数体是可读的和有明确意图的,让别人阅读整段代码时更方便
@@ -200,7 +219,7 @@ do {
     print(greet(person: "Bill", from: "Cupertino"))
 }
 
-//: ### Omitting Argument Labels
+//: ## Omitting Argument Labels
 do {
     func someFunction(_ firstParameterName: Int, secondParameterName: Int) {
         // In the function body, firstParameterName and secondParameterName
@@ -209,7 +228,7 @@ do {
     someFunction(1, secondParameterName: 2)
 }
 
-//: ### Default Parameter Values
+//: ## Default Parameter Values
 /*:
  - 预定义参数, 这意味着我们可以在调用该函数时省略它.
  */
@@ -229,7 +248,7 @@ do {
     join(string: "", toString: "")
 }
 
-//: ### Variadic Parameters
+//: ## Variadic Parameters
 /*:
  - NOTE:
  A function may have at most one variadic parameter.
@@ -246,9 +265,12 @@ do {
     arithmeticMean(3, 8.25, 18.75)
 }
 
-
-//: ### In-Out Parameters
+//: ## In-Out Parameters
 /*:
+ 声明函数时, 在参数前面用inout修饰, 表示传的是对象引用, 从而实现在函数内部实现改变外部参数
+ - 传入的时候, 要在变量名字前面用&符号修饰, 表示传递给inout参数, 声明这个变量在参数内部是可以被改变的.
+ - 只能传入变量，不能传入常量和字面量，因为这些是不能变的.
+ - inout修饰的参数是不能有默认值的，有范围的参数集合也不能被修饰，另外，一个参数一旦被inout修饰，就不能再被var和let修饰了
  - NOTE:
  In-out parameters cannot have default values, and variadic parameters cannot be marked as inout.
  */
@@ -268,85 +290,8 @@ do {
  In-out parameters are not the same as returning a value from a function. The swapTwoInts example above does not define a return type or return a value, but it still modifies the values of someInt and anotherInt. In-out parameters are an alternative way for a function to have an effect outside of the scope of its function body.
  输入 - 输出参数与从函数返回值不同。 上面的swapTwoInts示例没有定义返回类型或返回值，但它仍然修改someInt和anotherInt的值。 输入 - 输出参数是函数具有超出函数体范围仍有效的替代方法。
  */
-
-
-
-
-
 do {
-    class Dog {
-        //: Default Parameter
-        func say(_ s:String, times:Int = 1) {
-            for _ in 1...times {
-                print(s)
-            }
-        }
-
-        func doThing (a:Int = 0, b:Int = 3) {}
-
-        //: variadic parameter lists, 可以获取指定类型的多个值
-        func sayStrings(_ arrayOfStrings:String ...) {
-            for s in arrayOfStrings { print(s) }
-        }
-        // new in beta 6, variadic can go anywhere
-
-        func sayStrings(_ arrayOfStrings:String ..., times:Int) {
-            for _ in 1...times {
-                for s in arrayOfStrings { print(s) }
-            }
-        }
-    }
-
-    let d = Dog()
-    d.say("woof") // same as saying d.say("woof", times:1)
-    d.say("woof", times:3)
-    d.sayStrings("hey", "ho", "nonny nonny no")
-    d.sayStrings("Manny", "Moe", "Jack", times:3)
-    // print is now variadic
-    print("Manny", 3, true) // Manny 3 true
-    print("Manny", "Moe", separator:", ", terminator: ", ")
-    print("Jack")
-
-    // ignored
-    func say(_ s:String, times:Int, loudly _:Bool) {Dog().say(s, times:times)}
-    func say2(_ s:String, times:Int, _:Bool) {Dog().say(s, times:times)}
-
-    say("hi", times:3, loudly:true)
-    say2("hi", times:3, true)
-}
-
-
-/*:
- ### var modifiable Parameters
- 1. copy let Parameter then new var
- 2. Key word inout
- 声明函数时, 在参数前面用inout修饰, 表示传的是对象引用, 从而实现在函数内部实现改变外部参数
- - 传入的时候, 要在变量名字前面用&符号修饰, 表示传递给inout参数, 声明这个变量在参数内部是可以被改变的.
- - 只能传入变量，不能传入常量和字面量，因为这些是不能变的一旦定义.
- - inout修饰的参数是不能有默认值的，有范围的参数集合也不能被修饰，另外，一个参数一旦被inout修饰，就不能再被var和let修饰了
- */
-//: var can't define parameter, because it is, after all, rather misleading
-/*
- func say(s:String, times:Int, var loudly:Bool) {
- func removeFromStringNot(var s:String, character c:Character) -> Int {
- */
-do {
-    /// instead copy let then new var
-    func say(s:String, times:Int, loudly:Bool) {
-        var loudly = loudly
-        loudly = true
-        _ = loudly
-    }
-    func removeCharacterNot(_ c:Character, from s:String) -> Int {
-        var s = s
-        var howMany = 0
-        while let ix = s.characters.index(of:c) {
-            s.remove(at:ix)
-            howMany += 1
-        }
-        return howMany
-    }
-    /// inout key word: 定义传递的参数的值可以被修改,这将反映在函数定义的原始变量上。
+    /// inout修饰的参数的值可以被修改, 这将反映在函数定义的原始变量上。
     func removeCharacter(_ c:Character, from s: inout String) -> Int {
         var howMany = 0
         while let ix = s.characters.index(of:c) {
@@ -354,12 +299,6 @@ do {
             howMany += 1
         }
         return howMany
-    }
-    do {
-        let s = "hello"
-        let result = removeCharacterNot("l", from:s)
-        print(result)
-        print(s) // no effect on s
     }
     do {
         var s = "hello"
@@ -371,93 +310,7 @@ do {
         var ss = "testing" {didSet {print("did")}}
         _ = removeCharacter("X", from:&ss) // "did", even though no change
     }
-    do {
-        func swapTwoInts(_ a: inout Int, b: inout Int) {
-            let temporaryA = a
-            a = b
-            b = temporaryA
-        }
-        var someInt = 3
-        var anotherInt = 107
-        swapTwoInts(&someInt, b: &anotherInt)
-    }
-    do {
-        let myRect = CGRect.zero
-        var arrow = CGRect.zero
-        var body = CGRect.zero
-        struct Arrow {
-            static let ARHEIGHT : CGFloat = 0
-        }
-        // but the whole example may fall to the ground...
-        // as they may be blocking access to the original C functions entirely
-        // the won't let me write this:
-        // let r = CGRectDivide(myRect, &arrow, &body, Arrow.ARHEIGHT, .minYEdge)
-        // but they do seem to let me access it as a kind of method!
-        // seed 4, dodged a bullet; they renamified it but they didn't kill it
-        // seed 6, they renamified it further; I hope they don't totally kill it...
-        myRect.__divided(slice: &arrow, remainder: &body, atDistance: Arrow.ARHEIGHT, from: .minYEdge)
-        // hmm, maybe I can subsitute this example:
-        let c = UIColor.purple
-        var r : CGFloat = 0
-        var g : CGFloat = 0
-        var b : CGFloat = 0
-        var a : CGFloat = 0
-        c.getRed(&r, green: &g, blue: &b, alpha: &a)
-        print(r,g,b,a)
-    }
-    do {
-        func myTest(_ a: inout Int, arr: inout [Int]) {
-            a += 1
-            arr[0] += 1
-            arr = [0, 0, 0]
-        }
-        var x = 10
-        var y = [1, 2, 3]
-        myTest(&x, arr: &y)
-        // 调用完之后，x值为11，y的值为[0, 0, 0]
-        x
-        y
-    }
-    /// 阶乘积:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
-    func factorial(_ max: Int) -> Int {
-        var result: Int = 1
-        var number = max
-        while number > 1 {
-            result = result * number
-            number -= 1
-        }
-        return result
-    }
-    ("factorial Result:\(factorial(10))") //注意不要Int超界
 }
-//: proving that a class instance parameter is mutable in a function without "inout"
-do {
-    class Dog {
-        var name = ""
-    }
-    // class parameters no "var", no "inout" needed
-    func changeName(of d:Dog, to newName:String) {
-        d.name = newName
-    }
-    let d = Dog()
-    d.name = "Fido"
-    print(d.name) // "Fido"
-    changeName(of:d, to:"Rover")
-    print(d.name) // "Rover"
-
-    // Example
-    class ViewController: UIViewController,UIPopoverPresentationControllerDelegate {
-        var button : UIButton!, button2 : UIButton!
-        func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-            print("reposition")
-            if view.pointee == self.button {
-                rect.pointee = self.button2.bounds
-                view.pointee = self.button2
-            }
-        }
-    }
-}
-
 //: ### inout线程调用
 do {
     /// 使用内嵌闭包
@@ -497,37 +350,114 @@ do {
     }
 }
 
-//: ### 元组作为返回参数
-do {
-    func count(string: String) -> (vowels: Int, consonants: Int, others: Int) {
-        var vowels = 0, consonants = 0, others = 0
-        /// 也可通过extension String: SequenceType {}
-        for character in string.characters {
-            switch String(character).lowercased() {
-            case "a", "e", "i", "o", "u":
-                vowels += 1
-            case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
-                 "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
-                consonants += 1
-            default:
-                others += 1
-            }
-        }
-        return (vowels, consonants, others)
-    }
-    count(string: "test count")
 
-    do {
-        // In this case we return a tuple
-        func minMax(array: [Int]) -> (min: Int, max:Int)? {
-            if array.isEmpty {return nil}
-            return (0,1)
-        }
-        minMax(array: [12,31,2223,323])
-    }
+//: # Function Types
+/*
+ Every function has a specific function type, made up of the parameter types and the return type of the function.
+ */
+
+/// type: (Int, Int) -> Int
+func addTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a + b
+}
+func multiplyTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a * b
+}
+/// multiplyTwoInts read as: “Define a variable called mathFunction, which has a type of ‘a function that takes two Int values, and returns an Int value.’ Set this new variable to refer to the function called addTwoInts.”
+
+/// type: () -> Void
+func printHelloWorld() {
+    print("hello, world")
 }
 
-//: ### 函数作参数
+//: ## Using Function Types
+do {
+    var mathFunction: (Int, Int) -> Int = addTwoInts
+    print("Result: \(mathFunction(2, 3))")
+
+    mathFunction = multiplyTwoInts
+    print("Result: \(mathFunction(2, 3))")
+
+    let anotherMathFunction = addTwoInts
+    // anotherMathFunction is inferred to be of type (Int, Int) -> Int
+}
+//: ## 函数变量 function As Value
+do {
+    func addInts(a:Int,b:Int)->Int {return a+b}
+    var mathFunction:(Int,Int)->Int = addInts
+    ("addInts Result:\(mathFunction(2,3))")
+
+    func multiplyInts(a:Int,b:Int)->Int {return a*b}
+    func printMathResult(_ mathFunction:(Int,Int)->Int,a:Int,b:Int){
+        ("MathResult:\(mathFunction(a,b))")
+    }
+    printMathResult(multiplyInts,a: 2,b: 3)
+
+    //定义类型函数的变量
+    func sayHello(personName: String) -> String{
+        return "Hello \(personName)!"
+    }
+    var stringFunction: (String) -> String = sayHello
+}
+do {
+    class Cat {
+        func purr () {}
+    }
+    class Dog {
+        let cat = Cat()
+        func bark() {print("woof")}
+        func bark(_ loudly:Bool) {
+            if loudly {
+                print("WOOF")
+            } else {
+                self.bark()
+            }
+        }
+        func test() {
+            // let barkFunction = bark
+            let barkFunction1 = bark(_:)
+            let barkFunction2 = bark as (Void) -> Void
+            let barkFunction3 = bark as (Bool) -> Void
+            let barkFunction4 : (Bool) -> Void = bark
+            let barkFunction5 = self.bark(_:)
+            /// Dog === type(of:self)
+            let barkFunction6 = type(of:self).bark(_:)
+            let barkFunction7 = Dog.bark(_:)
+
+            let f = {
+                // return bark(_:) // error
+                return self.bark(_:)
+            }
+            _ = f
+
+            let purrFunction1 = cat.purr
+            let purrFunction2 = self.cat.purr
+            let purrFunction3 = Cat.purr
+        }
+    }
+    class NoisyDog : Dog {
+        func test2() {
+            let barkFunction1 = bark(_:)
+            let barkFunction2 = self.bark(_:)
+            let barkFunction3 = super.bark(_:)
+        }
+    }
+    class Dog2 {
+        func bark() {}
+        func bark(_ loudly:Bool) {}
+        func bark(_ times:Int) {}
+        func test() {
+            // let barkFunction1 = bark // ambiguous
+            // let barkFunction2 = bark(_:) // still ambiguous
+            let barkFunction = bark as (Int) -> Void
+        }
+    }
+    
+}
+
+
+//: ## Function Types as Parameter Types
+//: 函数作参数
 do {
     func doThis(_ f:()->()) {
         f()
@@ -536,7 +466,14 @@ do {
         print("I did it")
     }
     doThis(whatToDo)
+
+    func printMathResult(_ mathFunction: (Int, Int) -> Int, _ a: Int, _ b: Int) {
+        print("Result: \(mathFunction(a, b))")
+    }
+    printMathResult(addTwoInts, 3, 5)
+    // Prints "Result: 8"
 }
+//: Example
 do {
     var myButton: UIButton!
     func moveMyButton (sender:AnyObject!) {
@@ -564,25 +501,12 @@ do {
         UIGraphicsEndImageContext()
         return result
     }
-    do {
-        let size = CGSize(width:45, height:20)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let p = UIBezierPath(
-            roundedRect: CGRect(x:0, y:0, width:45, height:20), cornerRadius: 8)
-        p.stroke()
-        let result = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-    }
     func drawing() {
-        let p = UIBezierPath( // looks like they've finally cut me off from CGRectMake
+        let p = UIBezierPath(
             roundedRect: CGRect(x:0, y:0, width:45, height:20), cornerRadius: 8)
         p.stroke()
     }
     let image = imageOfSize(CGSize(width:45, height:20), drawing)
-
-    // here, I'll prove we really drew it :)
-    let imageView = UIImageView(image:image)
-    imageView.frame.origin = CGPoint(x:100,y:100)
 }
 do {
     class ViewController: UIViewController {
@@ -646,67 +570,11 @@ do {
             self.b.addTarget(self.b, action: #selector(ViewController.buttonPressed(_:)), for: .touchUpInside)
             // but it would crash if you ran it and tapped the button
         }
-        
+
         func buttonPressed(_ sender:Any) { // must actually exist, or none of the above will compile
         }
-        
     }
 }
-
-/*:
- ## parameter Void
- - 无参Function相当于Void参数?
- - passing a void is the same as no parameters
- - Void 可省略
- - Void 多用于 Closures
- return Void
- - translates in returning an empty tuple: ()
- - 没有定义返回类型的函数会返回特殊的值Void,它其实是一个空的元组tuple,没有任何元素,也可简写成()
- */
-do {
-    func say1(_ s:String) -> Void { (s) }
-    func say2(_ s:String) -> () { (s) }
-    func say3(_ s:String) { (s) }
-    say1("howdy")
-    say2("howdy")
-    say3("howdy")
-    let pointless : Void = say1("howdy") //showing that we actually return void
-    ("pointless is \(pointless)") //showing that we captured the returned void
-}
-do {
-    func greet1(_ unused: Void) -> Void { ("howdy") }
-    func greet2() -> () { ("howdy") }
-    func greet3() { ("howdy") }
-    func greet4()-> String { return ("howdy") }
-    greet1()
-    greet2()
-    greet3()
-    let v:Void = ()
-    greet1(v)
-    greet4(v)
-}
-
-
-
-//: ## 函数变量 function As Value
-do {
-    func addInts(a:Int,b:Int)->Int {return a+b}
-    var mathFunction:(Int,Int)->Int = addInts
-    ("addInts Result:\(mathFunction(2,3))")
-
-    func multiplyInts(a:Int,b:Int)->Int {return a*b}
-    func printMathResult(_ mathFunction:(Int,Int)->Int,a:Int,b:Int){
-        ("MathResult:\(mathFunction(a,b))")
-    }
-    printMathResult(multiplyInts,a: 2,b: 3)
-
-    //定义类型函数的变量
-    func sayHello(personName: String) -> String{
-        return "Hello \(personName)!"
-    }
-    var stringFunction: (String) -> String = sayHello
-}
-
 do {
     class Cat {
         func purr () {}
@@ -750,7 +618,7 @@ do {
             let purrFunction1 = cat.purr
             let purrFunction2 = self.cat.purr
             let purrFunction3 = Cat.purr
-            
+
             _ = purrFunction1
             _ = purrFunction2
             _ = purrFunction3
@@ -783,8 +651,34 @@ do {
 }
 
 
-//: ### nested functions
-//: 函数作返回值: 可以使用函数类型作为返回函数。
+//: ## Function Types as Return Types
+//: 函数作返回值
+do {
+    func stepForward(_ input: Int) -> Int {
+        return input + 1
+    }
+    func stepBackward(_ input: Int) -> Int {
+        return input - 1
+    }
+    func chooseStepFunction(backward: Bool) -> (Int) -> Int {
+        return backward ? stepBackward : stepForward
+    }
+    var currentValue = 3
+    let moveNearerToZero = chooseStepFunction(backward: currentValue > 0)
+    // moveNearerToZero now refers to the stepBackward() function
+
+    print("Counting to zero:")
+    // Counting to zero:
+    while currentValue != 0 {
+        print("\(currentValue)... ")
+        currentValue = moveNearerToZero(currentValue)
+    }
+    print("zero!")
+    // 3...
+    // 2...
+    // 1...
+    // zero!
+}
 do {
     func squre(num: Int) -> Int {
         return num*num
@@ -804,15 +698,28 @@ do {
     ("getMathFunc result:\(mathFunc(5))")
 }
 
+
+//: ## nested functions
 //: 在这里，我们也定义嵌套函数,只能通过父函数访问这些函数,但可作为返回值传递.
 do {
-    func chooseStepFunction(_ backwards: Bool) -> (Int) -> Int {
+    func chooseStepFunction(backward: Bool) -> (Int) -> Int {
         func stepForward(input: Int) -> Int { return input + 1 }
         func stepBackward(input: Int) -> Int { return input - 1 }
-        return backwards ? stepBackward : stepForward
+        return backward ? stepBackward : stepForward
     }
-    var stepFunction = chooseStepFunction(true)
-    ("chooseStepFunction result: \(stepFunction(100))")
+    var currentValue = -4
+    let moveNearerToZero = chooseStepFunction(backward: currentValue > 0)
+    // moveNearerToZero now refers to the nested stepForward() function
+    while currentValue != 0 {
+        print("\(currentValue)... ")
+        currentValue = moveNearerToZero(currentValue)
+    }
+    print("zero!")
+    // -4...
+    // -3...
+    // -2...
+    // -1...
+    // zero!
 }
 do {
     func getMathFunc(type type:String)->(Int)->Int{
@@ -830,6 +737,124 @@ do {
     var mathFunc2=getMathFunc(type: "other")
     (mathFunc2(4))
 }
+
+
+
+//: # Other
+
+//: ## copy let Parameter then new var
+do {
+    /// instead copy let then new var
+    func removeCharacterNot(_ c:Character, from s:String) -> Int {
+        var s = s
+        var howMany = 0
+        while let ix = s.characters.index(of:c) {
+            s.remove(at:ix)
+            howMany += 1
+        }
+        return howMany
+    }
+    do {
+        let s = "hello"
+        let result = removeCharacterNot("l", from:s)
+        print(result)
+        print(s) // no effect on s
+    }
+    /// 阶乘积:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
+    func factorial(_ max: Int) -> Int {
+        var result: Int = 1
+        var number = max
+        while number > 1 {
+            result = result * number
+            number -= 1
+        }
+        return result
+    }
+    ("factorial Result:\(factorial(10))") //注意不要Int超界
+    do {
+        let myRect = CGRect.zero
+        var arrow = CGRect.zero
+        var body = CGRect.zero
+        struct Arrow {
+            static let ARHEIGHT : CGFloat = 0
+        }
+        // but the whole example may fall to the ground...
+        // as they may be blocking access to the original C functions entirely
+        // the won't let me write this:
+        // let r = CGRectDivide(myRect, &arrow, &body, Arrow.ARHEIGHT, .minYEdge)
+        // but they do seem to let me access it as a kind of method!
+        // seed 4, dodged a bullet; they renamified it but they didn't kill it
+        // seed 6, they renamified it further; I hope they don't totally kill it...
+        myRect.__divided(slice: &arrow, remainder: &body, atDistance: Arrow.ARHEIGHT, from: .minYEdge)
+        // hmm, maybe I can subsitute this example:
+        let c = UIColor.purple
+        var r : CGFloat = 0
+        var g : CGFloat = 0
+        var b : CGFloat = 0
+        var a : CGFloat = 0
+        c.getRed(&r, green: &g, blue: &b, alpha: &a)
+        print(r,g,b,a)
+    }
+}
+
+//: ## Class instance parameter is mutable in a function without "inout"
+do {
+    class Dog {
+        var name = ""
+    }
+    // class parameters no "var", no "inout" needed
+    func changeName(of d:Dog, to newName:String) {
+        d.name = newName
+    }
+    let d = Dog()
+    d.name = "Fido"
+    print(d.name) // "Fido"
+    changeName(of:d, to:"Rover")
+    print(d.name) // "Rover"
+
+    // Example
+    class ViewController: UIViewController,UIPopoverPresentationControllerDelegate {
+        var button : UIButton!, button2 : UIButton!
+        func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+            print("reposition")
+            if view.pointee == self.button {
+                rect.pointee = self.button2.bounds
+                view.pointee = self.button2
+            }
+        }
+    }
+}
+
+//: ## Void
+/*:
+ Passing a void is the same as no parameters
+ Void 可省略, Void 多用于 Closures
+ return Void = translates in returning an empty tuple: ()
+ 没有定义返回类型的函数会返回特殊的值Void,它其实是一个空的元组tuple,没有任何元素,也可简写成()
+ */
+do {
+    func say1(_ s:String) -> Void { (s) }
+    func say2(_ s:String) -> () { (s) }
+    func say3(_ s:String) { (s) }
+    say1("howdy")
+    say2("howdy")
+    say3("howdy")
+    let pointless : Void = say1("howdy") //showing that we actually return void
+    ("pointless is \(pointless)") //showing that we captured the returned void
+}
+do {
+    func greet1(_ unused: Void) -> Void { ("howdy") }
+    func greet2() -> () { ("howdy") }
+    func greet3() { ("howdy") }
+    func greet4()-> String { return ("howdy") }
+    greet1()
+    greet2()
+    greet3()
+    let v:Void = ()
+    greet1(v)
+    greet4(v)
+}
+
 
 /*:
  ## overload 函数重载
@@ -894,9 +919,117 @@ extension Thing {
     func makingHash(thing otherThing:Thing) -> Thing {return Thing()}
 }
 
-//: [Next](@next)
+
+//: # Anonymous Functions
+do {
+    func test(h:(Int, Int, Int) -> Int) {}
+    test {
+        _ in // showing that _ can mean "ignore _all_ parameters"
+        return 0
+    }
+
+    func imageOfSize(_ size:CGSize, _ whatToDraw:() -> ()) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        whatToDraw()
+        let result = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return result
+    }
+    let image = imageOfSize(CGSize(width:45, height:20), {
+        () -> () in // included deliberately for book example
+        let p = UIBezierPath(
+            roundedRect: CGRect(x:0,y:0,width:45,height:20),
+            cornerRadius: 8)
+        p.stroke()
+    })
+}
+do {
+    let arr = [2, 4, 6, 8]
+
+    func doubleMe(i:Int) -> Int {return i*2}
+    let arr2 = arr.map(doubleMe)
+
+    let arr3 = arr.map ({
+        (i:Int) -> Int in
+        return i*2
+    })
+    print(arr3)
+
+    let arr4 = arr.map {$0*2} // it doesn't get any Swiftier than this
+    print(arr4)
+}
+
+//: ## Use for define and call
+do {
+    var content = NSMutableAttributedString()
+
+    func imperative() {
+        let para = NSMutableParagraphStyle()
+        para.headIndent = 10
+        para.firstLineHeadIndent = 10
+        // ... more configuration of para ...
+        content.addAttribute(
+            NSParagraphStyleAttributeName,
+            value:para,
+            range:NSMakeRange(0,1))
+    }
+
+    func functional() {
+        content.addAttribute(
+            NSParagraphStyleAttributeName,
+            value: {
+                let para = NSMutableParagraphStyle()
+                para.headIndent = 10
+                para.firstLineHeadIndent = 10
+                // ... more configuration of para ...
+                return para }(),
+            range:NSMakeRange(0,1))
+    }
+}
 
 
+//: # Example
+do {
+    class Dog {
+        //: Default Parameter
+        func say(_ s:String, times:Int = 1) {
+            for _ in 1...times {
+                print(s)
+            }
+        }
+
+        func doThing (a:Int = 0, b:Int = 3) {}
+
+        //: variadic parameter lists, 可以获取指定类型的多个值
+        func sayStrings(_ arrayOfStrings:String ...) {
+            for s in arrayOfStrings { print(s) }
+        }
+        // new in beta 6, variadic can go anywhere
+
+        func sayStrings(_ arrayOfStrings:String ..., times:Int) {
+            for _ in 1...times {
+                for s in arrayOfStrings { print(s) }
+            }
+        }
+    }
+
+    let d = Dog()
+    d.say("woof") // same as saying d.say("woof", times:1)
+    d.say("woof", times:3)
+    d.sayStrings("hey", "ho", "nonny nonny no")
+    d.sayStrings("Manny", "Moe", "Jack", times:3)
+    // print is now variadic
+    print("Manny", 3, true) // Manny 3 true
+    print("Manny", "Moe", separator:", ", terminator: ", ")
+    print("Jack")
+
+    // ignored
+    func say(_ s:String, times:Int, loudly _:Bool) {Dog().say(s, times:times)}
+    func say2(_ s:String, times:Int, _:Bool) {Dog().say(s, times:times)}
+
+    say("hi", times:3, loudly:true)
+    say2("hi", times:3, true)
+}
 do {
     var red:CGFloat = 0.0,green:CGFloat=0.0,blue:CGFloat=0.0,alpha:CGFloat=0.0
     UIColor.red.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
@@ -905,3 +1038,5 @@ do {
     blue
     alpha
 }
+
+//: [Next](@next)
