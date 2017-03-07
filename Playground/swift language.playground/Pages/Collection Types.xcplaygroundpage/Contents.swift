@@ -2,6 +2,142 @@
 
 /*: 
  # Collection Types
+ Swift provides three primary collection types, known as arrays, sets, and dictionaries, for storing collections of values. Arrays are ordered collections of values. Sets are unordered collections of unique values. Dictionaries are unordered collections of key-value associations.
+ https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/CollectionTypes_intro_2x.png
+ Arrays, sets, and dictionaries in Swift are always clear about the types of values and keys that they can store. This means that you cannot insert a value of the wrong type into a collection by mistake. It also means you can be confident about the type of values you will retrieve from a collection.
+ - NOTE:
+ Swift’s array, set, and dictionary types are implemented as generic collections.
+ */
+/*: 
+ # Mutability of Collections
+ If you create an array, a set, or a dictionary, and assign it to a variable, the collection that is created will be mutable. This means that you can change (or mutate) the collection after it is created by adding, removing, or changing items in the collection. If you assign an array, a set, or a dictionary to a constant, that collection is immutable, and its size and contents cannot be changed.
+ - NOTE:
+ It is good practice to create immutable collections in all cases where the collection does not need to change. Doing so makes it easier for you to reason about your code and enables the Swift compiler to optimize the performance of the collections you create.
+ */
+
+
+/*:
+ # Arrays
+ - NOTE:
+ Swift’s Array type is bridged to Foundation’s NSArray class.
+ For more information about using Array with Foundation and Cocoa, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html#//apple_ref/doc/uid/TP40014216-CH6 in https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216.
+ */
+
+/*: 
+ ## Array Type Shorthand Syntax
+ The type of a Swift array is written in full as Array<Element>, where Element is the type of values the array is allowed to store. You can also write the type of an array in shorthand form as [Element]. Although the two forms are functionally identical, the shorthand form is preferred and is used throughout this guide when referring to the type of an array.
+ */
+
+//: ## Creating an Empty Array
+do {
+    var someInts = [Int]()
+    print("someInts is of type [Int] with \(someInts.count) items.")
+    someInts.append(3)
+    someInts = []
+}
+
+//: ## Creating an Array with a Default Value
+
+
+
+
+
+
+
+
+
+
+
+
+var shoppingList: [String] = ["Eggs", "Pigs"]
+shoppingList = ["Eggs", "Pigs"] //Both are the same
+
+if shoppingList.isEmpty { //Checks if count == 0
+    ("The shopping list is empty.")
+} else {
+    ("The shopping list is not empty.")
+}
+
+shoppingList.append("Cow") //At the end of the array
+shoppingList += ["Bird", "Shark"]
+shoppingList[0...2] = ["Bananas", "Apples", "Strawberries"] //0-4替换添加
+shoppingList
+shoppingList[0...1] = ["Bananas", "Apples", "Strawberries"] //Replace several items at once 只能确定替换的起始元素,结束序号由替换的数组长度决定,被替换的元素后移
+shoppingList
+
+shoppingList.insert("Maple Syrup", at: 0) //Inserts element at index
+
+let mapleSyrup = shoppingList.remove(at: 0) //Returns removed item
+
+var emptyArray = [Int]() //Initialize empty array
+emptyArray = [] //Also valid
+var array = [Int](repeating: 0, count: 3) //Initalizes an array of lenght 3 with zeros
+
+var compoundArray = array + emptyArray
+
+var reversedShoppingList: [String] = shoppingList.reversed()
+
+reversedShoppingList.removeLast() //Removes last item. Remove the first with removeFirst(). No returned value.
+reversedShoppingList.popLast() //Pops the last item, removing it from the array and also returning it. Note that if the array is empty, the returned value is nil.
+reversedShoppingList.removeFirst()
+reversedShoppingList.removeAll()
+
+var myArr = Array<String>()
+var num = Array<Int>(repeating: 6, count: 3)
+var arr:[Int] = [1,2,3]
+var someInt=[Int]()
+
+var nsObjectArray: [Any] = ["Eggs", 123, true] //推断为Any数组
+
+var food=["f1:apple","f2:orange","f3:banana","v1:tomato","v2:potato"]
+for fruit in food { //fru为Let类型
+    if fruit.hasPrefix("f"){
+        ("f_fruit: \(fruit)")
+    }
+    if fruit.hasSuffix("o"){
+        ("fruit_o: \(fruit)")
+    }
+}
+food[3]
+
+var a10 = Array(0 ... 10) //包含10
+a10 = Array(0 ..< 10) //小于10
+let a10x = (0 ..< 10).map { i in i*i }
+a10x
+let indexOf6 = a10x.index(of:6)
+let indexOf81 = a10x.index(of:81)
+let indexOfFirstGreaterThanFive = a10x.index{$0 > 5}
+(indexOfFirstGreaterThanFive)
+let indexOfFirstGreaterThanOneHundred = a10x.index{$0 > 100}
+var filtered = a10.filter { $0 == 3 }  // <= returns [3]
+filtered
+a10.filter { $0 == 3 }.count > 0
+a10.contains(11) == true
+
+//斐波纳契序列
+//struct FibonacciSequence : Sequence {
+//    let upperBound: Int
+//    func generate() -> AnyIterator<Int> {
+//        var current = 1
+//        var next = 1
+//        return AnyGenerator {
+//            if current > self.upperBound {
+//                return nil
+//            }
+//            let result = current
+//            current = next
+//            next += result
+//            return result
+//        };
+//    }
+//}
+//let fibseq = FibonacciSequence(upperBound: 100)
+//let aFibseq = Array(fibseq)
+//
+//var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
+//nsArray.componentsJoinedByString("-")
+
+/*:
  数组类型的赋值和拷贝行为要比字典(Dictionary)类型的复杂的多.
  当操作数组内容时,数组(Array)能提供接近C语言的的性能,并且拷贝行为只有在必要时才会发生.
  如果你将一个数组(Array)实例赋给一个变量或常量,或者将其作为参数传递给函数或方法调用,在事件发生时数组的内容不会被拷贝.
@@ -49,94 +185,6 @@ import UIKit
  Structs are VALUE types, which means that when working with mutating functions, you'll need to store them in "var". Everytime the struct is "mutated", a new struct will be created and stored in that var.
  */
 
-//: ## Arrays
-var shoppingList: [String] = ["Eggs", "Pigs"]
-shoppingList = ["Eggs", "Pigs"] //Both are the same
-
-if shoppingList.isEmpty { //Checks if count == 0
-    ("The shopping list is empty.")
-} else {
-    ("The shopping list is not empty.")
-}
-
-shoppingList.append("Cow") //At the end of the array
-shoppingList += ["Bird", "Shark"]
-shoppingList[0...2] = ["Bananas", "Apples", "Strawberries"] //0-4替换添加
-shoppingList
-shoppingList[0...1] = ["Bananas", "Apples", "Strawberries"] //Replace several items at once 只能确定替换的起始元素,结束序号由替换的数组长度决定,被替换的元素后移
-shoppingList
-
-shoppingList.insert("Maple Syrup", atIndex: 0) //Inserts element at index
-
-let mapleSyrup = shoppingList.removeAtIndex(0) //Returns removed item
-
-var emptyArray = [Int]() //Initialize empty array
-emptyArray = [] //Also valid
-var array = [Int](count: 3, repeatedValue: 0) //Initalizes an array of lenght 3 with zeros
-
-var compoundArray = array + emptyArray
-
-var reversedShoppingList: [String] = shoppingList.reverse()
-
-reversedShoppingList.removeLast() //Removes last item. Remove the first with removeFirst(). No returned value.
-reversedShoppingList.popLast() //Pops the last item, removing it from the array and also returning it. Note that if the array is empty, the returned value is nil.
-reversedShoppingList.removeFirst()
-reversedShoppingList.removeAll()
-
-var myArr = Array<String>()
-var num = Array<Int>(count: 3, repeatedValue: 6)
-var arr:[Int] = [1,2,3]
-var someInt=[Int]()
-
-var nsObjectArray = ["Eggs",123,true] //推断为NSObject数组
-
-var food=["f1:apple","f2:orange","f3:banana","v1:tomato","v2:potato"]
-for fruit in food { //fru为Let类型
-    if fruit.hasPrefix("f"){
-        ("f_fruit: \(fruit)")
-    }
-    if fruit.hasSuffix("o"){
-        ("fruit_o: \(fruit)")
-    }
-}
-food[3]
-
-var a10 = Array(0 ... 10) //包含10
-a10 = Array(0 ..< 10) //小于10
-let a10x = (0 ..< 10).map { i in i*i }
-a10x
-let indexOf6 = a10x.indexOf(6)
-let indexOf81 = a10x.indexOf(81)
-let indexOfFirstGreaterThanFive = a10x.indexOf({$0 > 5})
-(indexOfFirstGreaterThanFive)
-let indexOfFirstGreaterThanOneHundred = a10x.indexOf({$0 > 100})
-var filtered = a10.filter { $0 == 3 }  // <= returns [3]
-filtered
-a10.filter { $0 == 3 }.count > 0
-a10.contains(11) == true
-
-//斐波纳契序列
-struct FibonacciSequence : SequenceType {
-    let upperBound: Int
-    func generate() -> AnyGenerator<Int> {
-        var current = 1
-        var next = 1
-        return AnyGenerator {
-            if current > self.upperBound {
-                return nil
-            }
-            let result = current
-            current = next
-            next += result
-            return result
-        };
-    }
-}
-let fibseq = FibonacciSequence(upperBound: 100)
-let aFibseq = Array(fibseq)
-
-var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
-nsArray.componentsJoinedByString("-")
 
 //: ## Dictionaries
 
@@ -154,7 +202,7 @@ if let airportName = airports["LAX"] { //Subscript always returns optional in ca
 }
 
 airports["LAX"] = nil
-airports.removeValueForKey("LAX") //Both remove the key-value pair
+airports.removeValue(forKey:"LAX") //Both remove the key-value pair
 airports["HZ"] = "Hang Zhou" //不存在的Key设置Value,dict自动添加k-v对
 //: ### 迭代
 //Iterating over the whole dictionary
@@ -177,8 +225,8 @@ var emptyDic: [String:Double] = [:]
 emptyDic.isEmpty
 emptyDic=[:]
 
-var personErr = ["age":18,"name":"Jack","height":178] //NSObject类型
-var person = ["age":"18","name":"Jack","height":"178"] //String类型
+var personErr = ["age":18,"name":"Jack","height":178] as [String : Any]
+var person = ["age":"18", "name":"Jack","height":"178"] //String类型
 person["age"]
 var height:String? = person["height"]
 if height != nil {
