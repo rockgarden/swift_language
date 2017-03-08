@@ -37,37 +37,213 @@ do {
 }
 
 //: ## Creating an Array with a Default Value
+var threeDoubles = Array(repeating: 0.0, count: 3)
 
-
-
-
-
-
-
-
-
-
-
-
-var shoppingList: [String] = ["Eggs", "Pigs"]
-shoppingList = ["Eggs", "Pigs"] //Both are the same
-
-if shoppingList.isEmpty { //Checks if count == 0
-    ("The shopping list is empty.")
-} else {
-    ("The shopping list is not empty.")
+//: ## Creating an Array by Adding Two Arrays Together
+do {
+    var anotherThreeDoubles = Array(repeating: 2.5, count: 3)
+    var sixDoubles = threeDoubles + anotherThreeDoubles
 }
 
-shoppingList.append("Cow") //At the end of the array
-shoppingList += ["Bird", "Shark"]
-shoppingList[0...2] = ["Bananas", "Apples", "Strawberries"] //0-4替换添加
-shoppingList
-shoppingList[0...1] = ["Bananas", "Apples", "Strawberries"] //Replace several items at once 只能确定替换的起始元素,结束序号由替换的数组长度决定,被替换的元素后移
-shoppingList
+//: ## Creating an Array with an Array Literal
+/// initialize an array with an array literal: [value 1, value 2, value 3]
+var shoppingList: [String] = ["Eggs", "Milk"]
+/*:
+ - NOTE:
+ The shoppingList array is declared as a variable (with the var introducer) and not a constant (with the let introducer) because more items are added to the shopping list in the examples below.
+ */
+do {
+    /// alse can creating like below
+    var shoppingList = ["Eggs", "Milk"]
+}
 
-shoppingList.insert("Maple Syrup", at: 0) //Inserts element at index
+//: ## Accessing and Modifying an Array
+do {
+    print("The shopping list contains \(shoppingList.count) items.")
 
-let mapleSyrup = shoppingList.remove(at: 0) //Returns removed item
+    shoppingList = ["Eggs", "Pigs"] //Both are the same
+
+    if shoppingList.isEmpty { //Checks if count == 0
+        ("The shopping list is empty.")
+    } else {
+        ("The shopping list is not empty.")
+    }
+
+    shoppingList.append("Cow") //At the end of the array
+    shoppingList += ["Bird", "Shark"]
+    shoppingList += ["Chocolate Spread", "Cheese", "Butter"]
+
+    /// Retrieve a value from the array by using subscript syntax, passing the index of the value you want to retrieve within square brackets immediately after the name of the array.
+    var firstItem = shoppingList[0]
+    /*:
+     - NOTE:
+     The first item in the array has an index of 0, not 1. Arrays in Swift are always zero-indexed.
+     */
+    /// 0 替换
+    shoppingList[0] = "Six eggs"
+    shoppingList[0...2] = ["Bananas", "Apples", "Strawberries"]
+    shoppingList
+    /// Replace several items at once 只能确定替换的起始元素,结束序号由替换的数组长度决定,被替换的元素后移
+    shoppingList[0...1] = ["Bananas", "Apples", "Strawberries"]
+    shoppingList
+    shoppingList[0...6] = ["Bananas", "Apples"]
+    shoppingList
+    /*:
+     - NOTE:
+     You can’t use subscript syntax to append a new item to the end of an array.
+     */
+
+    shoppingList.insert("Maple Syrup", at: 0) //Inserts element at index
+
+    let mapleSyrup = shoppingList.remove(at: 0) //Returns removed item
+    /*:
+     - NOTE:
+     If you try to access or modify a value for an index that is outside of an array’s existing bounds, you will trigger a runtime error. You can check that an index is valid before using it by comparing it to the array’s count property. Except when count is 0 (meaning the array is empty), the largest valid index in an array will always be count - 1, because arrays are indexed from zero.
+     */
+    firstItem = shoppingList[0]
+
+    let lastone = shoppingList.removeLast()
+}
+
+//: ## Iterating Over an Array
+do {
+    for item in shoppingList {
+        print(item)
+    }
+
+    for (index, value) in shoppingList.enumerated() {
+        print("Item \(index + 1): \(value)")
+    }
+}
+
+
+//: # Sets
+/*:
+ - NOTE:
+ Swift’s Set type is bridged to Foundation’s NSSet class.
+ For more information about using Set with Foundation and Cocoa, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html#//apple_ref/doc/uid/TP40014216-CH6 in https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216.
+ */
+
+//: ## Hash Values for Set Types
+/*:
+ A type must be hashable in order to be stored in a set—that is, the type must provide a way to compute a hash value for itself. A hash value is an Int value that is the same for all objects that compare equally, such that if a == b, it follows that a.hashValue == b.hashValue.
+ All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default, and can be used as set value types or dictionary key types. Enumeration case values without associated values (as described in Enumerations) are also hashable by default.
+ - NOTE:
+ You can use your own custom types as set value types or dictionary key types by making them conform to the Hashable protocol from Swift’s standard library. Types that conform to the Hashable protocol must provide a gettable Int property called hashValue. The value returned by a type’s hashValue property is not required to be the same across different executions of the same program, or in different programs.
+ Because the Hashable protocol conforms to Equatable, conforming types must also provide an implementation of the equals operator (==). The Equatable protocol requires any conforming implementation of == to be an equivalence relation. That is, an implementation of == must satisfy the following three conditions, for all values a, b, and c:
+ a == a (Reflexivity 自反性)
+ a == b implies b == a (Symmetry 对称性)
+ a == b && b == c implies a == c (Transitivity 传递性)
+ For more information about conforming to protocols, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267.
+ */
+
+//: ## Set Type Syntax
+//: The type of a Swift set is written as Set<Element>, where Element is the type that the set is allowed to store. Unlike arrays, sets do not have an equivalent shorthand form.
+
+//: ## Creating and Initializing an Empty Set
+do {
+    var letters = Set<Character>()
+    /// The type of the letters variable is inferred to be Set<Character>, from the type of the initializer.
+    print("letters is of type Set<Character> with \(letters.count) items.")
+    letters.insert("a")
+    // letters now contains 1 value of type Character
+    letters = []
+    // letters is now an empty set, but is still of type Set<Character>
+}
+
+//: ## Creating a Set with an Array Literal
+var favoriteGenres: Set<String> = ["Rock", "Classical", "Hip hop"]
+do {
+    /// A set type cannot be inferred from an array literal alone, so the type Set must be explicitly declared. However, because of Swift’s type inference, you don’t have to write the type of the set if you’re initializing it with an array literal containing values of the same type. The initialization of favoriteGenres could have been written in a shorter form instead:
+    var favoriteGenres: Set = ["Rock", "Classical", "Hip hop"]
+}
+
+//: ## Accessing and Modifying a Set
+do {
+    print("I have \(favoriteGenres.count) favorite music genres.")
+
+    if favoriteGenres.isEmpty {
+        print("As far as music goes, I'm not picky.")
+    } else {
+        print("I have particular music preferences.")
+    }
+
+    favoriteGenres.insert("Jazz")
+
+    if let removedGenre = favoriteGenres.remove("Rock") {
+        print("\(removedGenre)? I'm over it.")
+    } else {
+        print("I never much cared for that.")
+    }
+
+    if favoriteGenres.contains("Funk") {
+        print("I get up on the good foot.")
+    } else {
+        print("It's too funky in here.")
+    }
+}
+
+//: ## Iterating Over a Set 迭代
+do {
+    for genre in favoriteGenres {
+        print("\(genre)")
+    }
+    for genre in favoriteGenres.sorted() {
+        print("\(genre)")
+    }
+}
+
+//: # Performing Set Operations
+
+//: ## Fundamental Set Operations
+/*:
+ https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/setVennDiagram_2x.png 
+ - Use the intersection(_:) method to create a new set with only the values common to both sets.
+ - Use the symmetricDifference(_:) method to create a new set with values in either set, but not both.
+ - Use the union(_:) method to create a new set with all of the values in both sets.
+ - Use the subtracting(_:) method to create a new set with values not in the specified set.
+ */
+do {
+    let oddDigits: Set = [1, 3, 5, 7, 9]
+    let evenDigits: Set = [0, 2, 4, 6, 8]
+    let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]
+
+    oddDigits.union(evenDigits).sorted()
+    // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    oddDigits.intersection(evenDigits).sorted()
+    // []
+    oddDigits.subtracting(singleDigitPrimeNumbers).sorted()
+    // [1, 9]
+    /// 对称差分
+    oddDigits.symmetricDifference(singleDigitPrimeNumbers).sorted()
+    // [1, 2, 9]
+}
+
+//: ## Set Membership and Equality
+/*:
+ https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/setEulerDiagram_2x.png
+ - Use the “is equal” operator (==) to determine whether two sets contain all of the same values.
+ - Use the isSubset(of:) method to determine whether all of the values of a set are contained in the specified set.
+ - Use the isSuperset(of:) method to determine whether a set contains all of the values in a specified set.
+ - Use the isStrictSubset(of:) or isStrictSuperset(of:) methods to determine whether a set is a subset or superset, but not equal to, a specified set.
+ - Use the isDisjoint(with:) method to determine whether two sets have any values in common.
+ */
+do {
+    let houseAnimals: Set = ["🐶", "🐱"]
+    let farmAnimals: Set = ["🐮", "🐔", "🐑", "🐶", "🐱"]
+    let cityAnimals: Set = ["🐦", "🐭"]
+
+    houseAnimals.isSubset(of: farmAnimals)
+    farmAnimals.isSuperset(of: houseAnimals)
+    farmAnimals.isDisjoint(with: cityAnimals)
+}
+
+
+
+
+
+
+
 
 var emptyArray = [Int]() //Initialize empty array
 emptyArray = [] //Also valid
