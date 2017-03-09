@@ -1,0 +1,94 @@
+// Thinkful Playground
+// Thinkful.com
+
+// Fibonacci Sequence
+
+// By definition, the first two numbers in the Fibonacci sequence are 1 and 1, or 0 and 1, depending on the chosen starting point of the sequence, and each subsequent number is the sum of the previous two.
+
+// This "basic" version of the FibonacciSequence does not check for overflows.
+
+class FibonacciSequence {
+    
+    let includesZero: Bool
+    let values: [Int]
+    
+    init(maxNumber: Int, includesZero: Bool) {
+        self.includesZero = includesZero
+        if maxNumber == 0 && includesZero == false {
+            values = []
+        } else if maxNumber == 0 {
+            values = [0]
+        } else {
+            var sequence = [0,1,1]
+            var nextNumber = 2
+            while nextNumber <= maxNumber {
+                sequence.append(nextNumber)
+                let lastNumber = sequence.last!
+                let secondToLastNumber = sequence[sequence.count-2]
+                nextNumber = secondToLastNumber + lastNumber
+            }
+            if includesZero == false {
+                sequence.remove(at: 0)
+            }
+            values = sequence
+        }
+    }
+    
+    init(numberOfItemsInSequence: Int, includesZero: Bool) {
+        self.includesZero = includesZero
+        if numberOfItemsInSequence == 0 {
+            values = []
+        } else if numberOfItemsInSequence == 1 {
+            if includesZero == true {
+                values = [0]
+            } else {
+                values = [1]
+            }
+        } else {
+            var sequence: [Int]
+            if includesZero == true {
+                sequence = [0,1]
+            } else {
+                sequence = [1,1]
+            }
+            for _ in 2 ..< numberOfItemsInSequence {
+                let lastNumber = sequence.last!
+                let secondToLastNumber = sequence[sequence.count-2]
+                let nextNumber = secondToLastNumber + lastNumber
+                sequence.append(nextNumber)
+            }
+            values = sequence
+        }
+    }
+}
+
+let fibonacciSequence = FibonacciSequence(maxNumber: 12345, includesZero: true)
+
+print(fibonacciSequence.values)
+
+let anotherSequence = FibonacciSequence(numberOfItemsInSequence: 13, includesZero: true)
+
+print(anotherSequence.values)
+
+//斐波纳契序列
+//struct FibonacciSequence : Sequence {
+//    let upperBound: Int
+//    func generate() -> AnyIterator<Int> {
+//        var current = 1
+//        var next = 1
+//        return AnyGenerator {
+//            if current > self.upperBound {
+//                return nil
+//            }
+//            let result = current
+//            current = next
+//            next += result
+//            return result
+//        };
+//    }
+//}
+//let fibseq = FibonacciSequence(upperBound: 100)
+//let aFibseq = Array(fibseq)
+//
+//var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
+//nsArray.componentsJoinedByString("-")

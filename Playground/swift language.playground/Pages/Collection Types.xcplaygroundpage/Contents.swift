@@ -7,6 +7,8 @@
  Arrays, sets, and dictionaries in Swift are always clear about the types of values and keys that they can store. This means that you cannot insert a value of the wrong type into a collection by mistake. It also means you can be confident about the type of values you will retrieve from a collection.
  - NOTE:
  Swift’s array, set, and dictionary types are implemented as generic collections.
+ - NOTE:
+ For more information about using Array with Foundation and Cocoa, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html#//apple_ref/doc/uid/TP40014216-CH6 in https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216.
  */
 /*: 
  # Mutability of Collections
@@ -18,9 +20,9 @@
 
 /*:
  # Arrays
+ 操作数组内容时,数组(Array)能提供接近C语言的的性能.
  - NOTE:
  Swift’s Array type is bridged to Foundation’s NSArray class.
- For more information about using Array with Foundation and Cocoa, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html#//apple_ref/doc/uid/TP40014216-CH6 in https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216.
  */
 
 /*: 
@@ -100,9 +102,13 @@ do {
      - NOTE:
      If you try to access or modify a value for an index that is outside of an array’s existing bounds, you will trigger a runtime error. You can check that an index is valid before using it by comparing it to the array’s count property. Except when count is 0 (meaning the array is empty), the largest valid index in an array will always be count - 1, because arrays are indexed from zero.
      */
-    firstItem = shoppingList[0]
-
-    let lastone = shoppingList.removeLast()
+    var sl = shoppingList
+    firstItem = sl[0]
+    let Firstone = sl.removeFirst()
+    let lastone = sl.removeLast()
+    /// Pops the last item, removing it from the array and also returning it. Note that if the array is empty, the returned value is nil.
+    sl.popLast()
+    sl.removeAll()
 }
 
 //: ## Iterating Over an Array
@@ -114,6 +120,46 @@ do {
     for (index, value) in shoppingList.enumerated() {
         print("Item \(index + 1): \(value)")
     }
+
+    var reversedShoppingList: [String] = shoppingList.reversed()
+}
+do {
+    var food=["f1:apple","f2:orange","f3:banana","v1:tomato","v2:potato"]
+    for fruit in food { //fruit为Let类型
+        if fruit.hasPrefix("f"){
+            print("f_fruit: \(fruit)")
+        }
+        if fruit.hasSuffix("o"){
+            print("fruit_o: \(fruit)")
+        }
+    }
+}
+
+//: ## Example
+do {
+    var a10 = Array(0 ... 10) //包含10
+    a10 = Array(0 ..< 10) //小于10
+    let a10x = (0 ..< 10).map { i in i*i }
+    a10x
+    let indexOf6 = a10x.index(of:6)
+    let indexOf81 = a10x.index(of:81)
+    let indexOfFirstGreaterThanFive = a10x.index{$0 > 15}
+    (indexOfFirstGreaterThanFive)
+    let indexOfFirstGreaterThanOneHundred = a10x.index{$0 > 100}
+    var filtered = a10.filter { $0 == 3 }  // <= returns [3]
+    filtered
+    a10.filter { $0 == 3 }.count > 0
+    a10.contains(11) == true
+}
+
+/*:
+ ## 判定两个数组是否共用相同元素
+ 通过使用恒等运算符(identity operators)( == and !=)来判定两个数组共用相同的储存空间或元素.
+ */
+do {
+    let a = [1,3,4], b = [2,3,7], c = [1,3,4]
+    a == b
+    a != c
 }
 
 
@@ -121,7 +167,6 @@ do {
 /*:
  - NOTE:
  Swift’s Set type is bridged to Foundation’s NSSet class.
- For more information about using Set with Foundation and Cocoa, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html#//apple_ref/doc/uid/TP40014216-CH6 in https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/index.html#//apple_ref/doc/uid/TP40014216.
  */
 
 //: ## Hash Values for Set Types
@@ -239,189 +284,97 @@ do {
 }
 
 
+//: # Dictionaries
+//: Swift’s Dictionary type is bridged to Foundation’s NSDictionary class.
+/*
+ ## Dictionary Type Shorthand Syntax
+ The type of a Swift dictionary is written in full as Dictionary<Key, Value>, where Key is the type of value that can be used as a dictionary key, and Value is the type of value that the dictionary stores for those keys.
+ - NOTE:
+ A dictionary Key type must conform to the Hashable protocol, like a set’s value type.
+ You can also write the type of a dictionary in shorthand form as [Key: Value]. Although the two forms are functionally identical, the shorthand form is preferred and is used throughout this guide when referring to the type of a dictionary.
+ */
 
+//: ## Creating an Empty Dictionary
+var namesOfIntegers = [Int: String]() //Its keys are of type Int, and its values are of type String.
+do {
+    namesOfIntegers[16] = "sixteen"
+    // namesOfIntegers now contains 1 key-value pair
+    namesOfIntegers = [:]
+    // namesOfIntegers is once again an empty dictionary of type [Int: String]
+}
 
+//: ## Creating a Dictionary with a Dictionary Literal
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+do {
+    var airports = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
 
+    let personErr = ["age":18,"name":"Jack","height":178] as [String : Any]
 
+    var dict = Dictionary<String,Int>()
+    dict["age"] = 16
 
+    var scores: [String: Int]
+    scores = Dictionary<String,Int>(minimumCapacity: 5)
+}
 
-var emptyArray = [Int]() //Initialize empty array
-emptyArray = [] //Also valid
-var array = [Int](repeating: 0, count: 3) //Initalizes an array of lenght 3 with zeros
+//: ## Accessing and Modifying a Dictionary
+do {
+    print("The airports dictionary contains \(airports.count) items.")
 
-var compoundArray = array + emptyArray
-
-var reversedShoppingList: [String] = shoppingList.reversed()
-
-reversedShoppingList.removeLast() //Removes last item. Remove the first with removeFirst(). No returned value.
-reversedShoppingList.popLast() //Pops the last item, removing it from the array and also returning it. Note that if the array is empty, the returned value is nil.
-reversedShoppingList.removeFirst()
-reversedShoppingList.removeAll()
-
-var myArr = Array<String>()
-var num = Array<Int>(repeating: 6, count: 3)
-var arr:[Int] = [1,2,3]
-var someInt=[Int]()
-
-var nsObjectArray: [Any] = ["Eggs", 123, true] //推断为Any数组
-
-var food=["f1:apple","f2:orange","f3:banana","v1:tomato","v2:potato"]
-for fruit in food { //fru为Let类型
-    if fruit.hasPrefix("f"){
-        ("f_fruit: \(fruit)")
+    if airports.isEmpty {
+        print("The airports dictionary is empty.")
+    } else {
+        print("The airports dictionary is not empty.")
     }
-    if fruit.hasSuffix("o"){
-        ("fruit_o: \(fruit)")
+
+    /// add a new item to a dictionary with subscript syntax. 前提是key不存在,则自动添加k-v对, 否则change the value.
+    airports["LHR"] = "London"
+    /// use subscript syntax to change the value associated with a particular key:
+    airports["LHR"] = "London Heathrow"
+
+    /// use a dictionary’s updateValue(_:forKey:) method to set or update the value for a particular key.
+    /// Updates or creates the value. Returns optional w/ previous value 返回 old key-value, if key 不存在 return nil
+    if let oldValue = airports.updateValue("Dublin Airport", forKey: "DUB") {
+        print("The old value for DUB was \(oldValue).")
     }
-}
-food[3]
 
-var a10 = Array(0 ... 10) //包含10
-a10 = Array(0 ..< 10) //小于10
-let a10x = (0 ..< 10).map { i in i*i }
-a10x
-let indexOf6 = a10x.index(of:6)
-let indexOf81 = a10x.index(of:81)
-let indexOfFirstGreaterThanFive = a10x.index{$0 > 5}
-(indexOfFirstGreaterThanFive)
-let indexOfFirstGreaterThanOneHundred = a10x.index{$0 > 100}
-var filtered = a10.filter { $0 == 3 }  // <= returns [3]
-filtered
-a10.filter { $0 == 3 }.count > 0
-a10.contains(11) == true
+    /// use subscript syntax to retrieve a value from the dictionary for a particular key.
+    /// Subscript always returns optional in case value is not set.
+    if let airportName = airports["DUB"] {
+        print("The name of the airport is \(airportName).")
+    } else {
+        print("That airport is not in the airports dictionary.")
+    }
 
-//斐波纳契序列
-//struct FibonacciSequence : Sequence {
-//    let upperBound: Int
-//    func generate() -> AnyIterator<Int> {
-//        var current = 1
-//        var next = 1
-//        return AnyGenerator {
-//            if current > self.upperBound {
-//                return nil
-//            }
-//            let result = current
-//            current = next
-//            next += result
-//            return result
-//        };
-//    }
-//}
-//let fibseq = FibonacciSequence(upperBound: 100)
-//let aFibseq = Array(fibseq)
-//
-//var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
-//nsArray.componentsJoinedByString("-")
-
-/*:
- 数组类型的赋值和拷贝行为要比字典(Dictionary)类型的复杂的多.
- 当操作数组内容时,数组(Array)能提供接近C语言的的性能,并且拷贝行为只有在必要时才会发生.
- 如果你将一个数组(Array)实例赋给一个变量或常量,或者将其作为参数传递给函数或方法调用,在事件发生时数组的内容不会被拷贝.
- 相反,数组公用相同的元素序列.当你在一个数组内修改某一元素,修改结果也会在另一数组显示.
- 对数组来说,拷贝行为仅仅当操作有可能修改数组长度时才会发生:
- - 包括了附加(appending)
- - 插入(inserting)
- - 删除(removing)
- - 使用范围下标(ranged subscript)去替换这一范围内的元素.
- 只有当数组拷贝确要发生时,数组内容的行为规则与字典中键值的相同.
- - Note:
- 确保数组的唯一性
- 在操作一个数组，或将其传递给函数以及方法调用之前是很有必要先确定这个数组是有一个唯一拷贝的。
- 通过在数组变量上调用unshare方法来确定数组引用的唯一性。(当数组赋给常量时，不能调用unshare方法)
- 如果一个数组被多个变量引用，在其中的一个变量上调用unshare方法，则会拷贝此数组，此时这个变量将会有属于它自己的独立数组拷贝。
- 当数组仅被一个变量引用时，则不会有拷贝发生。
- 在上一个示例的最后，b和c都引用了同一个数组。此时在b上调用unshare方法则会将b变成一个唯一个拷贝.
- */
-
-var a = [1, 2, 3]
-var b = a
-var c = a
-//: 如果通过下标语法修改数组中某一元素的值，那么a,b,c中的相应值不会都会发生改变。请注意当你用下标语法修改某一值时，并没有拷贝行为伴随发生，因为下表语法修改值时没有改变数组长度的可能：
-a[0] = 42
-(a[0])
-(b[0])
-(c[0])
-/*: 
- 然而，当你给a附加新元素时，数组的长度会改变。当附加元素这一事件发生时，Swift 会创建这个数组的一个拷贝。从此以后，a将会是原数组的一个独立拷贝。
- 拷贝发生后，如果再修改a中元素值的话，a将会返回与b，c不同的结果，因为后两者引用的是原来的数组：
- */
-a.append(4)
-a[0] = 777
-(a[0])
-(b[0])
-(c[0])
-/*:
- 判定两个数组是否共用相同元素
- 我们通过使用恒等运算符(identity operators)( === and !==)来判定两个数组或子数组共用相同的储存空间或元素。
- */
-import UIKit
-/*: 
- Arrays and dictionaries in swift use generics and can be mutable or immutable
- depending on whether they are assigned to a var or let
- Structs are VALUE types, which means that when working with mutating functions, you'll need to store them in "var". Everytime the struct is "mutated", a new struct will be created and stored in that var.
- */
-
-
-//: ## Dictionaries
-
-var airports: [String: String] = ["JFK": "John F. Kennedy", "SCL": "Arturo Merino Benitez"]
-airports = ["JFK": "John F. Kennedy", "SCL": "Arturo Merino Benitez"] //Also valid
-airports["JFK"] = "New York"
-
-airports.updateValue("Los Angeles", forKey:"LAX") //Updates or creates the value. Returns optional w/ previous value 返回 old key-value, if key 不存在 return nil
-airports
-
-if let airportName = airports["LAX"] { //Subscript always returns optional in case value is not set.
-    ("The name of the airport is \(airportName).")
-} else {
-    ("That airport is not in the airports dictionary.")
+    /// use subscript syntax to remove a key-value pair from a dictionary by assigning a value of nil for that key
+    airports["APL"] = "Apple International"
+    // "Apple International" is not the real airport for APL, so delete it
+    airports["APL"] = nil
+    // APL has now been removed from the dictionary
+    airports.removeValue(forKey:"APL")
+    //Both remove the key-value pair
 }
 
-airports["LAX"] = nil
-airports.removeValue(forKey:"LAX") //Both remove the key-value pair
-airports["HZ"] = "Hang Zhou" //不存在的Key设置Value,dict自动添加k-v对
-//: ### 迭代
-//Iterating over the whole dictionary
-for (key, value) in airports {
-    ("\(key): \(value)")
-}
-//Iterating on Keys
-for airportCode in airports.keys {
-    ("Airport code: \(airportCode)")
-}
-//Iterating on Values
-for airportName in airports.values {
-    ("Airport name: \(airportName)")
-}
-//: 空字典 Empty Dictionaries
-var numbers = [Int: String]()
-numbers = [:] //Both do the same
-numbers[16] = "sixteen"
-var emptyDic: [String:Double] = [:]
-emptyDic.isEmpty
-emptyDic=[:]
+//: ## Iterating Over a Dictionary
+do {
+    for (airportCode, airportName) in airports {
+        print("\(airportCode): \(airportName)")
+    }
+    for airportCode in airports.keys {
+        print("Airport code: \(airportCode)")
+    }
+    for airportName in airports.values {
+        print("Airport name: \(airportName)")
+    }
 
-var personErr = ["age":18,"name":"Jack","height":178] as [String : Any]
-var person = ["age":"18", "name":"Jack","height":"178"] //String类型
-person["age"]
-var height:String? = person["height"]
-if height != nil {
-    (height)
+    /// If you need to use a dictionary’s keys or values with an API that takes an Array instance, initialize a new array with the keys or values property:
+    let airportCodes = [String](airports.keys)
+    let airportNames = [String](airports.values)
 }
-var dict = Dictionary<String,Int>()
-dict["age"] = 16
-
-var scores: [String: Int]
-scores = Dictionary<String,Int>(minimumCapacity: 5)
-//: 获取keys或values可用计数
-let keyArr = [String](person.keys)
-let keyValue = [String](person.values)
 /*:
  - NOTE:
- You can use your own custom types as dictionary key types by making them conform to the Hashable protocol from Swift’s standard library.
- Types that conform to the Hashable protocol must provide a gettable Int property called hashValue, and must also provide an implementation of the “is equal” operator (==). The value returned by a type’s hashValue property is not required to be the same across different executions of the same program, or in different programs.
+ Swift’s Dictionary type does not have a defined ordering. To iterate over the keys or values of a dictionary in a specific order, use the sorted() method on its keys or values property.
  */
-//: All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default
 
 
 //: [Next](@next)
