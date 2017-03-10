@@ -1,3 +1,5 @@
+//: [Previous](@previous)
+
 // Thinkful Playground
 // Thinkful.com
 
@@ -8,10 +10,10 @@
 // This "basic" version of the FibonacciSequence does not check for overflows.
 
 class FibonacciSequence {
-    
+
     let includesZero: Bool
     let values: [Int]
-    
+
     init(maxNumber: Int, includesZero: Bool) {
         self.includesZero = includesZero
         if maxNumber == 0 && includesZero == false {
@@ -33,7 +35,7 @@ class FibonacciSequence {
             values = sequence
         }
     }
-    
+
     init(numberOfItemsInSequence: Int, includesZero: Bool) {
         self.includesZero = includesZero
         if numberOfItemsInSequence == 0 {
@@ -69,3 +71,29 @@ print(fibonacciSequence.values)
 let anotherSequence = FibonacciSequence(numberOfItemsInSequence: 13, includesZero: true)
 
 print(anotherSequence.values)
+
+//斐波纳契序列
+//struct FibonacciSequence : Sequence {
+//    let upperBound: Int
+//    func generate() -> AnyIterator<Int> {
+//        var current = 1
+//        var next = 1
+//        return AnyGenerator {
+//            if current > self.upperBound {
+//                return nil
+//            }
+//            let result = current
+//            current = next
+//            next += result
+//            return result
+//        };
+//    }
+//}
+//let fibseq = FibonacciSequence(upperBound: 100)
+//let aFibseq = Array(fibseq)
+//
+//var nsArray: NSArray = [1,2,3,4,5] //Foundation类型
+//nsArray.componentsJoinedByString("-")
+
+
+//: [Next](@next)

@@ -17,12 +17,6 @@
          location = "group:FibonacciSequence.playground">
       </FileRef>
       <FileRef
-         location = "group:FibonacciSequenceWithComments.playground">
-      </FileRef>
-      <FileRef
-         location = "group:FinobacciBasic.playground">
-      </FileRef>
-      <FileRef
          location = "group:2015-09-VariancePlayground.playground">
       </FileRef>
       <FileRef

@@ -2,26 +2,8 @@
 
 import Foundation
 
-//// Fibonacci Sequence
-//public struct FibonacciSequenceO : Sequence {
-//
-//    public func generate() -> AnyIterator<UInt> {
-//        var last: (UInt, UInt) = (0, 1)
-//
-//        return AnyIterator<UInt> {
-//            let next = last.0
-//            last = (last.1, last.0 + last.1)
-//            return next
-//        }
-//    }
-//}
-
-
-
-/// An iterable Sequence representing the famous Fibonacci Sequence.
-///
-/// - author: Christopher Durham
-///
+//: # 斐波那契数列
+//: An iterable Sequence representing the famous Fibonacci Sequence.
 public struct FibonacciSequence: Sequence {
 
     fileprivate let stop: StoppingPoint
@@ -75,5 +57,8 @@ extension FibonacciSequence: CustomDebugStringConvertible, CustomStringConvertib
     }
 }
 
-
+let fsu = FibonacciSequence(upTo: 28)
+fsu.description
+let fst = FibonacciSequence(terms: 28)
+print(fst.description)
 //: [Next](@next)

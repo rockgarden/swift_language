@@ -1,3 +1,5 @@
+//: [Previous](@previous)
+
 // Thinkful Playground
 // Thinkful.com
 
@@ -6,10 +8,10 @@
 // By definition, the first two numbers in the Fibonacci sequence are 1 and 1, or 0 and 1, depending on the chosen starting point of the sequence, and each subsequent number is the sum of the previous two.
 
 class FibonacciSequence {
-    
+
     let includesZero: Bool
     let values: [UInt]
-    
+
     init(maxNumber: UInt, includesZero: Bool) {
         self.includesZero = includesZero
         if maxNumber == 0 && includesZero == false {
@@ -36,7 +38,7 @@ class FibonacciSequence {
             values = sequence
         }
     }
-    
+
     init(numberOfItemsInSequence: UInt, includesZero: Bool) {
         self.includesZero = includesZero
         if numberOfItemsInSequence == 0 {
@@ -78,3 +80,6 @@ let anotherSequence = FibonacciSequence(numberOfItemsInSequence: 13, includesZer
 print(anotherSequence.values)
 
 UInt.max // This is the maximum number which can be stored in a UInt.
+
+
+//: [Next](@next)

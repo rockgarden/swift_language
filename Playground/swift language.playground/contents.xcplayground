@@ -18,10 +18,10 @@
         <page name='Untitled Page 2'/>
         <page name='Closures'/>
         <page name='Temp'/>
+        <page name='Collection Types'/>
         <page name='collection Array'/>
         <page name='collection Dictionary'/>
         <page name='collection Set'/>
-        <page name='Collection Types'/>
         <page name='Control Flow'/>
         <page name='conditional evaluation'/>
         <page name='loops'/>
