@@ -47,7 +47,7 @@
          location = "group:MyPlayground.playground">
       </FileRef>
       <FileRef
-         location = "group:swift language.playground">
+         location = "group:/Users/rockgarden/GitHub/swift_language/Playground/Swift Language Guide.playground">
       </FileRef>
       <FileRef
          location = "group:Swift Standard Library.playground">
