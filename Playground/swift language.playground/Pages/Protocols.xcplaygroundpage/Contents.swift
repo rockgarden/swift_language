@@ -1,5 +1,9 @@
 //: [Previous](@previous)
 import UIKit
+/*: 
+ # Protocol
+ 灵活的提供Func或Var
+ */
 //: # Protocol Syntax
 protocol SomeProtocol {
     // protocol definition goes here
@@ -192,28 +196,33 @@ protocol DiceGame {
     func play()
 }
 protocol DiceGameDelegate {
-    func gameDidStart(game: DiceGame)
-    func game(game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)
-    func gameDidEnd(game: DiceGame)
+    func gameDidStart(_ game: DiceGame)
+    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)
+    func gameDidEnd(_ game: DiceGame)
 }
 class SnakesAndLadders: DiceGame {
     let finalSquare = 25
+
+    /// The dice property is declared as a constant property because it does not need to change after initialization, and the protocol only requires that it is gettable.
     let dice = Dice(sides: 6, generator: LinearCongruentialGenerator())
     var square = 0
     var board: [Int]
+
     init() {
-        board = [Int](repeating: 0, count: finalSquare + 1)
+        board = Array(repeating: 0, count: finalSquare + 1)
         board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
         board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
-        print(board)
     }
+
+    /// Because the delegate property is an optional DiceGameDelegate, the play() method uses optional chaining each time it calls a method on the delegate. If the delegate property is nil, these delegate calls fail gracefully and without error. If the delegate property is non-nil, the delegate methods are called, and are passed the SnakesAndLadders instance as a parameter(将实例作为参数传递). 影响ARC
     var delegate: DiceGameDelegate?
+
     func play() {
         square = 0
-        delegate?.gameDidStart(game:self)
+        delegate?.gameDidStart(self)
         gameLoop: while square != finalSquare {
             let diceRoll = dice.roll()
-            delegate?.game(game:self, didStartNewTurnWithDiceRoll: diceRoll)
+            delegate?.game(self, didStartNewTurnWithDiceRoll: diceRoll)
             switch square + diceRoll {
             case finalSquare:
                 break gameLoop
@@ -224,7 +233,7 @@ class SnakesAndLadders: DiceGame {
                 square += board[square]
             }
         }
-        delegate?.gameDidEnd(game:self)
+        delegate?.gameDidEnd(self)
     }
 }
 
@@ -234,63 +243,33 @@ class SnakesAndLadders: DiceGame {
  */
 class DiceGameTracker: DiceGameDelegate {
     var numberOfTurns = 0
-    func gameDidStart(game: DiceGame) {
+    func gameDidStart(_ game: DiceGame) {
         numberOfTurns = 0
         if game is SnakesAndLadders {
-            ("Started a new game of Snakes and Ladders")
+            print("Started a new game of Snakes and Ladders")
         }
-        ("The game is using a \(game.dice.sides)-sided dice")
+        print("The game is using a \(game.dice.sides)-sided dice")
     }
-    func game(game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int) {
+    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int) {
         numberOfTurns += 1
-        ("Rolled a \(diceRoll)")
+        print("Rolled a \(diceRoll)")
     }
-    func gameDidEnd(game: DiceGame) {
-        ("The game lasted for \(numberOfTurns) turns")
+    func gameDidEnd(_ game: DiceGame) {
+        print("The game lasted for \(numberOfTurns) turns")
     }
 }
-//: In action:
-let tracker = DiceGameTracker() //new instance
+
+let tracker = DiceGameTracker()
 let game = SnakesAndLadders()
 game.delegate = tracker
 game.play()
 
 
-
-
-
-
-
-// just showing the notation
-func f(f:protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
-
-
-
-
-
-
-
-// system protocol
-struct Nest : ExpressibleByIntegerLiteral {
-    var eggCount : Int = 0
-    init() {}
-    init(integerLiteral val: Int) {
-        self.eggCount = val
-    }
-}
-func reportEggs(nest: Nest) {
-    ("this nest contains \(nest.eggCount) eggs")
-}
-reportEggs(nest: 4)
-
-
-
-
-
-
-/*: ## Adding Protocol Conformance with an Extension
- You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type.
- Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand
+/*: 
+ # Adding Protocol Conformance with an Extension
+ You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand.
+ - NOTE:
+ Existing instances of a type automatically adopt and conform to a protocol when that conformance is added to the instance’s type in an extension.
  */
 protocol TextRepresentable {
     var textualDescription: String { get }
@@ -304,7 +283,17 @@ extension Dice: TextRepresentable {
 
 let d12 = Dice(sides: 12, generator: LinearCongruentialGenerator())
 (d12.textualDescription)
-/*: Declaring Protocol Adoption with an Extension */
+
+extension SnakesAndLadders: TextRepresentable {
+    var textualDescription: String {
+        return "A game of Snakes and Ladders with \(finalSquare) squares"
+    }
+}
+(game.textualDescription)
+
+/*: 
+ ## Declaring Protocol Adoption with an Extension
+ */
 struct Hamster {
     var name: String
     var textualDescription: String {
@@ -312,29 +301,35 @@ struct Hamster {
     }
 }
 extension Hamster: TextRepresentable {}
-//: Protocols can also be added to collections
-let simon = Hamster(name: "Simon")
-let things: [TextRepresentable] = [d12, simon]
 
+let simonTheHamster = Hamster(name: "Simon")
+/// Must explicitly declare their adoption of the protocol: 必须显式声明其采用的协议.
+let somethingTextRepresentable: TextRepresentable = simonTheHamster
+print(somethingTextRepresentable.textualDescription)
+/*:
+ - NOTE:
+ Types do not automatically adopt a protocol just by satisfying its requirements. They must always explicitly declare their adoption of the protocol.
+ */
+
+
+//: # Collections of Protocol Types
+let things: [TextRepresentable] = [game, d12, simonTheHamster]
 for thing in things {
-    (thing.textualDescription)
+    print(thing.textualDescription)
 }
 things[0].textualDescription
 things[1].textualDescription
 
-//: ## Protocol Inheritance
+
+//: # Protocol Inheritance
 protocol PrettyTextRepresentable: TextRepresentable {
     var prettyTextualDescription: String { get }
 }
 
-extension SnakesAndLadders: TextRepresentable {
-    var textualDescription: String {
-        return "A game of Snakes and Ladders with \(finalSquare) squares"
-    }
-}
-
+/// This example defines a new protocol, PrettyTextRepresentable, which inherits from TextRepresentable. Anything that adopts PrettyTextRepresentable must satisfy all of the requirements enforced by TextRepresentable, plus the additional requirements enforced by PrettyTextRepresentable. In this example, PrettyTextRepresentable adds a single requirement to provide a gettable property called prettyTextualDescription that returns a String.
 extension SnakesAndLadders: PrettyTextRepresentable {
     var prettyTextualDescription: String {
+        /// Anything that is PrettyTextRepresentable must also be TextRepresentable, and so the implementation of prettyTextualDescription starts by accessing the textualDescription property from the TextRepresentable protocol to begin an output string.
         var output = textualDescription + ":\n"
         for index in 1...finalSquare {
             switch board[index] {
@@ -349,24 +344,23 @@ extension SnakesAndLadders: PrettyTextRepresentable {
         return output
     }
 }
-
-/*:
- This example defines a new protocol, PrettyTextRepresentable, which inherits from TextRepresentable.
- Anything that adopts PrettyTextRepresentable must satisfy all of the requirements enforced by TextRepresentable,
- plus the additional requirements enforced by PrettyTextRepresentable.
- */
+do {
+    print(game.prettyTextualDescription)
+}
 
 
 /*:
- ## Class-Only Protocols
- You can limit protocol adoption采用 to class types (and not structures or enumerations) by adding the class keyword to a protocol’s inheritance list. The class keyword must always appear first in a protocol’s inheritance list, before any inherited protocols
+ # Class-Only Protocols
+ You can limit protocol adoption to class types (and not structures or enumerations) by adding the class keyword to a protocol’s inheritance list. The class keyword must always appear first in a protocol’s inheritance list, before any inherited protocols
  */
 protocol SomeInheritedProtocol {}
 protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
     // class-only protocol definition goes here
 }
+
+
 /*:
- ## Protocol Composition
+ # Protocol Composition
  It can be useful to require a type to conform to multiple protocols at once.
  You can combine multiple protocols into a single requirement with a protocol composition.
  Protocol compositions have the form protocol<SomeProtocol, AnotherProtocol>.
@@ -382,48 +376,129 @@ struct Personn: Named, Aged {
     var name: String
     var age: Int
 }
-func wishHappyBirthday(celebrator: protocol<Named, Aged>) {
-    ("Happy birthday \(celebrator.name) - you're \(celebrator.age)!")
+do {
+    func wishHappyBirthday(to celebrator: protocol<Named, Aged>) {
+        print("Happy birthday \(celebrator.name) - you're \(celebrator.age)!")
+    }
+    do {
+        func wishHappyBirthday(to celebrator: Named & Aged) { }
+    }
+    let birthdayPerson = Personn(name: "Malcolm", age: 21)
+    wishHappyBirthday(to:birthdayPerson)
 }
-let birthdayPerson = Personn(name: "Malcolm", age: 21)
-wishHappyBirthday(celebrator:birthdayPerson) //输出wishHappyBirthday
-
 /*:
  - NOTE:
- Protocol compositions do not define a new, permanent protocol type.
- Rather, they define a temporary local protocol that has the combined requirements of all protocols in the composition.
+ Protocol compositions do not define a new, permanent protocol type.Rather, they define a temporary local protocol that has the combined requirements of all protocols in the composition.
+ 协议组成不定义新的永久协议类型。 相反，它们定义了具有组合中所有协议的组合要求的临时本地协议。
  */
 
 
 /*:
- ## Checking for Protocol Conformance
+ # Checking for Protocol Conformance
+ 检查协议一致性
  You can use the is and as operators described in Type Casting to check for protocol conformance,
  and to cast to a specific protocol. Checking for and casting to a protocol follows exactly the same syntax as checking for and casting to a type:
  - The is operator returns true if an instance conforms to a protocol and returns false if it does not.
  - The as? version of the downcast operator returns an optional value of the protocol’s type, and this value is nil if the instance does not conform to that protocol.
  - The as! version of the downcast operator forces the downcast to the protocol type and triggers a runtime error if the downcast does not succeed.
  */
+protocol HasArea {
+    var area: Double { get }
+}
+class Circle: HasArea {
+    let pi = 3.1415927
+    var radius: Double
+    var area: Double { return pi * radius * radius }
+    init(radius: Double) { self.radius = radius }
+}
+class Country: HasArea {
+    var area: Double
+    init(area: Double) { self.area = area }
+}
+class Animal {
+    var legs: Int
+    init(legs: Int) { self.legs = legs }
+}
+do {
+    /// The Circle, Country and Animal classes do not have a shared base class. Nonetheless, they are all classes, and so instances of all three types can be used to initialize an array that stores values of type AnyObject.
+    let objects: [AnyObject] = [
+        Circle(radius: 2.0),
+        Country(area: 243_610),
+        Animal(legs: 4)
+    ]
+    for object in objects {
+        if let objectWithArea = object as? HasArea {
+            print("Area is \(objectWithArea.area)")
+        } else {
+            print("Something that doesn't have an area")
+        }
+    }
+}
 
 
 /*:
- ## Optional Protocol Requirements
- Optional requirements are prefixed by the optional modifier as part of the protocol’s definition.
- When you use a method or property in an optional requirement, its type automatically becomes an optional.
- For example, a method of type (Int) -> String becomes ((Int) -> String)?. Note that the entire function type is wrapped in the optional, not method’s the return value.
- You check for an implementation of an optional method by writing a question mark after the name of the method when it is called, such as someOptionalMethod?(someArgument).
- - NOTE:
- Optional protocol requirements can only be specified if your protocol is marked with the @objc attribute.
- This attribute indicates that the protocol should be exposed to Objective-C code and is described in
- Using Swift with Cocoa and Objective-C (Swift 2.1). Even if you are not interoperating with Objective-C,
- you need to mark your protocols with the @objc attribute if you want to specify optional requirements.
- Note also that @objc protocols can be adopted only by classes that inherit from
- Objective-C classes or other @objc classes. They can’t be adopted by structures or enumerations.
+ # Optional Protocol Requirements
+ You can define optional requirements for protocols, These requirements do not have to be implemented by types that conform to the protocol. Optional requirements are prefixed by the optional modifier as part of the protocol’s definition. Optional requirements are available so that you can write code that interoperates with Objective-C. Both the protocol and the optional requirement must be marked with the @objc attribute. Note that @objc protocols can be adopted only by classes that inherit from Objective-C classes or other @objc classes. They can’t be adopted by structures or enumerations.
+ 您可以为协议定义可选的要求，这些要求不必由符合协议的类型实现。可选要求作为协议定义的一部分由可选修饰符作为前缀。提供了可选的要求，以便您可以编写与Objective-C互操作的代码。协议和可选要求都必须用@objc属性标记。注意，@objc协议只能通过继承Objective-C类或其他@objc类的类来采用。它们不能被结构或枚举采用。
+ When you use a method or property in an optional requirement, its type automatically becomes an optional. For example, a method of type (Int) -> String becomes ((Int) -> String)?. Note that the entire function type is wrapped in the optional, not the method’s return value.
+ 当在可选需求中使用方法或属性时，其类型将自动变为可选。例如，类型（Int） - > String的方法变成（（Int） - > String）？。注意，整个函数类型都是可选的，而不是方法的返回值。
+ An optional protocol requirement can be called with optional chaining, to account for the possibility that the requirement was not implemented by a type that conforms to the protocol. You check for an implementation of an optional method by writing a question mark after the name of the method when it is called, such as someOptionalMethod?(someArgument).
+ 可选的协议需求可以使用可选的链接来调用，以说明需求不是由符合协议的类型实现的可能性。通过在调用方法的名称之后写一个问号，例如someOptionalMethod？（someArgument），可以检查可选方法的实现。有关可选链接的信息，请参阅可选链接。
  */
-
 @objc protocol CounterDataSource {
-    @objc optional func incrementForCount(count: Int) -> Int
+    @objc optional func increment(forCount count: Int) -> Int
     @objc optional var fixedIncrement: Int { get }
 }
+/* 
+ - NOTE:
+ Strictly speaking, you can write a custom class that conforms to CounterDataSource without implementing either protocol requirement. They are both optional, after all. Although technically allowed, this wouldn’t make for a very good data source.
+ */
+class Counter {
+    var count = 0
+    var dataSource: CounterDataSource?
+    func increment() {
+        /// First, it is possible that dataSource may be nil, and so dataSource has a question mark after its name to indicate that increment(forCount:) should be called only if dataSource isn’t nil. Second, even if dataSource does exist, there is no guarantee that it implements increment(forCount:), because it is an optional requirement.
+        if let amount = dataSource?.increment?(forCount: count) {
+            count += amount
+        } else if let amount = dataSource?.fixedIncrement {
+            count += amount
+        }
+    }
+}
+
+do {
+    class ThreeSource: NSObject, CounterDataSource {
+        let fixedIncrement = 3
+    }
+    var counter = Counter()
+    counter.dataSource = ThreeSource()
+    for _ in 1...4 {
+        counter.increment()
+        print(counter.count)
+    }
+}
+
+@objc class TowardsZeroSource: NSObject, CounterDataSource {
+    func increment(forCount count: Int) -> Int {
+        if count == 0 {
+            return 0
+        } else if count < 0 {
+            return 1
+        } else {
+            return -1
+        }
+    }
+}
+do {
+    var counter = Counter()
+    counter.count = -4
+    counter.dataSource = TowardsZeroSource()
+    for _ in 1...5 {
+        counter.increment()
+        print(counter.count)
+    }
+}
+
 /// 通过扩展实现optional
 //protocol CDS {
 //    func incrementForCount(count: Int) -> Int
@@ -432,154 +507,159 @@ wishHappyBirthday(celebrator:birthdayPerson) //输出wishHappyBirthday
 //    var fixedIncrement: Int { get }
 //}
 
-class Counter {
-    var count = 0
-    var dataSource: CounterDataSource?
-    func increment() {
-        if let amount = dataSource?.incrementForCount?(count:count) {
-            count += amount
-        } else if let amount = dataSource?.fixedIncrement {
-            count += amount
-        }
-    }
-}
 
 /*:
- Because the call to incrementForCount(_:) can fail for either of these two reasons,
- the call returns an optional Int value. This is true even though incrementForCount(_:)
- is defined as returning a nonoptional Int value in the definition of CounterDataSource.
+ # Protocol Extensions
+ Protocols can be extended to provide method and property implementations to conforming types. This allows you to define behavior on protocols themselves, rather than in each type’s individual conformance or in a global function.
  */
-/*:
- ## Protocol Extensions
- */
-
 extension RandomNumberGenerator {
     func randomBool() -> Bool {
         return random() > 0.5
     }
 }
+do {
+    let generator = LinearCongruentialGenerator()
+    print("Here's a random number: \(generator.random())")
+    print("And here's a random Boolean: \(generator.randomBool())")
+}
 
-//: By creating an extension on the protocol, all conforming types automatically gain this method implementation without any additional modification.
-
-let PE_generator = LinearCongruentialGenerator()
-("Here's a random number: \(PE_generator.random())")
-("And here's a random Boolean: \(PE_generator.randomBool())")
-
-
-/*:
- You can use protocol extensions to provide a default implementation to any method or property requirement of that protocol.
- If a conforming type provides its own implementation of a required method or property, that implementation will be used instead of the one provided by the extension.
+/*: 
+ ## Providing Default Implementations
+ You can use protocol extensions to provide a default implementation to any method or computed property requirement of that protocol. If a conforming type provides its own implementation of a required method or property, that implementation will be used instead of the one provided by the extension.
  - NOTE:
- Protocol requirements with default implementations provided by extensions are distinct from optional protocol requirements.
- Although conforming types don’t have to provide their own implementation of either, requirements with default implementations can be called without optional chaining.
+ Protocol requirements with default implementations provided by extensions are distinct from optional protocol requirements. Although conforming types don’t have to provide their own implementation of either, requirements with default implementations can be called without optional chaining.
  */
+extension PrettyTextRepresentable  {
+    var default_prettyTextualDescription: String {
+        return textualDescription
+    }
+}
 
 /*:
- When you define a protocol extension, you can specify constraints that conforming types must satisfy before the methods and properties of the extension are available. You write these constraints after the name of the protocol you’re extending using a where clause.
+ ## Adding Constraints to Protocol Extensions
+ 向协议扩展添加约束
+ When you define a protocol extension, you can specify constraints that conforming types must satisfy before the methods and properties of the extension are available. You write these constraints after the name of the protocol you’re extending using a generic where clause, as described in https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Generics.html#//apple_ref/doc/uid/TP40014097-CH26-ID192.
  */
-
 extension Collection where Iterator.Element: TextRepresentable {
     var textualDescription: String {
         let itemsAsText = self.map { $0.textualDescription }
         return "[" + itemsAsText.joined(separator:", ") + "]"
     }
 }
-
-let murrayTheHamster = Hamster(name: "Murray")
-let morganTheHamster = Hamster(name: "Morgan")
-let mauriceTheHamster = Hamster(name: "Maurice")
-let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
-
-//: Because Array conforms to CollectionType and the array’s elements conform to the TextRepresentable protocol, the array can use the textualDescription property to get a textual representation of its contents.
-(hamsters.textualDescription)
+do {
+    let murrayTheHamster = Hamster(name: "Murray")
+    let morganTheHamster = Hamster(name: "Morgan")
+    let mauriceTheHamster = Hamster(name: "Maurice")
+    let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
+    //: Because Array conforms to CollectionType and the array’s elements conform to the TextRepresentable protocol, the array can use the textualDescription property to get a textual representation of its contents.
+    (hamsters.textualDescription)
+}
 /*:
  - NOTE:
  If a conforming type satisfies the requirements for multiple constrained extensions that provide implementations for the same method or property, Swift will use the implementation corresponding to the most specialized constraints.
+ 如果符合类型满足为同一方法或属性提供实现的多个约束扩展的要求，Swift将使用与最专用约束相对应的实现。
  */
 
-////: ## Protocol Example
-////: ### Example 1
-//protocol Strokable {
-//    var strokeWidth: Double {get set}
-//}
-//
-//protocol Fullable {
-//    var fullColor: Color? {get set}
-//}
-//
-//enum Color { //fullColor协议属性的类型定义
-//    case red, green, blue, yellow, cyan
-//}
-//
-//protocol HasArea: Fullable, Strokable { //协议多继承
-//    var area: Double {get}
-//}
-//
-//protocol Mathable {
-//    static var pi: Double {get}
-//    static var e: Double {get}
-//}
-//
-//struct Rect: HasArea, Mathable {
-//    var width: Double
-//    var height: Double
-//    init(width: Double, height: Double){
-//        self.width = width
-//        self.height = height
-//    }
-//    var fullColor: Color?
-//    var strokeWidth: Double = 0.0
-//    var area: Double {
-//        get{
-//            return width * height
-//        }
-//    }
-//    static var pi: Double = 3.14159535
-//    static var e: Double = 2.71828
-//}
 
-//protocol Flier {
-//    func fly()
-//}
-//struct Bird: Flier {
-//    func fly() {
-//    }
-//    func getWorm() {
-//    }
-//}
-//struct Bee {
-//    func fly() {
-//    }
-//}
-//func tellToFly(f: Flier) {
-//    f.fly()
-//}
-//enum Filter: String, CustomStringConvertible {
-//    case Albums = "Albums"
-//    case Playlists = "Playlists"
-//    case Podcasts = "Podcasts"
-//    case Books = "Audiobooks"
-//    var description: String { return self.rawValue }
-//}
-//func isBird(f: Flier) -> Bool {
-//    return f is Bird
-//}
-//func tellGetWorm(f: Flier) {
-//    (f as? Bird)?.getWorm()
-//}
-//struct Insect: Flier {
-//    func fly() {
-//    }
-//}
-//
-//let b = Bird()
-//tellToFly(b)
-//let b2 = Bee()
-//// tellToFly(b2) //compile error
-//let type = Filter.Albums
-//"It is \(type)"
-//let ok = isBird(Bird())
-//let ok2 = isBird(Insect())
-//_ = b2
+
+//: # Example
+
+
+// just showing the notation
+func f(f:protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
+
+
+// system protocol
+struct Nest : ExpressibleByIntegerLiteral {
+    var eggCount : Int = 0
+    init() {}
+    init(integerLiteral val: Int) {
+        self.eggCount = val
+    }
+}
+do {
+    func reportEggs(nest: Nest) {
+        ("this nest contains \(nest.eggCount) eggs")
+    }
+    reportEggs(nest: 4)
+}
+
+
+protocol Strokable {
+    var strokeWidth: Double {get set}
+}
+enum Color { //fullColor协议属性的类型定义
+    case red, green, blue, yellow, cyan
+}
+protocol Fullable {
+    var fullColor: Color? {get set}
+}
+protocol DrawArea: Fullable, Strokable { //协议多继承
+    var area: Double {get}
+}
+
+protocol Mathable {
+    static var pi: Double {get}
+    static var e: Double {get}
+}
+struct Rect: DrawArea, Mathable {
+    var width: Double
+    var height: Double
+    init(width: Double, height: Double){
+        self.width = width
+        self.height = height
+    }
+    var fullColor: Color?
+    var strokeWidth: Double = 0.0
+    var area: Double {
+        get{
+            return width * height
+        }
+    }
+    static var pi: Double = 3.14159535
+    static var e: Double = 2.71828
+}
+
+
+protocol Flier {
+    func fly()
+}
+struct Bird: Flier {
+    func fly() {}
+    func getWorm() {}
+}
+struct Bee {
+    func fly() {}
+}
+enum Filter: String, CustomStringConvertible {
+    case Albums = "Albums"
+    case Playlists = "Playlists"
+    case Podcasts = "Podcasts"
+    case Books = "Audiobooks"
+    var description: String { return self.rawValue }
+}
+struct Insect: Flier {
+    func fly() {}
+}
+do {
+    func isBird(_ f: Flier) -> Bool {
+        return f is Bird
+    }
+    func tellGetWorm(_ f: Flier) {
+        (f as? Bird)?.getWorm()
+    }
+    func tellToFly(_ f: Flier) {
+        f.fly()
+    }
+    let b = Bird()
+    tellToFly(b)
+    let b2 = Bee()
+    // tellToFly(b2) //compile error
+    let type = Filter.Albums
+    "It is \(type)"
+    let ok = isBird(Bird())
+    let ok2 = isBird(Insect())
+}
+
 
 //: [Next](@next)
