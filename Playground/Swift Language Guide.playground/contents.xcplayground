@@ -31,6 +31,8 @@
         <page name='ErrorType'/>
         <page name='Error_Handling'/>
         <page name='Extensions'/>
+        <page name='Protocols'/>
+        <page name='Automatic Reference Counting'/>
         <page name='Generics'/>
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>
@@ -44,7 +46,6 @@
         <page name='lazy'/>
         <page name='Methods'/>
         <page name='Optional Chaining'/>
-        <page name='Protocols'/>
         <page name='recursion'/>
         <page name='SequenceType'/>
         <page name='singleton'/>
