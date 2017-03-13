@@ -96,7 +96,7 @@ print("And another one: \(generator.random())")
  https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Methods.html#//apple_ref/doc/uid/TP40014097-CH15-ID239
  If you define a protocol instance method requirement that is intended to mutate instances of any type that adopts the protocol, mark the method with the mutating keyword as part of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement.
  - NOTE:
- If you mark a protocol instance method requirement as mutating, you do not need to write the mutating keyword when writing an implementation of that method for a class. The mutating keyword is only used by structures and enumerations.
+ If you mark a protocol instance method requirement as mutating, you do not need to write the mutating keyword when writing an implementation of that method for a class. The mutating keyword is only used by structures and enumerations. 在 class 中实现带有mutating方法的接口时, 不用mutating进行修饰, 因为对于class来说, 类的成员变量和方法都是透明的, 所以不必使用 mutating 来进行修饰
  */
 protocol Togglable {
     mutating func toggle()
@@ -112,8 +112,34 @@ enum OnOffSwitch: Togglable {
         }
     }
 }
-var lightSwitch = OnOffSwitch.Off
-lightSwitch.toggle()
+class OnOffClass: Togglable {
+
+    enum OnOff {
+        case off, on
+    }
+
+    var onOff: OnOff
+    init(oo: OnOff) {
+        self.onOff = oo
+    }
+
+    func toggle() {
+        switch onOff {
+        case .off:
+            onOff = .on
+        case .on:
+            onOff = .off
+        }
+        print(onOff.hashValue)
+    }
+}
+do {
+    var lightSwitch = OnOffSwitch.Off
+    var onOffClass = OnOffClass(oo: .off)
+    lightSwitch.toggle()
+    onOffClass.toggle()
+}
+
 
 //: # Initializer Requirements
 protocol IR_SomeProtocol {
@@ -352,6 +378,7 @@ do {
 /*:
  # Class-Only Protocols
  You can limit protocol adoption to class types (and not structures or enumerations) by adding the class keyword to a protocol’s inheritance list. The class keyword must always appear first in a protocol’s inheritance list, before any inherited protocols
+ class关键字用来限制的协议只能应用在类上
  */
 protocol SomeInheritedProtocol {}
 protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
