@@ -46,9 +46,9 @@ protocol Generic {
     // associatedtype U where U:Flier // no where clauses on associatedtype
     associatedtype U: Cat, Flier // legal: this is basically an inheritance declaration!
 }
-func flyAndWalk<T where T: Walker, T: Flier> (f: T) { }
-func flyAndWalk2<T : protocol<Walker, Flier>> (f: T) { }
-func flyAndWalk3<T where T: Flier, T: Cat> (f: T) { }
+func flyAndWalk<T where T: Walker, T: Flier> (_ f: T) { }
+func flyAndWalk2<T : protocol<Walker, Flier>> (_ f: T) { }
+func flyAndWalk3<T where T: Flier, T: Cat> (_ f: T) { }
 // func flyAndWalk4<T where T == Cat> (f:T) {}
 struct Bird: Flier, Walker { }
 
@@ -74,7 +74,7 @@ struct Bird1: Flier1{
 struct Insect: Flier1 {
     typealias Other = Bird1
 }
-func flockTogether<T: Flier1 where T.Other: Equatable> (f: T) { }
+func flockTogether<T: Flier1 where T.Other: Equatable> (_ f: T) { }
 do {
     flockTogether(Bird1()) // okay
     // flockTogether(Insect()) // nope
@@ -87,7 +87,7 @@ struct Pig: Flier1 {
 struct Pig2: Flier1 {
     typealias Other = NoisyDog
 }
-func flockTogether2<T: Flier1 where T.Other: Dog> (f: T) { }
+func flockTogether2<T: Flier1 where T.Other: Dog> (_ f: T) { }
 do {
     flockTogether2(Pig()) // okay
     flockTogether2(Pig2()) // okay
@@ -100,14 +100,14 @@ struct Bird3: Flier1 {
 struct Insect3: Flier1 {
     typealias Other = Walker
 }
-func flockTogether3 < T: Flier1 where T.Other == Walker > (f: T) { }
+func flockTogether3 < T: Flier1 where T.Other == Walker > (_ f: T) { }
 do {
     // flockTogether3(Bird3()) // nope
     flockTogether3(Insect3()) // okay
 }
 
 // ==== equality and class
-func flockTogether4 < T: Flier1 where T.Other == Dog > (f: T) { }
+func flockTogether4 < T: Flier1 where T.Other == Dog > (_ f: T) { }
 do {
     flockTogether4(Pig()) // okay
     // flockTogether4(Pig2()) // nope
@@ -121,7 +121,7 @@ struct Insect4: Flier1 {
     typealias Other = Int
 }
 func flockTwoTogether < T: Flier1, U: Flier1 where T.Other == U.Other >
-    (f1: T, _ f2: U) { }
+    (_ f1: T, _ f2: U) { }
 do {
     flockTwoTogether(Bird4(), Bird4())
     flockTwoTogether(Insect4(), Insect4())

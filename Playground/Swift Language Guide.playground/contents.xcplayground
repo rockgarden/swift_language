@@ -30,9 +30,11 @@
         <page name='didSet'/>
         <page name='ErrorType'/>
         <page name='Error_Handling'/>
+        <page name='Automatic Reference Counting'/>
+        <page name='Type Casting'/>
+        <page name='Nested Types'/>
         <page name='Extensions'/>
         <page name='Protocols'/>
-        <page name='Automatic Reference Counting'/>
         <page name='Generics'/>
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>
@@ -50,7 +52,6 @@
         <page name='SequenceType'/>
         <page name='singleton'/>
         <page name='Subscripts'/>
-        <page name='Type Casting copy'/>
         <page name='typealias'/>
         <page name='umbrella types'/>
         <page name='privacy'/>
