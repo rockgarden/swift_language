@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false' last-migration='0810'>
     <pages>
+        <page name='Collection Types'/>
+        <page name='Functions'/>
+        <page name='Enumerations'/>
+        <page name='Automatic Reference Counting'/>
+        <page name='Type Casting'/>
+        <page name='Nested Types'/>
+        <page name='Extensions'/>
+        <page name='Protocols'/>
         <page name='Basics'/>
         <page name='Basic Operators'/>
         <page name='Instance'/>
@@ -13,12 +21,9 @@
         <page name='Class polymorphism'/>
         <page name='Class type reference'/>
         <page name='Classes &amp; Structs'/>
-        <page name='Functions'/>
-        <page name='Enumerations'/>
         <page name='Untitled Page 2'/>
         <page name='Closures'/>
         <page name='Temp'/>
-        <page name='Collection Types'/>
         <page name='collection Array'/>
         <page name='collection Dictionary'/>
         <page name='collection Set'/>
@@ -30,11 +35,6 @@
         <page name='didSet'/>
         <page name='ErrorType'/>
         <page name='Error_Handling'/>
-        <page name='Automatic Reference Counting'/>
-        <page name='Type Casting'/>
-        <page name='Nested Types'/>
-        <page name='Extensions'/>
-        <page name='Protocols'/>
         <page name='Generics'/>
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>
