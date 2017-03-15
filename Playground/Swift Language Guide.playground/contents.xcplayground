@@ -3,6 +3,7 @@
     <pages>
         <page name='Collection Types'/>
         <page name='Functions'/>
+        <page name='Closures'/>
         <page name='Enumerations'/>
         <page name='Automatic Reference Counting'/>
         <page name='Type Casting'/>
@@ -22,7 +23,6 @@
         <page name='Class type reference'/>
         <page name='Classes &amp; Structs'/>
         <page name='Untitled Page 2'/>
-        <page name='Closures'/>
         <page name='Temp'/>
         <page name='collection Array'/>
         <page name='collection Dictionary'/>
