@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false' last-migration='0810'>
     <pages>
+        <page name='Basic Operators'/>
         <page name='Collection Types'/>
         <page name='Functions'/>
         <page name='Closures'/>
         <page name='Enumerations'/>
+        <page name='Classes and Structs'/>
+        <page name='Methods'/>
         <page name='Automatic Reference Counting'/>
         <page name='Type Casting'/>
         <page name='Nested Types'/>
         <page name='Extensions'/>
         <page name='Protocols'/>
+        <page name='Advanced Operators'/>
         <page name='Basics'/>
-        <page name='Basic Operators'/>
         <page name='Instance'/>
         <page name='Access Control'/>
         <page name='annotation'/>
@@ -21,7 +24,6 @@
         <page name='Class &amp; Struct Properties'/>
         <page name='Class polymorphism'/>
         <page name='Class type reference'/>
-        <page name='Classes &amp; Structs'/>
         <page name='Untitled Page 2'/>
         <page name='Temp'/>
         <page name='collection Array'/>
@@ -46,7 +48,6 @@
         <page name='Inheritance'/>
         <page name='Initialization'/>
         <page name='lazy'/>
-        <page name='Methods'/>
         <page name='Optional Chaining'/>
         <page name='recursion'/>
         <page name='SequenceType'/>
