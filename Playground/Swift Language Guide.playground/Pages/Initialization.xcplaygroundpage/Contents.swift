@@ -332,6 +332,157 @@ do {
  The figure below shows a more complex class hierarchy for four classes. It illustrates how the designated initializers in this hierarchy act as “funnel” points for class initialization, simplifying the interrelationships among classes in the chain: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation02_2x.png
  */
 
+/*:
+ ## Two-Phase Initialization
+
+ Class initialization in Swift is a two-phase process. In the first phase, each stored property is assigned an initial value by the class that introduced it. Once the initial state for every stored property has been determined, the second phase begins, and each class is given the opportunity to customize its stored properties further before the new instance is considered ready for use.
+ 
+ Swift中的类初始化是一个两阶段的过程。在第一阶段，每个存储的属性由引入它的类分配一个初始值。一旦确定了每个存储的属性的初始状态，则开始第二阶段，并且在新实例被考虑准备使用之前，给予每个类进一步定制其存储属性的机会。
+
+ The use of a two-phase initialization process makes initialization safe, while still giving complete flexibility to each class in a class hierarchy. Two-phase initialization prevents property values from being accessed before they are initialized, and prevents property values from being set to a different value by another initializer unexpectedly.
+ 
+ 使用两阶段初始化过程使初始化安全，同时仍然为类层次结构中的每个类提供完全的灵活性。两阶段初始化可防止在初始化之前访问属性值，并防止属性值由另一个初始值设置意外地设置为不同的值。
+
+ - NOTE:
+ Swift’s two-phase initialization process is similar to initialization in Objective-C. The main difference is that during phase 1, Objective-C assigns zero or null values (such as 0 or nil) to every property. Swift’s initialization flow is more flexible in that it lets you set custom initial values, and can cope with types for which 0 or nil is not a valid default value.
+ 
+ Swift的两阶段初始化过程与Objective-C中的初始化相似。主要区别在于，在阶段1中，Objective-C为每个属性分配零个或零个值（如0或nil）。 Swift的初始化流程更灵活，它允许您设置自定义初始值，并且可以处理0或nil不是有效默认值的类型。
+
+ Swift’s compiler performs four helpful safety-checks to make sure that two-phase initialization is completed without error:
+ 
+ Swift的编译器执行四个有用的安全检查，以确保两相初始化完成没有错误：
+
+ Safety check 1
+ A designated initializer must ensure that all of the properties introduced by its class are initialized before it delegates up to a superclass initializer. 指定的初始化程序必须确保其所引用的所有属性在委派为超类初始化程序之前被初始化。
+
+ As mentioned above, the memory for an object is only considered fully initialized once the initial state of all of its stored properties is known. In order for this rule to be satisfied, a designated initializer must make sure that all of its own properties are initialized before it hands off up the chain. 如上所述，只要所有存储的属性的初始状态都已知，对象的存储器才被视为完全初始化。为了使此规则得到满足，指定的初始化程序必须确保其所有的属性都被初始化，然后才能将其链接起来。
+
+ Safety check 2
+ A designated initializer must delegate up to a superclass initializer before assigning a value to an inherited property. If it doesn’t, the new value the designated initializer assigns will be overwritten by the superclass as part of its own initialization. 在将值分配给继承属性之前，指定的初始化程序必须委托给超类初始化程序。如果没有，指定的初始化程序分配的新值将被超类覆盖，作为其自身初始化的一部分。
+
+ Safety check 3
+ A convenience initializer must delegate to another initializer before assigning a value to any property (including properties defined by the same class). If it doesn’t, the new value the convenience initializer assigns will be overwritten by its own class’s designated initializer. 在将值分配给任何属性（包括由同一类定义的属性）之前，方便的初始化程序必须委派给另一个初始化程序。如果没有，便利初始化程序分配的新值将被其自己的类的指定的初始化程序覆盖。
+
+ Safety check 4
+ An initializer cannot call any instance methods, read the values of any instance properties, or refer to self as a value until after the first phase of initialization is complete. 初始化程序不能调用任何实例方法，读取任何实例属性的值，或者将self引用为值，直到初始化的第一阶段完成为止。
+
+ The class instance is not fully valid until the first phase ends. Properties can only be accessed, and methods can only be called, once the class instance is known to be valid at the end of the first phase. 类实例在第一阶段结束之前是不完全有效的。只有在第一阶段结束时，类实例被认为有效才能访问属性，只能调用方法。
+
+ Here’s how two-phase initialization plays out, based on the four safety checks above:
+ 
+ Phase 1
+
+ - A designated or convenience initializer is called on a class.在类上调用指定的或方便的初始化器。
+ - Memory for a new instance of that class is allocated. The memory is not yet initialized. 该类的新实例的内存被分配。内存尚未初始化。
+ - A designated initializer for that class confirms that all stored properties introduced by that class have a value. The memory for these stored properties is now initialized. 该类的指定的初始化程序确认该类引入的所有存储属性都具有值。这些存储的属性的内存现在被初始化。
+ - The designated initializer hands off to a superclass initializer to perform the same task for its own stored properties. 指定的初始化程序将切换到超类初始化程序，为其自己存储的属性执行相同的任务。
+ - This continues up the class inheritance chain until the top of the chain is reached. 这继续了类继承链，直到链的顶端到达。
+ - Once the top of the chain is reached, and the final class in the chain has ensured that all of its stored properties have a value, the instance’s memory is considered to be fully initialized, and phase 1 is complete. 一旦达到链的顶端，并且链中的最终类确保其所有存储的属性都具有值，则该实例的内存被认为是完全初始化的，阶段1已经完成。
+
+ Phase 2
+
+ - Working back down from the top of the chain, each designated initializer in the chain has the option to customize the instance further. Initializers are now able to access self and can modify its properties, call its instance methods, and so on. 从链的顶部回退，链中的每个指定的初始化程序都可以进一步自定义实例。初始化程序现在可以访问自己，并可以修改其属性，调用其实例方法等等。
+ - Finally, any convenience initializers in the chain have the option to customize the instance and to work with self. 最后，链中的任何方便的初始化器都可以自定义实例并与自己一起工作。
+ 
+ Here’s how phase 1 looks for an initialization call for a hypothetical subclass and superclass: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/twoPhaseInitialization01_2x.png
+ 
+ In this example, initialization begins with a call to a convenience initializer on the subclass. This convenience initializer cannot yet modify any properties. It delegates across to a designated initializer from the same class.
+
+ The designated initializer makes sure that all of the subclass’s properties have a value, as per safety check 1. It then calls a designated initializer on its superclass to continue the initialization up the chain.
+
+ The superclass’s designated initializer makes sure that all of the superclass properties have a value. There are no further superclasses to initialize, and so no further delegation is needed.
+
+ As soon as all properties of the superclass have an initial value, its memory is considered fully initialized, and Phase 1 is complete.
+
+ Here’s how phase 2 looks for the same initialization call:https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/twoPhaseInitialization02_2x.png
+ 
+ The superclass’s designated initializer now has an opportunity to customize the instance further (although it does not have to).
+
+ Once the superclass’s designated initializer is finished, the subclass’s designated initializer can perform additional customization (although again, it does not have to).
+
+ Finally, once the subclass’s designated initializer is finished, the convenience initializer that was originally called can perform additional customization.
+
+ */
+
+/*:
+ ## Initializer Inheritance and Overriding
+
+ Unlike subclasses in Objective-C, Swift subclasses do not inherit their superclass initializers by default. Swift’s approach prevents a situation in which a simple initializer from a superclass is inherited by a more specialized subclass and is used to create a new instance of the subclass that is not fully or correctly initialized.
+ 
+ 与Objective-C中的子类不同，Swift子类默认不会继承其超类初始值。 Swift的方法防止了超类中的简单初始化器被更专门的子类继承并用于创建未完全或正确初始化的子类的新实例。
+
+ - NOTE:
+ Superclass initializers are inherited in certain circumstances, but only when it is safe and appropriate to do so. For more information, see Automatic Initializer Inheritance below. 超类初始化器在某些情况下是继承的，但只有在安全可靠的情况下才能继承。有关更多信息，请参阅下面的自动初始化程序继承。
+
+ If you want a custom subclass to present one or more of the same initializers as its superclass, you can provide a custom implementation of those initializers within the subclass.
+
+ 如果您想要一个自定义子类来呈现一个或多个与其超类相同的初始化值，则可以在子类中提供这些初始化器的自定义实现。
+
+ When you write a subclass initializer that matches a superclass designated initializer, you are effectively providing an override of that designated initializer. Therefore, you must write the override modifier before the subclass’s initializer definition. This is true even if you are overriding an automatically provided default initializer, as described in Default Initializers.
+ 
+ 当您编写与超类指定的初始化程序相匹配的子类初始化程序时，您将有效地提供该指定的初始化程序的覆盖。因此，您必须在子类的初始化器定义之前编写覆盖修饰符。即使您重写自动提供的默认初始化程序，这一点也是如此，如默认初始化程序中所述。
+
+ As with an overridden property, method or subscript, the presence of the override modifier prompts Swift to check that the superclass has a matching designated initializer to be overridden, and validates that the parameters for your overriding initializer have been specified as intended.
+ 
+ 与覆盖属性，方法或下标一样，覆盖修饰符的存在会提示Swift检查超类是否具有匹配的指定的初始化程序以被覆盖，并验证您的重写初始化程序的参数是否按照预期进行了指定。
+
+ - NOTE:
+ You always write the override modifier when overriding a superclass designated initializer, even if your subclass’s implementation of the initializer is a convenience initializer. 当覆盖超类指定的初始化程序时，您始终会写入覆盖修饰符，即使您的子类的初始化程序的实现是一个方便的初始化程序。
+
+ Conversely, if you write a subclass initializer that matches a superclass convenience initializer, that superclass convenience initializer can never be called directly by your subclass, as per the rules described above in Initializer Delegation for Class Types. Therefore, your subclass is not (strictly speaking) providing an override of the superclass initializer. As a result, you do not write the override modifier when providing a matching implementation of a superclass convenience initializer.
+
+ 相反，如果您编写一个与超类方便初始化程序相匹配的子类初始化程序，那么超类方便初始化程序永远不能由您的子类直接调用，按照上述“类型类型初始化程序委派”中所述的规则。因此，您的子类不是（严格地说）提供超类初始化器的覆盖。因此，当提供超类便利初始化程序的匹配实现时，不要写入覆盖修饰符。
+ */
+do {
+    class Vehicle {
+        var numberOfWheels = 0
+        var description: String {
+            return "\(numberOfWheels) wheel(s)"
+        }
+    }
+    let vehicle = Vehicle()
+    print("Vehicle: \(vehicle.description)")
+    // Vehicle: 0 wheel(s)
+
+    class Bicycle: Vehicle {
+        /// The init() initializer for Bicycle starts by calling super.init(), which calls the default initializer for the Bicycle class’s superclass, Vehicle. This ensures that the numberOfWheels inherited property is initialized by Vehicle before Bicycle has the opportunity to modify the property. After calling super.init(), the original value of numberOfWheels is replaced with a new value of 2.
+        override init() {
+            super.init()
+            numberOfWheels = 2
+        }
+    }
+    let bicycle = Bicycle()
+    print("Bicycle: \(bicycle.description)")
+    // Bicycle: 2 wheel(s)
+}
+/*:
+ - NOTE:
+ Subclasses can modify inherited variable properties during initialization, but can not modify inherited constant properties.
+ */
+
+/*:
+ ## Automatic Initializer Inheritance
+
+ As mentioned above, subclasses do not inherit their superclass initializers by default. However, superclass initializers are automatically inherited if certain conditions are met. In practice, this means that you do not need to write initializer overrides in many common scenarios, and can inherit your superclass initializers with minimal effort whenever it is safe to do so.
+
+ Assuming that you provide default values for any new properties you introduce in a subclass, the following two rules apply:
+
+ Rule 1
+ If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers. 如果您的子类没有定义任何指定的初始化器，它将自动继承其所有超类指定的初始化器。
+
+ Rule 2
+ If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as per rule 1, or by providing a custom implementation as part of its definition—then it automatically inherits all of the superclass convenience initializers. 如果您的子类提供了其所有超类指定的初始化器的实现 - 通过按照规则1继承它们，或者通过提供自定义实现作为其定义的一部分，那么它将自动继承所有超类方便初始化器。
+
+ These rules apply even if your subclass adds further convenience initializers.
+
+ - NOTE:
+ A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2. 子类可以实现一个超类指定的初始化器作为子类方便初始化器，作为满足规则2的一部分。
+ */
+
+
+
+
+
 
 
 //: ## struct
