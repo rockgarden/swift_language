@@ -179,7 +179,7 @@ do {
  a == a (Reflexivity 自反性)
  a == b implies b == a (Symmetry 对称性)
  a == b && b == c implies a == c (Transitivity 传递性)
- For more information about conforming to protocols, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267.
+ For more information about conforming to protocols, see [Next](@https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267.)
  */
 
 //: ## Set Type Syntax
@@ -250,7 +250,7 @@ do {
  */
 do {
     let oddDigits: Set = [1, 3, 5, 7, 9]
-    let evenDigits: Set = [0, 2, 4, 6, 8]
+    let evenDigits: Set = [1, 2, 4, 6, 8]
     let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]
 
     oddDigits.union(evenDigits).sorted()

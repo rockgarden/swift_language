@@ -8,6 +8,8 @@
         <page name='Enumerations'/>
         <page name='Classes and Structs'/>
         <page name='Methods'/>
+        <page name='Inheritance'/>
+        <page name='Initialization'/>
         <page name='Automatic Reference Counting'/>
         <page name='Type Casting'/>
         <page name='Nested Types'/>
@@ -45,8 +47,6 @@
         <page name='guard'/>
         <page name='defer'/>
         <page name='Higher Order Functions'/>
-        <page name='Inheritance'/>
-        <page name='Initialization'/>
         <page name='lazy'/>
         <page name='Optional Chaining'/>
         <page name='recursion'/>
@@ -60,5 +60,6 @@
         <page name='Convariance &amp; Contravariance'/>
         <page name='Summary'/>
         <page name='Untitled Page'/>
+        <page name='Untitled Page 3'/>
     </pages>
 </playground>

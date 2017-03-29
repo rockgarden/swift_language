@@ -1,7 +1,339 @@
 //: [Previous](@previous)
-//: # Initialization 初始化
 import UIKit
 import AVFoundation
+/*: 
+ # Initialization 初始化
+ Initialization is the process of preparing an instance of a class, structure, or enumeration for use. This process involves setting an initial value for each stored property on that instance and performing any other setup or initialization that is required before the new instance is ready for use.
+
+ You implement this initialization process by defining initializers, which are like special methods that can be called to create a new instance of a particular type. Unlike Objective-C initializers, Swift initializers do not return a value. Their primary role is to ensure that new instances of a type are correctly initialized before they are used for the first time.
+
+ Instances of class types can also implement a deinitializer, which performs any custom cleanup just before an instance of that class is deallocated. For more information about deinitializers, see Deinitialization.
+ */
+/*
+ # Setting Initial Values for Stored Properties
+
+ Classes and structures must set all of their stored properties to an appropriate initial value by the time an instance of that class or structure is created. Stored properties cannot be left in an indeterminate state.
+
+ You can set an initial value for a stored property within an initializer, or by assigning a default property value as part of the property’s definition.
+
+ - NOTE:
+ When you assign a default value to a stored property, or set its initial value within an initializer, the value of that property is set directly, without calling any property observers.
+ */
+
+/*
+ ## Initializers
+
+ Initializers are called to create a new instance of a particular type. In its simplest form, an initializer is like an instance method with no parameters, written using the init keyword.
+ */
+do {
+    /// The structure defines a single initializer, init, with no parameters, which initializes the stored temperature with a value of 32.0 (the freezing point of water in degrees Fahrenheit).
+    struct Fahrenheit {
+        var temperature: Double
+        init() {
+            temperature = 32.0
+        }
+    }
+    var f = Fahrenheit()
+    print("The default temperature is \(f.temperature)° Fahrenheit")
+}
+
+/*:
+ ## Default Property Values
+
+ You can set the initial value of a stored property from within an initializer, as shown above. Alternatively, specify a default property value as part of the property’s declaration. You specify a default property value by assigning an initial value to the property when it is defined.
+
+ - NOTE:
+ If a property always takes the same initial value, provide a default value rather than setting a value within an initializer. The end result is the same, but the default value ties the property’s initialization more closely to its declaration. It makes for shorter, clearer initializers and enables you to infer the type of the property from its default value. The default value also makes it easier for you to take advantage of default initializers and initializer inheritance.
+ 如果属性始终采用相同的初始值，请提供默认值，而不是在初始化程序中设置值。 最终的结果是一样的，但是默认值会将属性的初始化与其声明密切相关。 它使更短，更清晰的初始化程序，使您能够从其默认值推断属性的类型。 默认值还使您更容易利用默认初始化和初始化器继承，如本章后面所述。
+ */
+do {
+    struct Fahrenheit {
+        var temperature = 32.0
+    }
+}
+
+/*:
+ # Customizing Initialization
+
+ You can customize the initialization process with input parameters and optional property types, or by assigning constant properties during initialization, as described in the following sections.
+
+ ## Initialization Parameters
+
+ You can provide initialization parameters as part of an initializer’s definition, to define the types and names of values that customize the initialization process. Initialization parameters have the same capabilities and syntax as function and method parameters.
+ */
+do {
+    /// The Celsius structure implements two custom initializers called init(fromFahrenheit:) and init(fromKelvin:), which initialize a new instance of the structure with a value from a different temperature scale:
+    struct Celsius {
+        var temperatureInCelsius: Double
+        init(fromFahrenheit fahrenheit: Double) {
+            temperatureInCelsius = (fahrenheit - 32.0) / 1.8
+        }
+        init(fromKelvin kelvin: Double) {
+            temperatureInCelsius = kelvin - 273.15
+        }
+    }
+    let boilingPointOfWater = Celsius(fromFahrenheit: 212.0)
+    // boilingPointOfWater.temperatureInCelsius is 100.0
+    let freezingPointOfWater = Celsius(fromKelvin: 273.15)
+    // freezingPointOfWater.temperatureInCelsius is 0.0
+}
+
+/*:
+ ## Parameter Names and Argument Labels
+
+ As with function and method parameters, initialization parameters can have both a parameter name for use within the initializer’s body and an argument label for use when calling the initializer.
+
+ However, initializers do not have an identifying function name before their parentheses in the way that functions and methods do. Therefore, the names and types of an initializer’s parameters play a particularly important role in identifying which initializer should be called. Because of this, Swift provides an automatic argument label for every parameter in an initializer if you don’t provide one.
+ */
+do {
+    struct Color {
+        let red, green, blue: Double
+        init(red: Double, green: Double, blue: Double) {
+            self.red   = red
+            self.green = green
+            self.blue  = blue
+        }
+        init(white: Double) {
+            red   = white
+            green = white
+            blue  = white
+        }
+    }
+    let magenta = Color(red: 1.0, green: 0.0, blue: 1.0)
+    let halfGray = Color(white: 0.5)
+    //let veryGreen = Color(0.0, 1.0, 0.0)
+    // this reports a compile-time error - argument labels are required
+}
+
+/*:
+ ## Initializer Parameters Without Argument Labels
+
+ If you do not want to use an argument label for an initializer parameter, write an underscore (_) instead of an explicit argument label for that parameter to override the default behavior.
+ */
+do {
+    struct Celsius {
+        var temperatureInCelsius: Double
+        init(_ celsius: Double) {
+            temperatureInCelsius = celsius
+        }
+    }
+    let bodyTemperature = Celsius(37.0)
+    // bodyTemperature.temperatureInCelsius is 37.0
+}
+
+/*:
+ ## Optional Property Types
+
+ If your custom type has a stored property that is logically allowed to have “no value”—perhaps because its value cannot be set during initialization, or because it is allowed to have “no value” at some later point—declare the property with an optional type. Properties of optional type are automatically initialized with a value of nil, indicating that the property is deliberately intended to have “no value yet” during initialization.
+ 
+ 如果您的自定义类型具有在逻辑上允许具有“no value”的存储属性 - 或许是因为在初始化期间无法设置其值，或者因为允许在稍后的某个时间点具有“no value” 可选类型。 可选类型的属性将自动初始化为nil值，表示该属性在初始化期间故意打算“没有值”。
+ */
+do {
+    class SurveyQuestion {
+        var text: String
+        var response: String?
+        init(text: String) {
+            self.text = text
+        }
+        func ask() {
+            print(text)
+        }
+    }
+    let cheeseQuestion = SurveyQuestion(text: "Do you like cheese?")
+    cheeseQuestion.ask()
+    // Prints "Do you like cheese?"
+    cheeseQuestion.response = "Yes, I do like cheese."
+}
+
+/*:
+ ## Assigning Constant Properties During Initialization
+ 初始化期间分配常量属性
+ 
+ You can assign a value to a constant property at any point during initialization, as long as it is set to a definite value by the time initialization finishes. Once a constant property is assigned a value, it can’t be further modified.
+
+ 只要在初始化完成时将其设置为一个确定的值，您可以在初始化期间的任意时间为一个常量属性赋值。 一旦一个常量属性被分配一个值，就不能进一步修改。
+
+ - NOTE:
+ For class instances, a constant property can be modified during initialization only by the class that introduces it. It cannot be modified by a subclass.
+ 
+ 对于类实例，常量属性可以在初始化期间被引入它的类修改。 它不能被子类修改。
+ */
+do {
+    class SurveyQuestion {
+        let text: String
+        var response: String?
+        init(text: String) {
+            self.text = text
+        }
+        func ask() {
+            print(text)
+        }
+    }
+    let beetsQuestion = SurveyQuestion(text: "How about beets?")
+    beetsQuestion.ask()
+    // Prints "How about beets?"
+    beetsQuestion.response = "I also like beets. (But not with cheese.)"
+}
+
+/*:
+ # Default Initializers
+
+ Swift provides a default initializer for any structure or class that provides default values for all of its properties and does not provide at least one initializer itself. The default initializer simply creates a new instance with all of its properties set to their default values.
+ 
+ Swift为任何为其所有属性提供默认值的结构或类提供了一个默认的初始化程序，并且不提供至少一个初始化程序本身。 默认的初始化程序只需创建一个新的实例，将其所有属性设置为其默认值。
+ */
+do {
+    class ShoppingListItem {
+        var name: String?
+        var quantity = 1
+        var purchased = false
+    }
+    var item = ShoppingListItem()
+}
+
+/*:
+ ## Memberwise Initializers for Structure Types
+ 成员初始化器结构类型
+
+ Structure types automatically receive a memberwise initializer if they do not define any of their own custom initializers. Unlike a default initializer, the structure receives a memberwise initializer even if it has stored properties that do not have default values.
+ 
+ 如果结构类型没有定义任何自己的自定义初始值设置，它们将自动接收成员初始值。 与默认初始化程序不同，即使存储的属性没有默认值，该结构也会接收成员初始值。
+
+ The memberwise initializer is a shorthand way to initialize the member properties of new structure instances. Initial values for the properties of the new instance can be passed to the memberwise initializer by name.
+ 
+ 成员初始化器是初始化新结构实例的成员属性的简写方式。 可以通过名称将新实例的属性的初始值传递给成员初始化器。
+ */
+do {
+    /// default values 被覆盖
+    struct Size {
+        var width = 0.0, height = 0.0
+    }
+    let twoByTwo = Size(width: 2.0, height: 2.0)
+    print(twoByTwo)
+}
+
+/*:
+ # Initializer Delegation for Value Types
+ 值类型的初始化器委派
+
+ Initializers can call other initializers to perform part of an instance’s initialization. This process, known as initializer delegation, avoids duplicating code across multiple initializers.
+ 
+ 初始化器可以调用其他初始化器来执行实例初始化的一部分。这个称为初始化器委派的过程避免了跨多个初始化器复制代码。
+
+ The rules for how initializer delegation works, and for what forms of delegation are allowed, are different for value types and class types. Value types (structures and enumerations) do not support inheritance, and so their initializer delegation process is relatively simple, because they can only delegate to another initializer that they provide themselves. Classes, however, can inherit from other classes, as described in Inheritance. This means that classes have additional responsibilities for ensuring that all stored properties they inherit are assigned a suitable value during initialization. These responsibilities are described in Class Inheritance and Initialization below.
+ 
+ 对于类型和类类型，初始化器委派的工作原理以及允许的委托形式的规则是不同的。值类型（结构和枚举）不支持继承，因此它们的初始化器委派过程相对简单，因为它们只能委托给他们自己提供的另一个初始化器。但是，类可以继承自其他类，如继承中所述。这意味着类有额外的责任，确保在继承的所有存储的属性在初始化期间被赋予合适的值。这些职责在下面的类继承和初始化中描述。
+
+ For value types, you use self.init to refer to other initializers from the same value type when writing your own custom initializers. You can call self.init only from within an initializer.
+ 
+ 对于值类型，在编写自己的自定义初始化器时，您可以使用self.init引用来自相同值类型的其他初始化器。您只能从初始化程序中调用self.init。
+
+ Note that if you define a custom initializer for a value type, you will no longer have access to the default initializer (or the memberwise initializer, if it is a structure) for that type. This constraint prevents a situation in which additional essential setup provided in a more complex initializer is accidentally circumvented by someone using one of the automatic initializers.
+ 
+ 请注意，如果为值类型定义自定义初始值设置，那么您将无法再访问该类型的默认初始化程序（或成员初始化程序，如果是结构体）。该约束防止了使用其中一个自动初始化器的人意外避开在更复杂的初始化器中提供的附加基本设置的情况。
+
+ - NOTE:
+ If you want your custom value type to be initializable with the default initializer and memberwise initializer, and also with your own custom initializers, write your custom initializers in an extension rather than as part of the value type’s original implementation. For more information, see Extensions.
+ 
+ 如果您希望使用默认的初始化程序和成员初始化程序以及自己的自定义初始化程序来初始化自定义值类型，请在扩展中编写自定义初始值设置，而不是值类型的原始实现的一部分。
+ */
+do {
+    struct Size {
+        var width = 0.0, height = 0.0
+    }
+    struct Point {
+        var x = 0.0, y = 0.0
+    }
+    struct Rect {
+        var origin = Point()
+        var size = Size()
+        init() {}
+        init(origin: Point, size: Size) {
+            self.origin = origin
+            self.size = size
+        }
+        init(center: Point, size: Size) {
+            let originX = center.x - (size.width / 2)
+            let originY = center.y - (size.height / 2)
+            self.init(origin: Point(x: originX, y: originY), size: size)
+        }
+    }
+    let basicRect = Rect()
+    // basicRect's origin is (0.0, 0.0) and its size is (0.0, 0.0)
+    let originRect = Rect(origin: Point(x: 2.0, y: 2.0),
+                          size: Size(width: 5.0, height: 5.0))
+    // originRect's origin is (2.0, 2.0) and its size is (5.0, 5.0)
+    let centerRect = Rect(center: Point(x: 4.0, y: 4.0),
+                          size: Size(width: 3.0, height: 3.0))
+    // centerRect's origin is (2.5, 2.5) and its size is (3.0, 3.0)
+}
+/*:
+ - NOTE:
+ For an alternative way to write this example without defining the init() and init(origin:size:) initializers yourself, see Extensions.
+ */
+
+/*:
+ # Class Inheritance and Initialization
+
+ All of a class’s stored properties—including any properties the class inherits from its superclass—must be assigned an initial value during initialization.
+
+ Swift defines two kinds of initializers for class types to help ensure all stored properties receive an initial value. These are known as designated initializers and convenience initializers.
+
+ ## Designated Initializers and Convenience Initializers
+
+ Designated initializers are the primary initializers for a class. A designated initializer fully initializes all properties introduced by that class and calls an appropriate superclass initializer to continue the initialization process up the superclass chain.
+
+ Classes tend to have very few designated initializers, and it is quite common for a class to have only one. Designated initializers are “funnel” points through which initialization takes place, and through which the initialization process continues up the superclass chain.
+
+ Every class must have at least one designated initializer. In some cases, this requirement is satisfied by inheriting one or more designated initializers from a superclass, as described in Automatic Initializer Inheritance below.
+
+ Convenience initializers are secondary, supporting initializers for a class. You can define a convenience initializer to call a designated initializer from the same class as the convenience initializer with some of the designated initializer’s parameters set to default values. You can also define a convenience initializer to create an instance of that class for a specific use case or input value type.
+
+ You do not have to provide convenience initializers if your class does not require them. Create convenience initializers whenever a shortcut to a common initialization pattern will save time or make initialization of the class clearer in intent.
+ */
+
+/*:
+ ## Syntax for Designated and Convenience Initializers
+
+ Designated initializers for classes are written in the same way as simple initializers for value types:
+
+ init(parameters) {statements}
+
+ Convenience initializers are written in the same style, but with the convenience modifier placed before the init keyword, separated by a space:
+
+ convenience init(parameters) {statements}
+ ## Initializer Delegation for Class Types
+
+ To simplify the relationships between designated and convenience initializers, Swift applies the following three rules for delegation calls between initializers:
+
+ Rule 1
+ A designated initializer must call a designated initializer from its immediate superclass.指定的初始化程序必须从其直接超类调用指定的初始化程序。
+
+ Rule 2
+ A convenience initializer must call another initializer from the same class.一个方便的初始化器必须从同一个类调用另一个初始化器。
+
+ Rule 3
+ A convenience initializer must ultimately call a designated initializer.一个方便的初始化器必须最终调用指定的初始化器。
+
+ A simple way to remember this is:
+
+ Designated initializers must always delegate up. 向上委托
+ Convenience initializers must always delegate across. 横向委托
+ 
+ These rules are illustrated in the figure below: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation01_2x.png
+ 
+ Here, the superclass has a single designated initializer and two convenience initializers. One convenience initializer calls another convenience initializer, which in turn calls the single designated initializer. This satisfies rules 2 and 3 from above. The superclass does not itself have a further superclass, and so rule 1 does not apply.
+
+ The subclass in this figure has two designated initializers and one convenience initializer. The convenience initializer must call one of the two designated initializers, because it can only call another initializer from the same class. This satisfies rules 2 and 3 from above. Both designated initializers must call the single designated initializer from the superclass, to satisfy rule 1 from above.
+
+ - NOTE:
+ These rules don’t affect how users of your classes create instances of each class. Any initializer in the diagram above can be used to create a fully-initialized instance of the class they belong to. The rules only affect how you write the implementation of the class’s initializers.
+
+ The figure below shows a more complex class hierarchy for four classes. It illustrates how the designated initializers in this hierarchy act as “funnel” points for class initialization, simplifying the interrelationships among classes in the chain: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation02_2x.png
+ */
+
+
+
 //: ## struct
 struct Celsius {
     var temperatureInCelsius: Double
