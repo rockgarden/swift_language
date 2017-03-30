@@ -479,6 +479,83 @@ do {
  A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2. 子类可以实现一个超类指定的初始化器作为子类方便初始化器，作为满足规则2的一部分。
  */
 
+/*:
+ ## Designated and Convenience Initializers in Action
+
+ The following example shows designated initializers, convenience initializers, and automatic initializer inheritance in action. This example defines a hierarchy of three classes called Food, RecipeIngredient, and ShoppingListItem, and demonstrates how their initializers interact.
+ */
+do {
+    /// The figure below shows the initializer chain for the Food class: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializersExample01_2x.png
+    class Food {
+        var name: String
+        init(name: String) {
+            self.name = name
+        }
+        convenience init() {
+            self.init(name: "[Unnamed]")
+        }
+    }
+    let namedMeat = Food(name: "Bacon")
+    // namedMeat's name is "Bacon"
+    let mysteryMeat = Food()
+    // mysteryMeat's name is "[Unnamed]
+
+    /// The figure below shows the initializer chain for the RecipeIngredient class: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializersExample02_2x.png
+    class RecipeIngredient: Food {
+        var quantity: Int
+        init(name: String, quantity: Int) {
+            self.quantity = quantity
+            super.init(name: name)
+        }
+        // Initializer Overriding
+        override convenience init(name: String) {
+            self.init(name: name, quantity: 1)
+        }
+    }
+    let oneMysteryItem = RecipeIngredient()
+    let oneBacon = RecipeIngredient(name: "Bacon")
+    let sixEggs = RecipeIngredient(name: "Eggs", quantity: 6)
+
+    class ShoppingListItem: RecipeIngredient {
+        var purchased = false
+        var description: String {
+            var output = "\(quantity) x \(name)"
+            output += purchased ? " ✔" : " ✘"
+            return output
+        }
+    }
+    /// NOTE: ShoppingListItem does not define an initializer to provide an initial value for purchased, because items in a shopping list (as modeled here) always start out unpurchased 购物清单初始状态为空
+    /// The figure below shows the overall initializer chain for all three classes: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializersExample03_2x.png
+
+    var breakfastList = [
+        ShoppingListItem(),
+        ShoppingListItem(name: "Bacon"),
+        ShoppingListItem(name: "Eggs", quantity: 6),
+        ]
+    breakfastList[0].name = "Orange juice"
+    breakfastList[0].purchased = true
+    //breakfastList[1].purchased = true
+    for item in breakfastList {
+        print(item.description)
+    }
+    // 1 x Orange juice ✔
+    // 1 x Bacon ✘
+    // 6 x Eggs ✘
+}
+
+/*:
+ # Failable Initializers
+
+ It is sometimes useful to define a class, structure, or enumeration for which initialization can fail. This failure might be triggered by invalid initialization parameter values, the absence of a required external resource, or some other condition that prevents initialization from succeeding.
+
+ To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, structure, or enumeration definition. You write a failable initializer by placing a question mark after the init keyword (init?).
+
+ */
+
+
+
+
+
 
 
 
