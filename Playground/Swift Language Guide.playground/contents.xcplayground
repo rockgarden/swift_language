@@ -10,6 +10,7 @@
         <page name='Methods'/>
         <page name='Inheritance'/>
         <page name='Initialization'/>
+        <page name='Deinitialization'/>
         <page name='Automatic Reference Counting'/>
         <page name='Type Casting'/>
         <page name='Nested Types'/>
@@ -35,7 +36,6 @@
         <page name='conditional evaluation'/>
         <page name='loops'/>
         <page name='Define and call'/>
-        <page name='Deinitialization'/>
         <page name='didSet'/>
         <page name='ErrorType'/>
         <page name='Error_Handling'/>

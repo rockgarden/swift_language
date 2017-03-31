@@ -210,7 +210,14 @@ do {
     }
     let twoByTwo = Size(width: 2.0, height: 2.0)
     print(twoByTwo)
+
+    /// For the struct, a memberwise initializer is provided. This means that stored properties don't necessarily need to have an initial value. A default initializer is created for all of them.
+    struct Other {
+        var temp: Double
+        var otherProp: Int = 10
+    }
 }
+
 
 /*:
  # Initializer Delegation for Value Types
@@ -224,9 +231,7 @@ do {
  
  对于类型和类类型，初始化器委派的工作原理以及允许的委托形式的规则是不同的。值类型（结构和枚举）不支持继承，因此它们的初始化器委派过程相对简单，因为它们只能委托给他们自己提供的另一个初始化器。但是，类可以继承自其他类，如继承中所述。这意味着类有额外的责任，确保在继承的所有存储的属性在初始化期间被赋予合适的值。这些职责在下面的类继承和初始化中描述。
 
- For value types, you use self.init to refer to other initializers from the same value type when writing your own custom initializers. You can call self.init only from within an initializer.
- 
- 对于值类型，在编写自己的自定义初始化器时，您可以使用self.init引用来自相同值类型的其他初始化器。您只能从初始化程序中调用self.init。
+ For value types, you use self.init to refer to other initializers from the same value type when writing your own custom initializers. You can call self.init only from within an initializer. 对于值类型，在编写自己的自定义初始化器时，您可以使用self.init引用来自相同值类型的其他初始化器。您只能从初始化程序中调用self.init。
 
  Note that if you define a custom initializer for a value type, you will no longer have access to the default initializer (or the memberwise initializer, if it is a structure) for that type. This constraint prevents a situation in which additional essential setup provided in a more complex initializer is accidentally circumvented by someone using one of the automatic initializers.
  
@@ -244,14 +249,18 @@ do {
     struct Point {
         var x = 0.0, y = 0.0
     }
+
+    /// In this case, the second initializer performs delegation, which is calling another initializer within the struct. This is only valid for value types, and not classes, in class must use convenience init!
     struct Rect {
         var origin = Point()
         var size = Size()
         init() {}
+
         init(origin: Point, size: Size) {
             self.origin = origin
             self.size = size
         }
+
         init(center: Point, size: Size) {
             let originX = center.x - (size.width / 2)
             let originY = center.y - (size.height / 2)
@@ -403,6 +412,38 @@ do {
  Finally, once the subclass’s designated initializer is finished, the convenience initializer that was originally called can perform additional customization.
 
  */
+do {
+    class Human {
+        var gender: String
+        init() {
+            self.gender = "Female"
+        }
+    }
+    class Person: Human {
+        var name: String
+        init(fullName name: String){
+            /// Phase 1: Initialize class-defined properties and call the superclass initializer.
+            self.name = name
+            super.init()
+            /// Phase 2: Further customization of local and inherited properties.
+            self.gender = "Male"
+        }
+        convenience init(partialName name: String){
+            /// Phase 1: Call designated initializer
+            let newName = "\(name) Karmy"
+            self.init(fullName: newName)
+            /// Phase 2: Access to self and properties
+            self.name = "John Karmy"
+        }
+    }
+    do {
+        let h1 = Human()
+        let h2 = Human.init() //definitely permitted in Swift 2.0
+        h1.self
+        let person = Person(fullName: "John")
+        (person.name)
+    }
+}
 
 /*:
  ## Initializer Inheritance and Overriding
@@ -550,196 +591,242 @@ do {
 
  To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, structure, or enumeration definition. You write a failable initializer by placing a question mark after the init keyword (init?).
 
+ - NOTE:
+ You cannot define a failable and a nonfailable initializer with the same parameter types and names.
+
+ A failable initializer creates an optional value of the type it initializes. You write return nil within a failable initializer to indicate a point at which initialization failure can be triggered.
+
+ - NOTE:
+ Strictly speaking, initializers do not return a value. Rather, their role is to ensure that self is fully and correctly initialized by the time that initialization ends. Although you write return nil to trigger an initialization failure, you do not use the return keyword to indicate initialization success.
+ */
+do {
+    let wholeNumber: Double = 12345.0
+    let pi = 3.14159
+
+    if let valueMaintained = Int(exactly: wholeNumber) {
+        print("\(wholeNumber) conversion to Int maintains value")
+    }
+    // Prints "12345.0 conversion to Int maintains value"
+
+    let valueChanged = Int(exactly: pi)
+    // valueChanged is of type Int?, not Int
+    /// Creates a Int whose value is `value`
+    /// if no rounding is necessary, nil otherwise.
+    /// public init?(exactly value: Double)
+
+    if valueChanged == nil {
+        print("\(pi) conversion to Int does not maintain value")
+    }
+    // Prints "3.14159 conversion to Int does not maintain value"
+
+    struct Animal {
+        let species: String
+        init?(species: String) {
+            if species.isEmpty { return nil }
+            self.species = species
+        }
+    }
+
+    let someCreature = Animal(species: "Giraffe")
+    // someCreature is of type Animal?, not Animal
+
+    if let giraffe = someCreature {
+        print("An animal was initialized with a species of \(giraffe.species)")
+    }
+    // Prints "An animal was initialized with a species of Giraffe"
+
+    let anonymousCreature = Animal(species: "")
+    // anonymousCreature is of type Animal?, not Animal
+
+    if anonymousCreature == nil {
+        print("The anonymous creature could not be initialized")
+    }
+    // Prints "The anonymous creature could not be initialized"
+}
+/*:
+ - NOTE:
+ Checking for an empty string value (such as "" rather than "Giraffe") is not the same as checking for nil to indicate the absence of an optional String value. In the example above, an empty string ("") is a valid, nonoptional String. However, it is not appropriate for an animal to have an empty string as the value of its species property. To model this restriction, the failable initializer triggers an initialization failure if an empty string is found.
  */
 
+/*:
+ ## Failable Initializers for Enumerations
 
-
-
-
-
-
-
-
-
-
-//: ## struct
-struct Celsius {
-    var temperatureInCelsius: Double
-    init(fromFahrenheit fahrenheit: Double) {
-        temperatureInCelsius = (fahrenheit - 32.0) / 1.8
-    }
-    init(fromKelvin kelvin: Double) {
-        temperatureInCelsius = kelvin - 273.15
-    }
-    init(_ celsius: Double) {
-        temperatureInCelsius = celsius
-    }
-}
-
-/*
- For the struct, a memberwise initializer is provided. This means that stored properties don't
- necessarily need to have an initial value. A default initializer is created for all of them.
+ You can use a failable initializer to select an appropriate enumeration case based on one or more parameters. The initializer can then fail if the provided parameters do not match an appropriate enumeration case.
  */
-struct Other {
-    var temp: Double
-    var otherProp: Int = 10
-}
-struct Size {
-    var width = 0.0, height = 0.0
-}
-struct Point {
-    var x = 0.0, y = 0.0
+do {
+    enum TemperatureUnit {
+        case kelvin, celsius, fahrenheit
+        init?(symbol: Character) {
+            switch symbol {
+            case "K":
+                self = .kelvin
+            case "C":
+                self = .celsius
+            case "F":
+                self = .fahrenheit
+            default:
+                return nil
+            }
+        }
+    }
+
+    let fahrenheitUnit = TemperatureUnit(symbol: "F")
+    if fahrenheitUnit != nil {
+        print("This is a defined temperature unit, so initialization succeeded.")
+    }
+    // Prints "This is a defined temperature unit, so initialization succeeded."
+
+    let unknownUnit = TemperatureUnit(symbol: "X")
+    if unknownUnit == nil {
+        print("This is not a defined temperature unit, so initialization failed.")
+    }
+    // Prints "This is not a defined temperature unit, so initialization failed."
+
 }
 
 /*:
- In this case, the second initializer performs delegation, which is
- calling another initializer within the struct. This is only valid for
- value types, and not classes!
- */
-struct Rect {
-    var origin = Point()
-    var size = Size()
-    init() {}
-    init(origin: Point, size: Size) {
-        self.origin = origin
-        self.size = size
-    }
-    init(center: Point, size: Size) {
-        let originX = center.x - (size.width / 2)
-        let originY = center.y - (size.height / 2)
-        self.init(origin: Point(x: originX, y: originY), size: size)
-    }
-}
+ ## Failable Initializers for Enumerations with Raw Values
 
-/*: 
- ## class
- For a class, every stored property must have an initial value, or have a value assigned to it inside the initializer.
- This reference image explains the relationship between designated initializers and convenience initializers.
- https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Art/initializerDelegation01_2x.png
- - Rule 1: A designated initializer must call a designated initializer from its immediate superclass.
- - Rule 2: convenience initializer must call another initializer from the same class.
- - Rule 3: convenience initializer must ultimately call a designated initializer.
- A simple way to remember this is:
- - Designated initializers must always delegate up.
- - Convenience initializers must always delegate across.
- • Phase 1
- - A designated or convenience initializer is called on a class.
- - Memory for a new instance of that class is allocated. The memory is not yet initialized.
- - A designated initializer for that class confirms that all stored properties introduced by that class have a value. The memory for these stored properties is now initialized.
- - The designated initializer hands off to a superclass initializer to perform the same task for its own stored properties.
- - This continues up the class inheritance chain until the top of the chain is reached.
- - Once the top of the chain is reached, and the final class in the chain has ensured that all of its store
- properties have a value, the instance’s memory is considered to be fully initialized, and phase 1 is complete.
- • Phase 2
- - Working back down from the top of the chain, each designated initializer in the chain has the option to
- customize the instance further. Initializers are now able to access self and can modify its properties, call its instance methods, and so on.
- - Finally, any convenience initializers in the chain have the option to customize the instance and to work with self.
- Also, keep in mind that:
- - Rule 1:If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
- - Rule 2:If your subclass provides an implementation of all of its superclass designated initializers—either by inheriting them as
- per rule 1, or by providing a custom implementation as part of its definition—then it automatically inherits all of the superclass convenience initializers.
- - NOTE: A subclass can implement a superclass designated initializer as a subclass convenience initializer as part of satisfying rule 2.
+ Enumerations with raw values automatically receive a failable initializer, init?(rawValue:), that takes a parameter called rawValue of the appropriate raw-value type and selects a matching enumeration case if one is found, or triggers an initialization failure if no matching value exists. 具有原始值的枚举会自动接收一个可用的初始化程序init？（rawValue :)，它可以使用一个名为rawValue的参数作为相应的原始值类型，如果没有匹配的值则触发初始化失败
  */
 do {
-    class Human {
-        var gender: String
-        init() {
-            self.gender = "Female"
+    enum TemperatureUnit: Character {
+        case kelvin = "K", celsius = "C", fahrenheit = "F"
+    }
+
+    let fahrenheitUnit = TemperatureUnit(rawValue: "F")
+    if fahrenheitUnit != nil {
+        print("This is a defined temperature unit, so initialization succeeded.")
+    }
+    // Prints "This is a defined temperature unit, so initialization succeeded."
+
+    let unknownUnit = TemperatureUnit(rawValue: "X")
+    if unknownUnit == nil {
+        print("This is not a defined temperature unit, so initialization failed.")
+    }
+    // Prints "This is not a defined temperature unit, so initialization failed."
+}
+
+/*:
+ ## Propagation of Initialization Failure
+
+ A failable initializer of a class, structure, or enumeration can delegate across to another failable initializer from the same class, structure, or enumeration. Similarly, a subclass failable initializer can delegate up to a superclass failable initializer.
+
+ In either case, if you delegate to another initializer that causes initialization to fail, the entire initialization process fails immediately, and no further initialization code is executed.
+
+ - NOTE:
+ A failable initializer can also delegate to a nonfailable initializer. Use this approach if you need to add a potential failure state to an existing initialization process that does not otherwise fail.
+ */
+do {
+    class Product {
+        let name: String
+        init?(name: String) {
+            if name.isEmpty { return nil }
+            self.name = name
         }
     }
-    class Person: Human {
-        var name: String
-        init(fullName name: String){
-            //Phase 1: Initialize class-defined properties and call the superclass initializer.
+
+    class CartItem: Product {
+        let quantity: Int
+        init?(name: String, quantity: Int) {
+            if quantity < 1 { return nil }
+            self.quantity = quantity
+            super.init(name: name)
+        }
+    }
+
+    if let twoSocks = CartItem(name: "sock", quantity: 2) {
+        print("Item: \(twoSocks.name), quantity: \(twoSocks.quantity)")
+    }
+    // Prints "Item: sock, quantity: 2"
+
+    if let zeroShirts = CartItem(name: "shirt", quantity: 0) {
+        print("Item: \(zeroShirts.name), quantity: \(zeroShirts.quantity)")
+    } else {
+        print("Unable to initialize zero shirts")
+    }
+    // Prints "Unable to initialize zero shirts"
+
+    if let oneUnnamed = CartItem(name: "", quantity: 1) {
+        print("Item: \(oneUnnamed.name), quantity: \(oneUnnamed.quantity)")
+    } else {
+        print("Unable to initialize one unnamed product")
+    }
+    // Prints "Unable to initialize one unnamed product"
+}
+
+/*:
+ ## Overriding a Failable Initializer
+
+ You can override a superclass failable initializer in a subclass, just like any other initializer. Alternatively, you can override a superclass failable initializer with a subclass nonfailable initializer. This enables you to define a subclass for which initialization cannot fail, even though initialization of the superclass is allowed to fail. 您可以像子类何其他初始化器一样在子类中覆盖超类可用的初始化器。 或者，您可以使用子类不可用的初始化程序覆盖超类可用的初始化程序。 这使您能够定义初始化不能失败的子类，即使允许超类的初始化失败。
+
+ Note that if you override a failable superclass initializer with a nonfailable subclass initializer, the only way to delegate up to the superclass initializer is to force-unwrap the result of the failable superclass initializer. 请注意，如果您使用非可用子类初始化程序覆盖可用的超类初始化程序，则委托到超类初始化程序的唯一方法是强制打开可用的超类初始化程序的结果。
+
+ - NOTE:
+ You can override a failable initializer with a nonfailable initializer but not the other way around. 您可以使用不可用的初始化程序覆盖可用的初始化程序，但不能相反。
+ */
+do {
+    class Document {
+        var name: String?
+        // this initializer creates a document with a nil name value
+        init() {}
+        // this initializer creates a document with a nonempty name value
+        init?(name: String) {
+            if name.isEmpty { return nil }
             self.name = name
+        }
+    }
+
+    class AutomaticallyNamedDocument: Document {
+        override init() {
             super.init()
-            //Phase 2: Further customization of local and inherited properties.
-            self.gender = "Male"
+            self.name = "[Untitled]"
         }
-        convenience init(partialName name: String){
-            //Phase 1: Call designated initializer
-            let newName = "\(name) Karmy"
-            self.init(fullName: newName)
-            //Phase 2: Access to self and properties
-            self.name = "John Karmy"
+        override init(name: String) {
+            super.init()
+            if name.isEmpty {
+                self.name = "[Untitled]"
+            } else {
+                self.name = name
+            }
         }
     }
-    do {
-        let h1 = Human()
-        let h2 = Human.init() //definitely permitted in Swift 2.0
-        h1.self
-        let person = Person(fullName: "John")
-        (person.name)
-    }
-}
 
-//: convenience init 参数不同
-do {
-    class Dog6 {
-        var name: String
-        var license: Int
-        init(name: String, license: Int) {
-            self.name = name
-            self.license = license
-        }
-        convenience init(license: Int) {
-            self.init(name: "Fido", license: license)
-        }
-    }
-    class NoisyDog6: Dog6 {
-        convenience init(name: String) {
-            self.init(name: name, license: 1)
+    class UntitledDocument: Document {
+        override init() {
+            super.init(name: "[Untitled]")!
         }
     }
 }
 
+/*:
+ ## The init! Failable Initializer
+
+ You typically define a failable initializer that creates an optional instance of the appropriate type by placing a question mark after the init keyword (init?). Alternatively, you can define a failable initializer that creates an implicitly unwrapped optional instance of the appropriate type. Do this by placing an exclamation mark after the init keyword (init!) instead of a question mark.
+
+ You can delegate from init? to init! and vice versa, and you can override init? with init! and vice versa. You can also delegate from init to init!, although doing so will trigger an assertion if the init! initializer causes initialization to fail.
+ */
+
+
+/*:
+ # Required Initializers
+
+ Write the required modifier before the definition of a class initializer to indicate that every subclass of the class must implement that initializer.
+ */
 do {
-    class Dog7 {
-        var name: String
-        var license: Int
-        init(name: String, license: Int) {
-            self.name = name
-            self.license = license
-        }
-        convenience init(license: Int) {
-            self.init(name: "Fido", license: license)
+    class SomeClass {
+        required init() {
+            // initializer implementation goes here
         }
     }
-    class NoisyDog7: Dog7 {
-        init(name: String) {
-            super.init(name: name, license: 1)
+
+    class SomeSubclass: SomeClass {
+        required init() {
+            // subclass implementation of the required initializer goes here
         }
-    }
-    do {
-        let nd1 = NoisyDog7(name: "Rover")
-        // let nd2 = NoisyDog7(name:"Fido", license:1) // compile error
-        // let nd3 = NoisyDog7(license:2) // compile error
     }
 }
 
-do {
-    class Dog8 {
-        var name : String
-        var license : Int
-        init(name: String, license: Int) {
-            self.name = name
-            self.license = license
-        }
-        convenience init(license: Int) {
-            self.init(name: "Fido", license: license)
-        }
-    }
-    class NoisyDog8 : Dog8 {
-        override init(name:String, license:Int) {
-            super.init(name: name, license: license)
-        }
-    }
-    do {
-        let nd1 = NoisyDog8(name: "Rover", license: 1)
-        let nd2 = NoisyDog8(license: 2)
-    }
-}
-//: required init
 do {
     class Dog {
         var name: String
@@ -753,290 +840,94 @@ do {
             self.obedient = obedient
             super.init(name: "Fido")
         }
-        // without this override, NoisyDog won't compile
+        /// without this override, NoisyDog won't compile
         required init(name: String) {
             super.init(name: name)
         }
     }
 }
 /*:
- Failable initializers allow us to return nil during initialization in case there was a problem.
- The object being initalized is treated as an optional.
- You can also define a failable initializer that returns an implicitly unwrapped optional instance by writing init!
- - For enums, nil can be returned at any point of initalizations
+ - NOTE:
+ You do not have to provide an explicit implementation of a required initializer if you can satisfy the requirement with an inherited initializer. 如果可以使用继承的初始化程序满足要求，则不需要提供必需的初始化程序的显式实现。
  */
-enum TemperatureUnit {
-    case Kelvin, Celsius, Fahrenheit
-    init?(symbol: Character) {
-        switch symbol {
-        case "K":
-            self = .Kelvin
-        case "C":
-            self = .Celsius
-        case "F":
-            self = .Fahrenheit
-        default:
-            return nil
-        }
-    }
-}
-//: - For class instances, nil can only be returned after initalizing all properties.
-class Product {
-    let name: String!
-    init?(name: String) {
-        self.name = name
-        if name.isEmpty { return nil }
+
+
+/*:
+ # Setting a Default Property Value with a Closure or Function
+ If a stored property’s default value requires some customization or setup, you can use a closure or global function to provide a customized default value for that property. Whenever a new instance of the type that the property belongs to is initialized, the closure or function is called, and its return value is assigned as the property’s default value. 如果存储属性的默认值需要一些自定义或设置，则可以使用闭包或全局函数为该属性提供自定义的默认值。每当初始化属性所属类型的新实例时，将调用闭包或函数，并将其返回值赋为该属性的默认值。
+
+ These kinds of closures or functions typically create a temporary value of the same type as the property, tailor that value to represent the desired initial state, and then return that temporary value to be used as the property’s default value. 这些闭包或函数通常创建与属性相同类型的临时值，将该值自定义为表示所需初始状态，然后将该临时值返回用作属性的默认值。
+ 
+ Note that the closure’s end curly brace is followed by an empty pair of parentheses. This tells Swift to execute the closure immediately. If you omit these parentheses, you are trying to assign the closure itself to the property, and not the return value of the closure. 注意闭包结束后的括号后面是一对空括号。这告诉swift立即执行闭包。如果省略这些圆括号，则试图将闭包本身赋给属性，而不是闭包的返回值。
+
+ - NOTE:
+ If you use a closure to initialize a property, remember that the rest of the instance has not yet been initialized at the point that the closure is executed. This means that you cannot access any other property values from within your closure, even if those properties have default values. You also cannot use the implicit self property, or call any of the instance’s methods. 如果使用闭包来初始化一个属性，请记住实例的其余部分在执行闭包的时候还没有被初始化。 这意味着即使这些属性具有默认值，您也不能从闭包中访问任何其他属性值。 您也不能使用隐式自身属性，也不能调用任何实例的方法。
+ 
+ FIXME: 除非 通过 self. 访问?
+ */
+do {
+    class SomeType {}
+    class SomeClass {
+        let note = "You can pre-initialize properties by running code inside a closure. Since the execution happens before all other properties are initialized, you can't access other properties nor call self inside the closure."
+        let someProperty: SomeType = {
+            let someValue = SomeType()
+            // create a default value for someProperty inside this closure
+            // someValue must be of the same type as SomeType
+            return someValue
+        }()
     }
 }
 do {
-    class Dog9 {
-        var name: String
-        var license: Int
-        init(name: String, license: Int) {
-            self.name = name
-            self.license = license
-        }
-    }
-    class NoisyDog9: Dog9 {
-        convenience init?() {
-            return nil //legal
-        }
-        init?(ok: Bool) {
-            if !ok { return nil }
-            // used to give compile error: "all stored properties... must be initialized..."
-            // now legal starting in Swift 2.2
-            super.init(name: "Fido", license: 123)
-        }
-        // illegal: init? cannot override init
-        // override init?(name:String, license:Int) {
-        // super.init(name:name, license:license)
-        // }
-        override init(name: String, license: Int) {
-            super.init(name: name, license: license)
-        }
-    }
-    class ObnoxiousDog9: NoisyDog9 {
-        // legal, init can override init?
-        override init(ok: Bool) {
-            super.init(name: "Fido", license: 123)
-        }
-    }
-    class CrazyDog9: NoisyDog9 {
-        override init(ok: Bool) {
-            super.init(ok: ok)! // legal: call super's designated init? without ? and by adding !
-        }
-    }
-}
-/*:
- You can pre-initialize properties by running code inside a closure. Since the execution happens before all other properties are initialized,
- you can't access other properties nor call self inside the closure.
- */
-struct Checkerboard {
-    let boardColors: [Bool] = {
-        var temporaryBoard = [Bool]()
-        var isBlack = false
-        for i in 1...10 {
-            for j in 1...10 {
-                temporaryBoard.append(isBlack)
+    /// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/chessBoard_2x.png
+    struct Chessboard {
+        let boardColors: [Bool] = {
+            var temporaryBoard = [Bool]()
+            var isBlack = false
+            for i in 1...8 {
+                for j in 1...8 {
+                    temporaryBoard.append(isBlack)
+                    isBlack = !isBlack
+                }
                 isBlack = !isBlack
             }
-            isBlack = !isBlack
+            return temporaryBoard
+        }()
+        func squareIsBlackAt(row: Int, column: Int) -> Bool {
+            return boardColors[(row * 8) + column]
         }
-        return temporaryBoard
-    }() //Note that these parenthesis indicate that you want to run the closure immediately.
-    func squareIsBlackAtRow(row: Int, column: Int) -> Bool {
-        return boardColors[(row * 10) + column]
     }
+
+    let board = Chessboard()
+    print(board.squareIsBlackAt(row: 0, column: 1))
+    // Prints "true"
+    print(board.squareIsBlackAt(row: 7, column: 7))
+    // Prints "false"
 }
 
-let bodyTemperature = Celsius(37.0)
-((bodyTemperature.temperatureInCelsius))
-let other = Other(temp: 20, otherProp: 10)
-(other.otherProp)
-if let product = Product(name: "Apple"){
-    ("Product is not nil. Names \(product.name)")
-}
-//: ### Example
-struct DigitFailable {
-    var number : Int
-    var meaningOfLife : Bool
-    init?(number:Int) {
-        if number != 42 {
-            return nil // early exit is legal for a struct in Swift 2.0
-        }
-        self.number = number
-        self.meaningOfLife = false
-    }
-}
+
+//: # Example
+
 //: ## conditional Initialization
-// showing that Swift no longer warns when AnyObject is implicitly assigned
-let arr = [1 as AnyObject, "howdy" as AnyObject]
-let thing = arr[0] // in Swift 1.2 and before we'd get a warning here
-_ = thing
-
-// var opts = [.Autoreverse, .Repeat] // compile error
-let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
-_ = opts
-var dothis = false
-if dothis {
-    let asset = AVAsset()
-    let track = asset.tracks[0]
-    let duration : CMTime = track.timeRange.duration
-    _ = duration
-}
-
-// wrapped in a function so that `val` is unknown to the compiler
-func conditionalInitializationExample(val:Int) {
-    let timed : Bool
-    if val == 1 {
-        timed = true
-    } else {
-        timed = false
-    }
-    _ = timed
-}
-
-// but in that case I would rather use a computed initializer:
-func computedInitializerExample(val:Int) {
-    let timed : Bool = {
-        if val == 1 {
-            return true
-        } else {
-            return false
+do {
+    struct DigitFailable {
+        var number : Int
+        var meaningOfLife : Bool
+        init?(number:Int) {
+            if number != 42 {
+                return nil
+            }
+            self.number = number
+            self.meaningOfLife = false
         }
-    }()
-    _ = timed
-}
-
-func btiExample() {
-    /*
-     do {
-     let bti = UIApplication.sharedApplication()
-     .beginBackgroundTaskWithExpirationHandler({
-     UIApplication.sharedApplication().endBackgroundTask(bti)
-     }) // error: variable used within its own initial value
-     }
-     */
-    /*
-     do {
-     var bti : UIBackgroundTaskIdentifier
-     bti = UIApplication.sharedApplication()
-     .beginBackgroundTaskWithExpirationHandler({
-     UIApplication.sharedApplication().endBackgroundTask(bti)
-     }) // error: variable captured by a closure before being initialized
-     }
-     */
-    do {
-        var bti : UIBackgroundTaskIdentifier = 0
-        bti = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-            UIApplication.shared.endBackgroundTask(bti)
-        })
     }
 }
 
-//: ### Example
-class Dog {
+do {
+    /// showing that Swift no longer warns when AnyObject is implicitly assigned
+    let arr = [1 as AnyObject, "howdy" as AnyObject]
+    let thing = arr[0]
+    _ = thing
+
+    // var opts = [.Autoreverse, .Repeat] // compile error
+    let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
 }
-
-class Dog2 {
-    var name = ""
-    var license = 0
-    init() {
-    }
-    init(name:String) {
-        self.name = name
-    }
-    init(license:Int) {
-        self.license = license
-    }
-    init(name:String, license:Int) {
-        self.name = name
-        self.license = license
-    }
-}
-
-class Dog4 {
-    //    var name = ""
-    //    var license = 0
-    var name : String // no default value!
-    var license : Int // no default value!
-    init(name:String = "", license:Int = 0) {
-        self.name = name
-        self.license = license
-    }
-}
-
-//Error: initalizer without initializing all stored properties
-// class Dog5not {
-// var name : String
-// var license : Int
-// init(name:String = "") {
-// self.name = name  }
-// }
-
-class DogReal {
-    let name : String
-    let license : Int
-    init(name:String, license:Int) {
-        self.name = name
-        self.license = license
-    }
-}
-
-
-struct Cat {
-    var name : String
-    var license : Int
-    init(name:String, license:Int) {
-        self.name = name
-        // meow() // too soon - compile error
-        self.license = license
-    }
-    func meow() {
-        print("meow")
-    }
-}
-
-struct Digit {
-    var number : Int
-    var meaningOfLife : Bool
-    // let meaningOfLife : Bool // would be legal but delegating initializer cannot set it
-    init(number:Int) {
-        self.number = number
-        self.meaningOfLife = false
-    }
-    init() { // delegating initializer
-        self.init(number:42)
-        self.meaningOfLife = true
-    }
-}
-
-struct Digit2 { // I regard the legality of this as a compiler bug
-    var number : Int = 100
-    init(value:Int) {
-        self.init(number:value)
-    }
-    init(number:Int) {
-        self.init(value:number)
-    }
-}
-
-class DogFailable {
-    let name : String
-    let license : Int
-    init!(name:String, license:Int) {
-        if name.isEmpty {
-            return nil // early exit is legal for a class in Swift 2.2
-        }
-        if license <= 0 {
-            return nil
-        }
-        self.name = name
-        self.license = license
-    }
-}
-
-/*:
- ***
- [Next](@next)
- */
