@@ -71,7 +71,29 @@ do {
         print("Not a safe place for humans")
     }
 }
-
+do {
+    do {
+        enum Shape {
+            case rectangle
+            case ellipse
+            case diamond
+            func addShape (to p: CGMutablePath, in r : CGRect) -> () {
+                switch self {
+                case .rectangle:
+                    p.addRect(r)
+                case .ellipse:
+                    p.addEllipse(in:r)
+                case .diamond:
+                    p.move(to: CGPoint(x:r.minX, y:r.midY))
+                    p.addLine(to: CGPoint(x: r.midX, y: r.minY))
+                    p.addLine(to: CGPoint(x: r.maxX, y: r.midY))
+                    p.addLine(to: CGPoint(x: r.midX, y: r.maxY))
+                    p.closeSubpath()
+                }
+            }
+        }
+    }
+}
 //: # Associated Values 关联值
 /*:
  显式定义枚举成员

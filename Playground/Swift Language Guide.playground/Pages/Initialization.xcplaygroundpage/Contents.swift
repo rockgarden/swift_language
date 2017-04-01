@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 import UIKit
 import AVFoundation
+import MediaPlayer
 /*: 
  # Initialization 初始化
  Initialization is the process of preparing an instance of a class, structure, or enumeration for use. This process involves setting an initial value for each stored property on that instance and performing any other setup or initialization that is required before the new instance is ready for use.
@@ -707,6 +708,82 @@ do {
     // Prints "This is not a defined temperature unit, so initialization failed."
 }
 
+do {
+    enum Filter : String {
+        case albums = "Albums"
+        case playlists = "Playlists"
+        case podcasts = "Podcasts"
+        case books = "Audiobooks"
+
+        static var cases : [Filter] = [.albums, .playlists, .podcasts, .books]
+
+        init?(_ index:Int) {
+            if !(0...3).contains(index) {
+                return nil
+            }
+            self = Filter.cases[index]
+        }
+
+        init?(_ rawValue:String) {
+            self.init(rawValue:rawValue)
+        }
+
+        var description : String { return self.rawValue }
+
+        var s: String {
+            get {
+                return "howdy"
+            }
+            set {}
+        }
+
+        mutating func advance() {
+            var i = Filter.cases.index(of:self)!
+            i = (i + 1) % 4
+            self = Filter.cases[i]
+        }
+
+        var query : MPMediaQuery {
+            switch self {
+            case .albums:
+                return .albums()
+            case .playlists:
+                return .playlists()
+            case .podcasts:
+                return .podcasts()
+            case .books:
+                return .audiobooks()
+            }
+        }
+    }
+
+    let type1 = Filter.albums
+    let type2 = Filter(rawValue:"Playlists")!
+    let type3 = Filter(2)
+    let type4 = Filter(5) //nil
+
+    do {
+        /// compile error
+        var type5 = Filter("Playlists")
+
+        /// warning: expression implicitly coerced from 'String?' to Any
+        print(type5?.description)
+
+        /// error: use of unresolved identifier 'type5'
+        //type5.s = "test"
+
+        /// right
+        type5?.s = "test"
+    }
+
+
+    var type6 = type2
+    type6.s = "test"
+
+    var type7 = Filter.books
+    type7.advance()
+}
+
 /*:
  ## Propagation of Initialization Failure
 
@@ -904,6 +981,22 @@ do {
     // Prints "false"
 }
 
+do {
+    func imageOfSize(_ size:CGSize, _ whatToDraw:() -> ()) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        whatToDraw()
+        let result = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return result
+    }
+
+    let cellBackgroundImage : UIImage = {
+        return imageOfSize(CGSize(width:320, height:44)) {
+            // ... drawing goes here ...
+        }
+    }()
+}
+
 
 //: # Example
 
@@ -931,3 +1024,4 @@ do {
     // var opts = [.Autoreverse, .Repeat] // compile error
     let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
 }
+
