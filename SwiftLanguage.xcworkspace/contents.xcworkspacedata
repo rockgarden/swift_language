@@ -61,5 +61,8 @@
       <FileRef
          location = "group:SwiftAndCPlayground.playground">
       </FileRef>
+      <FileRef
+         location = "group:Swift Language Reference.playground">
+      </FileRef>
    </Group>
 </Workspace>

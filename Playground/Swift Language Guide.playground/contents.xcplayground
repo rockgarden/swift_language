@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' display-mode='rendered' executeOnSourceChanges='false' last-migration='0810'>
+<playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false' last-migration='0810'>
     <pages>
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
@@ -7,6 +7,7 @@
         <page name='Closures'/>
         <page name='Enumerations'/>
         <page name='Classes and Structs'/>
+        <page name='Properties'/>
         <page name='Methods'/>
         <page name='Inheritance'/>
         <page name='Initialization'/>
@@ -43,7 +44,6 @@
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>
         <page name='Associated Types'/>
-        <page name='Function'/>
         <page name='guard'/>
         <page name='defer'/>
         <page name='Higher Order Functions'/>
