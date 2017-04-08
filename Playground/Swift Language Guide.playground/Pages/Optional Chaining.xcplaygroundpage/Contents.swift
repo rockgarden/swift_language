@@ -1,57 +1,67 @@
 //: [Previous](@previous)
-
-//: # Optional Chaining
-
 import UIKit
-
 /*:
- ## Optional Chaining as an Alternative to Forced Unwrapping
- The main difference is that optional chaining fails gracefully when the optional is nil,
- whereas forced unwrapping triggers a runtime error when the optional is nil.
- The result of an optional chaining call is always an optional value, even if the property,
- method, or subscript you are querying returns a nonoptional value.
- Specifically, the result of an optional chaining call is of the same type as the expected return value, but wrapped in an optional.
+ # Optional Chaining
+ Optional chaining is a process for querying and calling properties, methods, and subscripts on an optional that might currently be nil. If the optional contains a value, the property, method, or subscript call succeeds; if the optional is nil, the property, method, or subscript call returns nil. Multiple queries can be chained together, and the entire chain fails gracefully if any link in the chain is nil.
+
+ - NOTE:
+ Optional chaining in Swift is similar to messaging nil in Objective-C, but in a way that works for any type, and that can be checked for success or failure. Swift中的可选链接类似于Objective-C中的消息传递，但以某种方式适用于任何类型，并且可以检查成功或失败。
+
+
+ # Optional Chaining as an Alternative to Forced Unwrapping
+
+ 可选链接作为强制展开的替代方案
+
+ You specify optional chaining by placing a question mark (?) after the optional value on which you wish to call a property, method or subscript if the optional is non-nil. This is very similar to placing an exclamation mark (!) after an optional value to force the unwrapping of its value. The main difference is that optional chaining fails gracefully when the optional is nil, whereas forced unwrapping triggers a runtime error when the optional is nil. 您可以在可选的值（？）之后放置一个问号（？）来指定可选链接，如果可选的值为非零，则可以调用属性，方法或下标。这与在可选值之后放置感叹号（！）非常相似，以强制解除其值。主要区别在于可选链接在可选项为nil时正常失败，而当可选为nil时，强制解除触发器会触发运行时错误。
+
+ To reflect the fact that optional chaining can be called on a nil value, the result of an optional chaining call is always an optional value, even if the property, method, or subscript you are querying returns a nonoptional value. You can use this optional return value to check whether the optional chaining call was successful (the returned optional contains a value), or did not succeed due to a nil value in the chain (the returned optional value is nil). 为了反映可以在nil值上调用可选链接的事实，可选链接调用的结果始终是可选的值，即使正在查询的属性，方法或下标返回非可选值。您可以使用此可选返回值来检查可选链接调用是否成功（返回的可选项包含值）或由于链中的零值（返回的可选值为nil）而未成功。
+
+ Specifically, the result of an optional chaining call is of the same type as the expected return value, but wrapped in an optional. A property that normally returns an Int will return an Int? when accessed through optional chaining. 具体来说，可选链接调用的结果与预期返回值的类型相同，但是包含在可选项中。通常返回Int的属性将返回Int？当通过可选链接访问时。
+
+ The next several code snippets demonstrate how optional chaining differs from forced unwrapping and enables you to check for success.
  */
-//: like this:
-class ViewController: UIViewController {
-    override func viewDidLoad() {
-        // longer chain - still just one Optional results
-        _ = self.view.window?.rootViewController?.view.frame
+
+do {
+    class Person {
+        var residence: Residence?
+    }
+
+    class Residence {
+        var numberOfRooms = 1
+    }
+
+    let john = Person()
+    //let roomCount = john.residence!.numberOfRooms
+
+    if let roomCount = john.residence?.numberOfRooms {
+        print("John's residence has \(roomCount) room(s).")
+    } else {
+        print("Unable to retrieve the number of rooms.")
+    }
+    // Prints "Unable to retrieve the number of rooms."
+
+    john.residence = Residence()
+    if let roomCount = john.residence?.numberOfRooms {
+        print("John's residence has \(roomCount) room(s).")
+    } else {
+        print("Unable to retrieve the number of rooms.")
+    }
+    // Prints "John's residence has 1 room(s)."
+}
+do {
+    class ViewController: UIViewController {
+        override func viewDidLoad() {
+            // longer chain - still just one Optional results
+            _ = self.view.window?.rootViewController?.view.frame
+        }
     }
 }
 
-class Person {
-    var residence: Residence?
-}
-
-class Residence {
-    var numberOfRooms = 1
-}
-
-let john = Person()
-//: 下一句将产生run-time error: Unwrapping the "residence" property, which is an optional, and its value is nil
-//let roomCount = john.residence!.numberOfRooms
-
-//: Doing it with optional chaining
-if let roomCount = john.residence?.numberOfRooms {
-    roomCount
-    ("John's residence has \(roomCount) room(s).")
-} else {
-    ("Unable to retrieve the number of rooms.")
-}
-
-john.residence = Residence()
-
-if let roomCount = john.residence?.numberOfRooms {
-    ("John's residence has \(roomCount) room(s).")
-} else {
-    ("Unable to retrieve the number of rooms.")
-}
 
 /*:
- ## Defining Model Classes for Optional Chaining
+ # Defining Model Classes for Optional Chaining
+ You can use optional chaining with calls to properties, methods, and subscripts that are more than one level deep. This enables you to drill down into subproperties within complex models of interrelated types, and to check whether it is possible to access properties, methods, and subscripts on those subproperties. 您可以使用可选链接调用多个级别的属性，方法和下标。 这使您能够深入到相关类型的复杂模型中的子属性，并检查是否可以访问这些子属性的属性，方法和下标。
  */
-
 class OtherPerson {
     var residence: OtherResidence?
 }
@@ -84,11 +94,12 @@ class Address {
     var buildingName: String?
     var buildingNumber: String?
     var street: String?
+
     func buildingIdentifier() -> String? {
-        if buildingName != nil {
-            return buildingName
-        } else if buildingNumber != nil && street != nil {
+        if let buildingNumber = buildingNumber, let street = street {
             return "\(buildingNumber) \(street)"
+        } else if buildingName != nil {
+            return buildingName
         } else {
             return nil
         }
@@ -98,6 +109,14 @@ class Address {
 var otherResidence = OtherResidence()
 otherResidence.rooms.append(Room(name: "Living Room"))
 var room = otherResidence[0]
+
+
+
+
+
+
+
+
 
 /*:
  ## Accessing Properties Through Optional Chaining
