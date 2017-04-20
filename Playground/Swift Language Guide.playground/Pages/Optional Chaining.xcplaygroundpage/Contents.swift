@@ -21,15 +21,16 @@ import UIKit
  The next several code snippets demonstrate how optional chaining differs from forced unwrapping and enables you to check for success.
  */
 
+
+class Person {
+    var residence: Residence?
+}
+
+class Residence {
+    var numberOfRooms = 1
+}
+
 do {
-    class Person {
-        var residence: Residence?
-    }
-
-    class Residence {
-        var numberOfRooms = 1
-    }
-
     let john = Person()
     //let roomCount = john.residence!.numberOfRooms
 
@@ -111,119 +112,161 @@ otherResidence.rooms.append(Room(name: "Living Room"))
 var room = otherResidence[0]
 
 
-
-
-
-
-
-
-
 /*:
- ## Accessing Properties Through Optional Chaining
+ # Accessing Properties Through Optional Chaining
  */
+let john = OtherPerson()
+do {
+    if let roomCount = john.residence?.numberOfRooms {
+        print("John's residence has \(roomCount) room(s).")
+    } else {
+        print("Unable to retrieve the number of rooms.")
+    }
 
-let bob = OtherPerson()
-
-if let roomCount = bob.residence?.numberOfRooms {
-    ("John's residence has \(roomCount) room(s).")
-} else {
-    ("Unable to retrieve the number of rooms.")
-}
-
-/*:
- In next example, the attempt to set the address property of john.residence will fail, because john.residence is currently nil.
- The assignment is part of the optional chaining, which means none of the code on the right hand side of the = operator is evaluated.
- */
-
-let someAddress = Address()
-someAddress.buildingNumber = "29"
-someAddress.street = "Acacia Road"
-bob.residence?.address = someAddress
-
-func createAddress() -> Address {
-    print("Function was called.")
-    
     let someAddress = Address()
     someAddress.buildingNumber = "29"
     someAddress.street = "Acacia Road"
-    
-    return someAddress
+    john.residence?.address = someAddress
 }
-
-bob.residence?.address = createAddress() //不执行createAddress()
-bob.residence = otherResidence
-bob.residence?.address = createAddress() //now run createAddress()
-
 /*:
- If you call this method on an optional value with optional chaining, the method’s return type will be Void?, not Void, because return values are always of an optional type when called through optional chaining.
- This enables you to use an if statement to check whether it was possible to call the printNumberOfRooms() method, even though the method does not itself define a return value.
+ The assignment is part of the optional chaining, which means none of the code on the right hand side of the = operator is evaluated. In the previous example, it’s not easy to see that someAddress is never evaluated, because accessing a constant doesn’t have any side effects. The listing below does the same assignment, but it uses a function to create the address. The function prints “Function was called” before returning a value, which lets you see whether the right hand side of the = operator was evaluated.
  */
+do {
+    func createAddress() -> Address {
+        print("Function was called.")
 
-if let void = bob.residence?.printNumberOfRooms() {
-    ("It was possible to print the number of rooms.")
-    bob.residence?.numberOfRooms
-} else {
-    ("It was not possible to print the number of rooms.")
-}
+        let someAddress = Address()
+        someAddress.buildingNumber = "29"
+        someAddress.street = "Acacia Road"
 
-/*:
- Any attempt to set a property through optional chaining returns a value of type Void?, which enables you to compare against nil to see if the property was set successfully:
- */
-
-if (bob.residence?.address = someAddress) != nil {
-    ("It was possible to set the address.")
-} else {
-    ("It was not possible to set the address.")
-}
-
-/*:
- ## Accessing Subscripts Through Optional Chaining
- */
-
-if let firstRoomName = bob.residence?[0].name {
-    ("The first room name is \(firstRoomName).")
-} else {
-    ("Unable to retrieve the first room name.")
-}
-
-bob.residence?.rooms.append(Room(name: "Bathroom"))
-
-
-/*:
- Accessing Subscripts of Optional Type
- */
-
-var testScores = ["Dave": [86, 82, 84], "Bev": [79, 94, 81]]
-testScores["Dave"]?[0] = 91
-testScores["Bev"]?[0] += 1
-testScores["Brian"]?[0] = 72
-
-// the "Dave" array is now [91, 82, 84] and the "Bev" array is now [80, 94, 81]
-testScores["Dave"]
-testScores["Bev"]
-
-/*:
- - If you try to retrieve an Int value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used.
- - Similarly, if you try to retrieve an Int? value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used.
- */
-
-if let bobsStreet = bob.residence?.address?.street {
-    ("Bob's street name is \(bobsStreet).")
-} else {
-    ("Unable to retrieve the address.")
-}
-
-/*:
- Chaining on Methods with Optional Return Values
- */
-
-if let beginsWithThe =
-    bob.residence?.address?.buildingIdentifier()?.hasPrefix("The") {
-    if beginsWithThe {
-        ("John's building identifier begins with \"The\".")
-    } else {
-        ("John's building identifier does not begin with \"The\".")
+        return someAddress
     }
+    /// You can tell that the createAddress() function isn’t called, because nothing is printed.
+    john.residence?.address = createAddress()
 }
+
+
+/*:
+ # Calling Methods Through Optional Chaining
+ */
+do {
+    let numberOfRooms = john.residence?.numberOfRooms
+    func printNumberOfRooms() {
+        print("The number of rooms is \(numberOfRooms)")
+    }
+
+    if john.residence?.printNumberOfRooms() != nil {
+        print("It was possible to print the number of rooms.")
+    } else {
+        print("It was not possible to print the number of rooms.")
+    }
+    // Prints "It was not possible to print the number of rooms."
+}
+
+/*:
+ # Accessing Subscripts Through Optional Chaining
+ You can use optional chaining to try to retrieve and set a value from a subscript on an optional value, and to check whether that subscript call is successful.
+ - NOTE:
+ When you access a subscript on an optional value through optional chaining, you place the question mark before the subscript’s brackets, not after. The optional chaining question mark always follows immediately after the part of the expression that is optional. 当您通过可选链接访问可选值的下标时，将问号放在下标的括号之前，而不是之后。 可选的链接问号总是紧跟在可选的表达式的部分之后。
+ */
+do {
+    if let firstRoomName = john.residence?[0].name {
+        print("The first room name is \(firstRoomName).")
+    } else {
+        print("Unable to retrieve the first room name.")
+    }
+    // Prints "Unable to retrieve the first room name."
+
+    john.residence?[0] = Room(name: "Bathroom") //This subscript setting attempt also fails, because residence is currently nil.
+}
+do {
+    let johnsHouse = OtherResidence()
+    johnsHouse.rooms.append(Room(name: "Living Room"))
+    johnsHouse.rooms.append(Room(name: "Kitchen"))
+    john.residence = johnsHouse
+
+    if let firstRoomName = john.residence?[0].name {
+        print("The first room name is \(firstRoomName).")
+    } else {
+        print("Unable to retrieve the first room name.")
+    }
+    // Prints "The first room name is Living Room."
+}
+/*:
+ ## Accessing Subscripts of Optional Type
+ If a subscript returns a value of optional type—such as the key subscript of Swift’s Dictionary type—place a question mark after the subscript’s closing bracket to chain on its optional return value: 如果下标返回可选类型的值，例如Swift字典类型的键下标，则在下标的关闭括号之后放置一个问号，以链接其可选返回值：
+ */
+do {
+    var testScores = ["Dave": [86, 82, 84], "Bev": [79, 94, 81]]
+    testScores["Dave"]?[0] = 91
+    testScores["Bev"]?[0] += 1
+    testScores["Brian"]?[0] = 72
+    // the "Dave" array is now [91, 82, 84] and the "Bev" array is now [80, 94, 81]
+    print(testScores)
+}
+
+/*:
+ # Linking Multiple Levels of Chaining
+ You can link together multiple levels of optional chaining to drill down to properties, methods, and subscripts deeper within a model. However, multiple levels of optional chaining do not add more levels of optionality to the returned value. 您可以链接多个级别的可选链接，以深入了解模型中更深入的属性，方法和下标。 但是，多级可选链接不会为返回值添加更多级别的可选性。
+
+ To put it another way:
+
+ - If the type you are trying to retrieve is not optional, it will become optional because of the optional chaining. 如果您尝试检索的类型不是可选的，则由于可选链接，它将变为可选项。
+ - If the type you are trying to retrieve is already optional, it will not become more optional because of the chaining. 如果您尝试检索的类型已经是可选的，则由于链接，它不会变得更加可选
+ 
+ Therefore:
+
+ - If you try to retrieve an Int value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used. 如果您尝试通过可选链接检索Int值，Int？ 总是返回，无论使用多少级别的链接。
+ - Similarly, if you try to retrieve an Int? value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used. 同样，如果您尝试检索Int？ 价值通过可选链接，一个Int？ 总是返回，无论使用多少级别的链接。
+ */
+do {
+    if let johnsStreet = john.residence?.address?.street {
+        print("John's street name is \(johnsStreet).")
+    } else {
+        print("Unable to retrieve the address.")
+    }
+    // Prints "Unable to retrieve the address."
+}
+do {
+    let johnsAddress = Address()
+    johnsAddress.buildingName = "The Larches"
+    johnsAddress.street = "Laurel Street"
+    john.residence?.address = johnsAddress
+
+    if let johnsStreet = john.residence?.address?.street {
+        print("John's street name is \(johnsStreet).")
+    } else {
+        print("Unable to retrieve the address.")
+    }
+    // Prints "John's street name is Laurel Street."
+}
+
+/*:
+ # Chaining on Methods with Optional Return Values
+ You can also use optional chaining to call a method that returns a value of optional type, and to chain on that method’s return value if needed. 您还可以使用可选链接来调用返回可选类型值的方法，并根据需要链接该方法的返回值。
+ */
+do {
+    if let buildingIdentifier = john.residence?.address?.buildingIdentifier() {
+        print("John's building identifier is \(buildingIdentifier).")
+    }
+    // Prints "John's building identifier is The Larches."
+}
+//: If you want to perform further optional chaining on this method’s return value, place the optional chaining question mark after the method’s parentheses:
+do {
+    if let beginsWithThe =
+        john.residence?.address?.buildingIdentifier()?.hasPrefix("The") {
+        if beginsWithThe {
+            print("John's building identifier begins with \"The\".")
+        } else {
+            print("John's building identifier does not begin with \"The\".")
+        }
+    }
+    // Prints "John's building identifier begins with "The"."
+}
+/*:
+ - NOTE:
+ In the example above, you place the optional chaining question mark after the parentheses, because the optional value you are chaining on is the buildingIdentifier() method’s return value, and not the buildingIdentifier() method itself.
+ */
+
 
 //: [Next](@next)
