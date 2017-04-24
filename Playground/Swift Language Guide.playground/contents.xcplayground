@@ -19,10 +19,11 @@
         <page name='Nested Types'/>
         <page name='Extensions'/>
         <page name='Protocols'/>
+        <page name='Generics'/>
         <page name='Advanced Operators'/>
+        <page name='Access Control'/>
         <page name='Basics'/>
         <page name='Instance'/>
-        <page name='Access Control'/>
         <page name='annotation'/>
         <page name='operator'/>
         <page name='boolAndNumbers'/>
@@ -41,8 +42,6 @@
         <page name='Define and call'/>
         <page name='didSet'/>
         <page name='ErrorType'/>
-        <page name='Error_Handling'/>
-        <page name='Generics'/>
         <page name='Generics where clause'/>
         <page name='Generics Functions'/>
         <page name='Associated Types'/>
@@ -61,5 +60,6 @@
         <page name='Summary'/>
         <page name='Untitled Page'/>
         <page name='Untitled Page 3'/>
+        <page name='Error Handling'/>
     </pages>
 </playground>
