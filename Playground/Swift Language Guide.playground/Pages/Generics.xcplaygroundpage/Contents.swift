@@ -240,13 +240,94 @@ do {
     // doubleIndex is an optional Int with no value, because 9.3 isn't in the array
     let stringIndex = findIndex(of: "Andrea", in: ["Mike", "Malcolm", "Andrea"])
     // stringIndex is an optional Int containing a value of 2
-
 }
 
+/*:
+ # Associated Types
 
+ When defining a protocol, it is sometimes useful to declare one or more associated types as part of the protocol’s definition. An associated type gives a placeholder name to a type that is used as part of the protocol. The actual type to use for that associated type isn’t specified until the protocol is adopted. Associated types are specified with the associatedtype keyword. 在定义协议时，有时将一个或多个关联类型声明为协议定义的一部分是有用的。 关联类型为作为协议一部分使用的类型提供占位符名称。 在采用协议之前，不会指定用于该关联类型的实际类型。 关联类型使用associatedtype关键字指定。
 
+ ## Associated Types in Action
+ 
+*/
+protocol Container {
+    associatedtype Item
+    mutating func append(_ item: Item)
+    var count: Int { get }
+    subscript(i: Int) -> Item { get }
+}
+/*:
+ The Container protocol defines three required capabilities that any container must provide:
 
+ - It must be possible to add a new item to the container with an append(_:) method.
+ - It must be possible to access a count of the items in the container through a count property that returns an Int value.
+ - It must be possible to retrieve each item in the container with a subscript that takes an Int index value.
+ 
+ This protocol doesn’t specify how the items in the container should be stored or what type they are allowed to be. The protocol only specifies the three bits of functionality that any type must provide in order to be considered a Container. A conforming type can provide additional functionality, as long as it satisfies these three requirements. 该协议不指定应该如何存储容器中的项目或者允许的类型。该协议仅指定任何类型必须提供的功能的三位，以便被视为容器。只要满足这三个要求，一致的类型可以提供附加的功能。
 
+ Any type that conforms to the Container protocol must be able to specify the type of values it stores. Specifically, it must ensure that only items of the right type are added to the container, and it must be clear about the type of the items returned by its subscript.
+
+ To define these requirements, the Container protocol needs a way to refer to the type of the elements that a container will hold, without knowing what that type is for a specific container. The Container protocol needs to specify that any value passed to the append(_:) method must have the same type as the container’s element type, and that the value returned by the container’s subscript will be of the same type as the container’s element type. 要定义这些要求，容器协议需要一种方法来引用容器将要容纳的元素的类型，而不需要知道特定容器的类型。 Container协议需要指定传递给append（_ :)方法的任何值必须与容器的元素类型具有相同的类型，容器下标返回的值与容器的元素类型的类型相同。
+
+ To achieve this, the Container protocol declares an associated type called Item, written as associatedtype Item. The protocol doesn’t define what Item is—that information is left for any conforming type to provide. Nonetheless, the Item alias provides a way to refer to the type of the items in a Container, and to define a type for use with the append(_:) method and subscript, to ensure that the expected behavior of any Container is enforced. 为了实现这一点，Container协议声明一个名为Item的关联类型，写成关联类型项。该协议没有定义什么项目 - 该信息留给任何符合类型的提供。尽管如此，Item别名提供了一种方法来引用Container中的项目类型，并定义了一个用于附加（_ :)方法和下标的类型，以确保强制执行任何Container的预期行为。
+ */
+do {
+    struct IntStack: Container {
+        /// original IntStack implementation
+        var items = [Int]()
+        mutating func push(_ item: Int) {
+            items.append(item)
+        }
+        mutating func pop() -> Int {
+            return items.removeLast()
+        }
+
+        /// conformance to the Container protocol
+        typealias Item = Int
+        mutating func append(_ item: Int) {
+            self.push(item)
+        }
+        var count: Int {
+            return items.count
+        }
+        subscript(i: Int) -> Int {
+            return items[i]
+        }
+    }
+}
+
+do {
+    struct Stack<Element>: Container {
+        /// original Stack<Element> implementation
+        var items = [Element]()
+        mutating func push(_ item: Element) {
+            items.append(item)
+        }
+        mutating func pop() -> Element {
+            return items.removeLast()
+        }
+
+        /// conformance to the Container protocol
+        mutating func append(_ item: Element) {
+            self.push(item)
+        }
+        var count: Int {
+            return items.count
+        }
+        subscript(i: Int) -> Element {
+            return items[i]
+        }
+    }
+}
+/*:
+ ## Extending an Existing Type to Specify an Associated Type
+
+ You can extend an existing type to add conformance to a protocol, as described in Adding Protocol Conformance with an Extension. This includes a protocol with an associated type.
+
+ Swift’s Array type already provides an append(_:) method, a count property, and a subscript with an Int index to retrieve its elements. These three capabilities match the requirements of the Container protocol. This means that you can extend Array to conform to the Container protocol simply by declaring that Array adopts the protocol. You do this with an empty extension, as described in Declaring Protocol Adoption with an Extension:
+ 
+    extension Array: Container {}
+ */
 
 
 //: http://docs.scala-lang.org/tutorials/tour/abstract-types.html

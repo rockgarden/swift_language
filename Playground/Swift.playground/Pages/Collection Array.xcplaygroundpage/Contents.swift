@@ -1,16 +1,6 @@
 //: [Previous](@previous)
 import Foundation
 //: # Array
-do {
-    var arr = [Int]()
-    _ = arr
-    arr = []
-    
-    let rs = Array(1...3)
-    let chars = Array("howdy".characters)
-    let kvs = Array(["hey": "ho", "nonny": "nonny no"])
-    let strings: [String?] = Array(repeating: nil, count: 10)
-}
 
 //: Array map
 do {

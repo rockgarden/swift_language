@@ -150,6 +150,10 @@ do {
     filtered
     a10.filter { $0 == 3 }.count > 0
     a10.contains(11) == true
+
+    let chars = Array("howdy".characters)
+    let kvs = Array(["hey": "ho", "nonny": "nonny no"])
+    let strings: [String?] = Array(repeating: nil, count: 10)
 }
 
 /*:
