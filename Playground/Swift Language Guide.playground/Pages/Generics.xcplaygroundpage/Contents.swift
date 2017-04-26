@@ -5,6 +5,14 @@
 
  Generics are one of the most powerful features of Swift, and much of the Swift standard library is built with generic code. In fact, you’ve been using generics throughout the Language Guide, even if you didn’t realize it. For example, Swift’s Array and Dictionary types are both generic collections. You can create an array that holds Int values, or an array that holds String values, or indeed an array for any other type that can be created in Swift. Similarly, you can create a dictionary to store values of any specified type, and there are no limitations on what that type can be.
  */
+do {
+    /// 带范型的类
+    class Wat<T> {}
+    /// 带范型的结构体
+    struct WatWat<T> {}
+    /// 带范型的枚举
+    enum GoodDaySir<T> {}
+}
 /*:
  # The Problem That Generics Solve
 
@@ -134,6 +142,7 @@ do {
 
 /// generic version
 struct Stack<Element> {
+    /// original Stack<Element> implementation
     var items = [Element]()
     mutating func push(_ item: Element) {
         items.append(item)
@@ -144,15 +153,17 @@ struct Stack<Element> {
 }
 
 var stackOfStrings = Stack<String>()
-stackOfStrings.push("uno")
-stackOfStrings.push("dos")
-stackOfStrings.push("tres")
-stackOfStrings.push("cuatro")
-// the stack now contains 4 strings
 
-let fromTheTop = stackOfStrings.pop()
-// fromTheTop is equal to "cuatro", and the stack now contains 3 strings
+do {
+    stackOfStrings.push("uno")
+    stackOfStrings.push("dos")
+    stackOfStrings.push("tres")
+    stackOfStrings.push("cuatro")
+    // the stack now contains 4 strings
 
+    let fromTheTop = stackOfStrings.pop()
+    // fromTheTop is equal to "cuatro", and the stack now contains 3 strings
+}
 
 /*:
  # Extending a Generic Type
@@ -168,10 +179,12 @@ extension Stack {
     }
 }
 
-if let topItem = stackOfStrings.topItem {
-    print("The top item on the stack is \(topItem).")
+do {
+    if let topItem = stackOfStrings.topItem {
+        print("The top item on the stack is \(topItem).")
+    }
+    // Prints "The top item on the stack is tres."
 }
-// Prints "The top item on the stack is tres."
 
 /*:
  # Type Constraints
@@ -247,6 +260,9 @@ do {
 
  When defining a protocol, it is sometimes useful to declare one or more associated types as part of the protocol’s definition. An associated type gives a placeholder name to a type that is used as part of the protocol. The actual type to use for that associated type isn’t specified until the protocol is adopted. Associated types are specified with the associatedtype keyword. 在定义协议时，有时将一个或多个关联类型声明为协议定义的一部分是有用的。 关联类型为作为协议一部分使用的类型提供占位符名称。 在采用协议之前，不会指定用于该关联类型的实际类型。 关联类型使用associatedtype关键字指定。
 
+ 带范型的协议 == No Support
+ protocol 不支持范型类型参数。在 Swift 用 关联类型，代替支持抽象类型成员。
+
  ## Associated Types in Action
  
 */
@@ -296,54 +312,131 @@ do {
     }
 }
 
-do {
-    struct Stack<Element>: Container {
-        /// original Stack<Element> implementation
-        var items = [Element]()
-        mutating func push(_ item: Element) {
-            items.append(item)
-        }
-        mutating func pop() -> Element {
-            return items.removeLast()
-        }
-
-        /// conformance to the Container protocol
-        mutating func append(_ item: Element) {
-            self.push(item)
-        }
-        var count: Int {
-            return items.count
-        }
-        subscript(i: Int) -> Element {
-            return items[i]
-        }
+extension Stack: Container {
+    /// conformance to the Container protocol
+    mutating func append(_ item: Element) {
+        self.push(item)
+    }
+    var count: Int {
+        return items.count
+    }
+    subscript(i: Int) -> Element {
+        return items[i]
     }
 }
+
 /*:
  ## Extending an Existing Type to Specify an Associated Type
 
  You can extend an existing type to add conformance to a protocol, as described in Adding Protocol Conformance with an Extension. This includes a protocol with an associated type.
 
  Swift’s Array type already provides an append(_:) method, a count property, and a subscript with an Int index to retrieve its elements. These three capabilities match the requirements of the Container protocol. This means that you can extend Array to conform to the Container protocol simply by declaring that Array adopts the protocol. You do this with an empty extension, as described in Declaring Protocol Adoption with an Extension:
- 
-    extension Array: Container {}
  */
 
+extension Array: Container {}
 
-//: http://docs.scala-lang.org/tutorials/tour/abstract-types.html
-import Foundation
-//: 带范型的类
-class Wat<T> {}
-//: 带范型的结构体
-struct WatWat<T> {}
-//: 带范型的枚举
-enum GoodDaySir<T> {}
-/*: 
- 带范型的协议 == No Support
- protocol 不支持范型类型参数。在 Swift 用 关联类型，代替支持抽象类型成员。
- - 参见 ["关联类型"](Associated%20Types)
+/*:
+ # Generic Where Clauses
+
+ Type constraints, as described in Type Constraints, enable you to define requirements on the type parameters associated with a generic function or type. 类型约束，如类型约束中所述，使您能够定义与通用函数或类型相关联的类型参数的需求。
+
+ It can also be useful to define requirements for associated types. You do this by defining a generic where clause. A generic where clause enables you to require that an associated type must conform to a certain protocol, or that certain type parameters and associated types must be the same. A generic where clause starts with the where keyword, followed by constraints for associated types or equality relationships between types and associated types. You write a generic where clause right before the opening curly brace of a type or function’s body. 定义关联类型的要求也是有用的。你可以通过定义一个通用的where子句来实现。通用的where子句使您能够要求相关联的类型必须符合某个协议，或者某些类型参数和关联类型必须相同。通用where子句以where关键字开头，后跟关联类型的约束或类型和关联类型之间的相等关系。你在一个类型或函数的正文的开头大括号之前写一个通用的where子句。
+
+ The example below defines a generic function called allItemsMatch, which checks to see if two Container instances contain the same items in the same order. The function returns a Boolean value of true if all items match and a value of false if they do not.
+
+ The two containers to be checked do not have to be the same type of container (although they can be), but they do have to hold the same type of items. This requirement is expressed through a combination of type constraints and a generic where clause:
  */
-//protocol WellINever {
-//    typealias T
-//}
+do {
+    func allItemsMatch<C1: Container, C2: Container>
+        (_ someContainer: C1, _ anotherContainer: C2) -> Bool
+        where C1.Item == C2.Item, C1.Item: Equatable {
+
+            // Check that both containers contain the same number of items.
+            if someContainer.count != anotherContainer.count {
+                return false
+            }
+
+            // Check each pair of items to see if they are equivalent.
+            for i in 0..<someContainer.count {
+                if someContainer[i] != anotherContainer[i] {
+                    return false
+                }
+            }
+
+            // All items match, so return true.
+            return true
+    }
+
+    var stackOfStrings = Stack<String>()
+    stackOfStrings.push("uno")
+    stackOfStrings.push("dos")
+    stackOfStrings.push("tres")
+
+    var arrayOfStrings = ["uno", "dos", "tres"]
+
+    if allItemsMatch(stackOfStrings, arrayOfStrings) {
+        print("All items match.")
+    } else {
+        print("Not all items match.")
+    }
+    // Prints "All items match."
+}
+
+/*:
+ # Extensions with a Generic Where Clause
+ */
+extension Stack where Element: Equatable {
+    func isTop(_ item: Element) -> Bool {
+        guard let topItem = items.last else {
+            return false
+        }
+        return topItem == item
+    }
+}
+
+do {
+    if stackOfStrings.isTop("tres") {
+        print("Top element is tres.")
+    } else {
+        print("Top element is something else.")
+    }
+    // Prints "Top element is tres."
+}
+do {
+    struct NotEquatable { }
+    var notEquatableStack = Stack<NotEquatable>()
+    let notEquatableValue = NotEquatable()
+    notEquatableStack.push(notEquatableValue)
+    //notEquatableStack.isTop(notEquatableValue)  
+    /// Error: type 'NotEquatable' does not conform to protocol 'Equatable'
+}
+
+extension Container where Item: Equatable {
+    func startsWith(_ item: Item) -> Bool {
+        return count >= 1 && self[0] == item
+    }
+}
+do {
+    if [9, 9, 9].startsWith(42) {
+        print("Starts with 42.")
+    } else {
+        print("Starts with something else.")
+    }
+    // Prints "Starts with something else."
+}
+
+extension Container where Item == Double {
+    func average() -> Double {
+        var sum = 0.0
+        for index in 0..<count {
+            sum += self[index]
+        }
+        return sum / Double(count)
+    }
+}
+do {
+    print([1260.0, 1200.0, 98.6, 37.0].average())
+    // Prints "648.9"
+}
+
 //: [Next](@next)

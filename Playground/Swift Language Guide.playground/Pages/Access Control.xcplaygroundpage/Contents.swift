@@ -2,25 +2,68 @@
 
 import UIKit
 
-/*
+/*:
  # Access Control
+ 
+ Access control restricts access to parts of your code from code in other source files and modules. This feature enables you to hide the implementation details of your code, and to specify a preferred interface through which that code can be accessed and used. 访问控制限制从其他源文件和模块中的代码访问代码的部分。此功能使您可以隐藏代码的实现细节，并指定可以访问和使用该代码的首选接口。
+
+ You can assign specific access levels to individual types (classes, structures, and enumerations), as well as to properties, methods, initializers, and subscripts belonging to those types. Protocols can be restricted to a certain context, as can global constants, variables, and functions. 您可以为各种类型（类，结构和枚举）以及属于这些类型的属性，方法，初始值和下标分配特定的访问级别。协议可以被限制在特定的上下文中，全局常量，变量和函数也是如此。
+
+ In addition to offering various levels of access control, Swift reduces the need to specify explicit access control levels by providing default access levels for typical scenarios. Indeed, if you are writing a single-target app, you may not need to specify explicit access control levels at all. 除了提供各种级别的访问控制外，Swift还减少了为典型场景提供默认访问级别来指定显式访问控制级别的需求。实际上，如果您正在编写单一目标应用程序，则可能根本不需要指定显式的访问控制级别。
+
+ - NOTE:
+ The various aspects of your code that can have access control applied to them (properties, types, functions, and so on) are referred to as “entities” in the sections below, for brevity.
  */
 
 /*:
- Access control restricts access to parts of your code from code in other source files and modules.
- This feature enables you to hide the implementation details of your code, and to specify a preferred interface through which that code can be accessed and used.
- You can assign specific access levels to individual types (classes, structures, and enumerations),
- as well as to properties, methods, initializers, and subscripts belonging to those types.
- Protocols can be restricted to a certain context, as can global constants, variables, and functions.
+ # Modules and Source Files
+ Swift’s access control model is based on the concept of modules and source files. Swift的访问控制模型基于模块和源文件的概念。
 
- In addition to offering various levels of access control, Swift reduces the need to specify explicit access control levels
- by providing default access levels for typical scenarios. Indeed, if you are writing a single-target app,
- you may not need to specify explicit access control levels at all.
+ A module is a single unit of code distribution—a framework or application that is built and shipped as a single unit and that can be imported by another module with Swift’s import keyword.
 
- - NOTE:
- The various aspects of your code that can have access control applied to them (properties, types, functions, and so on)
- are referred to as “entities” in the sections below, for brevity.
+ Each build target (such as an app bundle or framework) in Xcode is treated as a separate module in Swift. If you group together aspects of your app’s code as a stand-alone framework—perhaps to encapsulate and reuse that code across multiple applications—then everything you define within that framework will be part of a separate module when it is imported and used within an app, or when it is used within another framework.
+
+ A source file is a single Swift source code file within a module (in effect, a single file within an app or framework). Although it is common to define individual types in separate source files, a single source file can contain definitions for multiple types, functions, and so on.
  */
+
+/*:
+ # Access Levels
+
+ Swift provides five different access levels for entities within your code. These access levels are relative to the source file in which an entity is defined, and also relative to the module that source file belongs to.
+
+ Open access and public access enable entities to be used within any source file from their defining module, and also in a source file from another module that imports the defining module. You typically use open or public access when specifying the public interface to a framework. The difference between open and public access is described below. 开放访问和公共访问使得实体可以在其定义模块的任何源文件中使用，并且还可以在另一个导入定义模块的模块的源文件中使用。指定框架的公共接口时，通常使用公开或公开的访问。开放和公共访问之间的区别如下所述:
+ - Internal access enables entities to be used within any source file from their defining module, but not in any source file outside of that module. You typically use internal access when defining an app’s or a framework’s internal structure. 内部访问使实体可以在其定义模块中的任何源文件中使用，但不能在该模块之外的任何源文件中使用。在定义应用程序或框架的内部结构时，通常使用内部访问。
+ - File-private access restricts the use of an entity to its own defining source file. Use file-private access to hide the implementation details of a specific piece of functionality when those details are used within an entire file. 文件专用访问将实体的使用限制在其自己的定义源文件中。当在整个文件中使用这些细节时，使用文件专用访问来隐藏特定功能的实现细节。
+ - Private access restricts the use of an entity to the enclosing declaration. Use private access to hide the implementation details of a specific piece of functionality when those details are used only within a single declaration. 私有访问将实体的使用限制在封闭声明中。当这些细节仅在单个声明中使用时，使用私有访问来隐藏特定功能的实现细节。
+ 
+ Open access is the highest (least restrictive) access level and private access is the lowest (most restrictive) access level. 开放访问是最高（最少限制）的访问级别，私有访问是最低（最严格的）访问级别。
+
+ Open access applies only to classes and class members, and it differs from public access as follows: 开放访问仅适用于类和类成员，它与公共访问不同如下：
+
+ - Classes with public access, or any more restrictive access level, can be subclassed only within the module where they’re defined. 具有公共访问权限或任何更多限制性访问级别的类可以仅在其定义的模块中进行子类化。
+ - Class members with public access, or any more restrictive access level, can be overridden by subclasses only within the module where they’re defined. 具有公共访问或任何更多限制性访问级别的类成员可以仅在它们被定义的模块内的子类覆盖。
+ - Open classes can be subclassed within the module where they’re defined, and within any module that imports the module where they’re defined. 开放类可以在定义模块的子类中，并在任何导入模块定义的模块中进行子类化。
+ - Open class members can be overridden by subclasses within the module where they’re defined, and within any module that imports the module where they’re defined. 开放类成员可以被模块定义的子类覆盖，并且可以在任何导入模块定义的模块中覆盖。
+
+ Marking a class as open explicitly indicates that you’ve considered the impact of code from other modules using that class as a superclass, and that you’ve designed your class’s code accordingly. 将类标记为open，表示您已经考虑了使用该类作为超类的其他模块的代码的影响，并且相应地设计了类的代码。
+ 
+ ## Guiding Principle of Access Levels
+
+ Access levels in Swift follow an overall guiding principle: No entity can be defined in terms of another entity that has a lower (more restrictive) access level.
+
+ For example:
+
+ - A public variable cannot be defined as having an internal, file-private, or private type, because the type might not be available everywhere that the public variable is used. 公共变量不能被定义为具有内部，文件私有或私有类型，因为在使用公共变量的地方，该类型可能不可用。
+ - A function cannot have a higher access level than its parameter types and return type, because the function could be used in situations where its constituent types are not available to the surrounding code. 函数不能具有比其参数类型和返回类型更高的访问级别，因为该函数可用于其组成类型不可用于周围代码的情况。
+ 
+ The specific implications of this guiding principle for different aspects of the language are covered in detail below.
+
+ */
+
+
+
+
+
 
 
 /*:

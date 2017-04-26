@@ -20,8 +20,8 @@
         <page name='Extensions'/>
         <page name='Protocols'/>
         <page name='Generics'/>
-        <page name='Advanced Operators'/>
         <page name='Access Control'/>
+        <page name='Advanced Operators'/>
         <page name='Basics'/>
         <page name='Instance'/>
         <page name='annotation'/>
