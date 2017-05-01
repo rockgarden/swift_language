@@ -144,6 +144,135 @@ private class SomePrivateClass_CT {                // explicitly private class
  */
 
 
+/*:
+ ## Function Types
+
+ The access level for a function type is calculated as the most restrictive access level of the function’s parameter types and return type. You must specify the access level explicitly as part of the function’s definition if the function’s calculated access level does not match the contextual default. 函数类型的访问级别被计算为函数参数类型和返回类型的最严格的访问级别。如果函数的计算访问级别与上下文默认值不匹配，则必须将该访问级别明确指定为函数定义的一部分。
+
+ The example below defines a global function called someFunction(), without providing a specific access-level modifier for the function itself. You might expect this function to have the default access level of “internal”, but this is not the case. In fact, someFunction() will not compile as written below:
+
+    func someFunction() -> (SomeInternalClass, SomePrivateClass) {
+        // function implementation goes here
+    }
+ The function’s return type is a tuple type composed from two of the custom classes defined above in Custom Types. One of these classes was defined as “internal”, and the other was defined as “private”. Therefore, the overall access level of the compound tuple type is “private” (the minimum access level of the tuple’s constituent types).
+
+ Because the function’s return type is private, you must mark the function’s overall access level with the private modifier for the function declaration to be valid:
+
+    private func someFunction() -> (SomeInternalClass, SomePrivateClass) {
+        // function implementation goes here
+    }
+ It is not valid to mark the definition of someFunction() with the public or internal modifiers, or to use the default setting of internal, because public or internal users of the function might not have appropriate access to the private class used in the function’s return type.
+ 
+ ## Enumeration Types
+
+ The individual cases of an enumeration automatically receive the same access level as the enumeration they belong to. You cannot specify a different access level for individual enumeration cases. 枚举的个别情况自动获得与其所属的枚举相同的访问级别。 您不能为单个枚举情况指定不同的访问级别。
+
+ In the example below, the CompassPoint enumeration has an explicit access level of “public”. The enumeration cases north, south, east, and west therefore also have an access level of “public”:
+
+    public enum CompassPoint {
+        case north
+        case south
+        case east
+        case west
+    }
+
+ ### Raw Values and Associated Values
+
+ The types used for any raw values or associated values in an enumeration definition must have an access level at least as high as the enumeration’s access level. You cannot use a private type as the raw-value type of an enumeration with an internal access level, for example. 在枚举定义中用于任何原始值或关联值的类型必须具有至少与枚举的访问级别一样高的访问级别。 例如，您不能使用私有类型作为具有内部访问级别的枚举的原始值类型。
+
+ ## Nested Types
+
+ Nested types defined within a private type have an automatic access level of private. Nested types defined within a file-private type have an automatic access level of file private. Nested types defined within a public type or an internal type have an automatic access level of internal. If you want a nested type within a public type to be publicly available, you must explicitly declare the nested type as public. 在私有类型中定义的嵌套类型具有私有的自动访问级别。 在文件 - 私有类型中定义的嵌套类型具有文件私有的自动访问级别。 在公共类型或内部类型中定义的嵌套类型具有内部自动访问级别。 如果您希望公共类型中的嵌套类型可以公开使用，则必须将该嵌套类型显式声明为public。
+
+ */
+
+
+/*:
+ # Subclassing
+
+ You can subclass any class that can be accessed in the current access context. A subclass cannot have a higher access level than its superclass—for example, you cannot write a public subclass of an internal superclass. 您可以对当前访问上下文中可以访问的任何类进行子类化。子类不能具有比其超类更高的访问级别，例如，您不能写个内部超类的公共子类。
+
+ In addition, you can override any class member (method, property, initializer, or subscript) that is visible in a certain access context.
+
+ An override can make an inherited class member more accessible than its superclass version. In the example below, class A is a public class with a file-private method called someMethod(). Class B is a subclass of A, with a reduced access level of “internal”. Nonetheless, class B provides an override of someMethod() with an access level of “internal”, which is higher than the original implementation of someMethod():
+
+    public class A {
+        fileprivate func someMethod() {}
+    }
+
+    internal class B: A {
+        override internal func someMethod() {}
+    }
+
+ It is even valid for a subclass member to call a superclass member that has lower access permissions than the subclass member, as long as the call to the superclass’s member takes place within an allowed access level context (that is, within the same source file as the superclass for a file-private member call, or within the same module as the superclass for an internal member call):
+
+    public class A {
+        fileprivate func someMethod() {}
+    }
+
+    internal class B: A {
+        override internal func someMethod() {
+            super.someMethod()
+        }
+    }
+
+ Because superclass A and subclass B are defined in the same source file, it is valid for the B implementation of someMethod() to call super.someMethod().
+ */
+
+/*:
+ # Constants, Variables, Properties, and Subscripts 常数，变量，属性和下标
+
+ A constant, variable, or property cannot be more public than its type. It is not valid to write a public property with a private type, for example. Similarly, a subscript cannot be more public than either its index type or return type. 常数，变量或属性不能比其类型更公开。例如，写私有类型的公共属性是无效的。类似地，下标不能比其索引类型或返回类型更公开。
+
+ If a constant, variable, property, or subscript makes use of a private type, the constant, variable, property, or subscript must also be marked as private:
+
+    private var privateInstance = SomePrivateClass()
+ 
+ ## Getters and Setters
+
+ Getters and setters for constants, variables, properties, and subscripts automatically receive the same access level as the constant, variable, property, or subscript they belong to. 常量，变量，属性和下标的Getters和setter自动接收与它们所属的常量，变量，属性或下标相同的访问级别。
+
+ You can give a setter a lower access level than its corresponding getter, to restrict the read-write scope of that variable, property, or subscript. You assign a lower access level by writing fileprivate(set), private(set), or internal(set) before the var or subscript introducer. 您可以给设置者比其相应的getter低的访问级别，以限制该变量，属性或下标的读写范围。您可以通过在var或下标引导器之前编写fileprivate（set），private（set）或internal（set）来分配较低的访问级别。
+
+ - NOTE:
+
+ This rule applies to stored properties as well as computed properties. Even though you do not write an explicit getter and setter for a stored property, Swift still synthesizes an implicit getter and setter for you to provide access to the stored property’s backing storage. Use fileprivate(set), private(set), and internal(set) to change the access level of this synthesized setter in exactly the same way as for an explicit setter in a computed property.
+
+ The example below defines a structure called TrackedString, which keeps track of the number of times a string property is modified:
+
+ */
+do {
+    struct TrackedString {
+        /// Although you can query the current value of the numberOfEdits property from within another source file, you cannot modify the property from another source file. This restriction protects the implementation details of the TrackedString edit-tracking functionality, while still providing convenient access to an aspect of that functionality. 虽然可以从另一个源文件中查询numberOfEdits属性的当前值，但是您不能从另一个源文件修改该属性。此限制保护了TrackedString编辑跟踪功能的实现细节，同时仍然可以方便地访问该功能的一个方面。
+        private(set) var numberOfEdits = 0
+        var value: String = "" {
+            didSet {
+                numberOfEdits += 1
+            }
+        }
+    }
+
+    var stringToEdit = TrackedString()
+    stringToEdit.value = "This string will be tracked."
+    stringToEdit.value += " This edit will increment numberOfEdits."
+    stringToEdit.value += " So will this one."
+    print("The number of edits is \(stringToEdit.numberOfEdits)")
+    // Prints "The number of edits is 3"
+}
+
+do {
+    /// The structure’s members (including the numberOfEdits property) therefore have an internal access level by default. You can make the structure’s numberOfEdits property getter public, and its property setter private, by combining the public and private(set) access-level modifiers. 使用public的显式访问级别定义了结构。因此，默认情况下，结构的成员（包括numberOfEdits属性）具有内部访问级别。您可以通过组合public和private（set）访问级别修饰符来使结构的numberOfEdits属性getter public，其属性setter private
+    public struct TrackedStringP {
+        public private(set) var numberOfEdits = 0
+        public var value: String = "" {
+            didSet {
+                numberOfEdits += 1
+            }
+        }
+        public init() {}
+    }
+}
+
 
 
 ///*:
