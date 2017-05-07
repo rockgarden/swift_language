@@ -42,7 +42,7 @@ import UIKit
 
  - Classes with public access, or any more restrictive access level, can be subclassed only within the module where they’re defined. 具有公共访问权限或任何更多限制性访问级别的类可以仅在其定义的模块中进行子类化。
  - Class members with public access, or any more restrictive access level, can be overridden by subclasses only within the module where they’re defined. 具有公共访问或任何更多限制性访问级别的类成员可以仅在它们被定义的模块内的子类覆盖。
- - Open classes can be subclassed within the module where they’re defined, and within any module that imports the module where they’re defined. 开放类可以在定义模块的子类中，并在任何导入模块定义的模块中进行子类化。
+ - Open classes can be subclassed within the module where they’re defined, and within any module that imports the module where they’re defined. 开放类可以被子类化，在其定义模块中，并在任何导入模块定义的模块中进行子类化。
  - Open class members can be overridden by subclasses within the module where they’re defined, and within any module that imports the module where they’re defined. 开放类成员可以被模块定义的子类覆盖，并且可以在任何导入模块定义的模块中覆盖。
 
  Marking a class as open explicitly indicates that you’ve considered the impact of code from other modules using that class as a superclass, and that you’ve designed your class’s code accordingly. 将类标记为open，表示您已经考虑了使用该类作为超类的其他模块的代码的影响，并且相应地设计了类的代码。
