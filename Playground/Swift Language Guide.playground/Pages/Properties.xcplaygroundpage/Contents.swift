@@ -9,6 +9,160 @@
  In addition, you can define property observers to monitor changes in a property’s value, which you can respond to with custom actions. Property observers can be added to stored properties you define yourself, and also to properties that a subclass inherits from its superclass.
 
  */
+/*:
+ # Stored Properties
+
+ In its simplest form, a stored property is a constant or variable that is stored as part of an instance of a particular class or structure. Stored properties can be either variable stored properties (introduced by the var keyword) or constant stored properties (introduced by the let keyword). 在其最简单的形式中，存储的属性是作为特定类或结构的实例的一部分存储的常量或变量。 存储的属性可以是变量存储属性（由var关键字引入）或常量存储属性（由let关键字引入）。
+
+ You can provide a default value for a stored property as part of its definition, as described in Default Property Values. You can also set and modify the initial value for a stored property during initialization. This is true even for constant stored properties, as described in Assigning Constant Properties During Initialization. 您可以为存储属性提供默认值作为其定义的一部分，如默认属性值中所述。 您还可以在初始化期间设置和修改存储属性的初始值。 即使对于常量存储的属性也是如此，如在初始化期间分配常量属性中所述。
+ */
+struct FixedLengthRange {
+    var firstValue: Int
+    let length: Int
+}
+do {
+    var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+    // the range represents integer values 0, 1, and 2
+    rangeOfThreeItems.firstValue = 6
+    // the range now represents integer values 6, 7, and 8
+}
+
+/*:
+ ## Stored Properties of Constant Structure Instances
+
+ If you create an instance of a structure and assign that instance to a constant, you cannot modify the instance’s properties, even if they were declared as variable properties:
+ */
+do {
+    let rangeOfFourItems = FixedLengthRange(firstValue: 0, length: 4)
+    // this range represents integer values 0, 1, 2, and 3
+    // rangeOfFourItems.firstValue = 6
+    // error: cannot assign to property: 'rangeOfFourItems' is a 'let' constant
+    // this will report an error, even though firstValue is a variable property
+}
+
+/*:
+ ## Lazy Stored Properties
+
+ A lazy stored property is a property whose initial value is not calculated until the first time it is used. You indicate a lazy stored property by writing the lazy modifier before its declaration. 一个懒惰的存储属性是一个属性，它的初始值在第一次使用之前不会被计算。在声明之前编写懒惰修饰符，表示一个懒惰的存储属性。
+
+ - NOTE:
+ You must always declare a lazy property as a variable (with the var keyword), because its initial value might not be retrieved until after instance initialization completes. Constant properties must always have a value before initialization completes, and therefore cannot be declared as lazy. 您必须始终将惰性属性声明为变量（使用var关键字），因为在实例初始化完成后，可能无法检索其初始值。常量属性必须始终在初始化完成之前具有一个值，因此不能被声明为惰性。
+
+ Lazy properties are useful when the initial value for a property is dependent on outside factors whose values are not known until after an instance’s initialization is complete. Lazy properties are also useful when the initial value for a property requires complex or computationally expensive setup that should not be performed unless or until it is needed. 当属性的初始值取决于在实例初始化完成之后其值不知道的外部因素时，惰性属性很有用。当属性的初始值需要复杂或计算上昂贵的设置时，延迟属性也是有用的，除非或直到需要才能执行。
+ */
+class DataImporter {
+    /*
+     DataImporter is a class to import data from an external file.
+     The class is assumed to take a non-trivial amount of time to initialize.
+     */
+    var filename = "data.txt"
+    // the DataImporter class would provide data importing functionality here
+}
+
+class DataManager {
+    lazy var importer = DataImporter()
+    var data = [String]()
+    // the DataManager class would provide data management functionality here
+}
+do {
+    let manager = DataManager()
+    manager.data.append("Some data")
+    manager.data.append("Some more data")
+    // the DataImporter instance for the importer property has not yet been created
+    print(manager.importer.filename)
+    // the DataImporter instance for the importer property has now been created
+    // Prints "data.txt"
+}
+/*:
+ - NOTE:
+ If a property marked with the lazy modifier is accessed by multiple threads simultaneously and the property has not yet been initialized, there is no guarantee that the property will be initialized only once. 如果标记有延迟修饰符的属性同时被多个线程访问，并且该属性尚未初始化，则不能保证该属性将仅被初始化一次。麻烦的! 所以在访问前要判断是否为nil.
+ 
+ ## Stored Properties and Instance Variables
+
+ If you have experience with Objective-C, you may know that it provides two ways to store values and references as part of a class instance. In addition to properties, you can use instance variables as a backing store for the values stored in a property.
+
+ Swift unifies these concepts into a single property declaration. A Swift property does not have a corresponding instance variable, and the backing store for a property is not accessed directly. This approach avoids confusion about how the value is accessed in different contexts and simplifies the property’s declaration into a single, definitive statement. All information about the property—including its name, type, and memory management characteristics—is defined in a single location as part of the type’s definition. Swift将这些概念统一为一个属性声明。 Swift属性没有相应的实例变量，并且不直接访问属性的后备存储。这种方法避免了在不同上下文中如何访问值的混淆，并将属性的声明简化为一个单一的定义语句。关于属性的所有信息（包括其名称，类型和内存管理特性）都在单个位置定义，作为类型定义的一部分。
+ */
+/*:
+ # Computed Properties
+
+ In addition to stored properties, classes, structures, and enumerations can define computed properties, which do not actually store a value. Instead, they provide a getter and an optional setter to retrieve and set other properties and values indirectly. 除了存储的属性之外，类，结构和枚举可以定义计算的属性，而实际上并不存储值。 相反，它们提供一个getter和一个可选的setter来间接检索和设置其他属性和值。
+ */
+/// Point encapsulates the x- and y-coordinate of a point.
+struct Point {
+    var x = 0.0, y = 0.0
+}
+/// Size encapsulates a width and a height.
+struct Size {
+    var width = 0.0, height = 0.0
+}
+/// Rect defines a rectangle by an origin point and a size. see picture: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/computedProperties_2x.png
+struct Rect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            origin.x = newCenter.x - (size.width / 2)
+            origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}
+do {
+    var square = Rect(origin: Point(x: 0.0, y: 0.0),
+                      size: Size(width: 10.0, height: 10.0))
+    let initialSquareCenter = square.center
+    square.center = Point(x: 15.0, y: 15.0)
+    print("square.origin is now at (\(square.origin.x), \(square.origin.y))")
+    // Prints "square.origin is now at (10.0, 10.0)"
+}
+
+/*:
+ ## Shorthand Setter Declaration
+
+ If a computed property’s setter does not define a name for the new value to be set, a default name of newValue is used. 如果计算属性的设置器未定义要设置的新值的名称，则使用默认名称newValue。Here’s an alternative version of the Rect structure, which takes advantage of this shorthand notation:
+ */
+struct AlternativeRect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set {
+            origin.x = newValue.x - (size.width / 2)
+            origin.y = newValue.y - (size.height / 2)
+        }
+    }
+}
+/*:
+ ## Read-Only Computed Properties
+
+ A computed property with a getter but no setter is known as a read-only computed property. A read-only computed property always returns a value, and can be accessed through dot syntax, but cannot be set to a different value. 具有getter但不设置器的计算属性称为只读计算属性。 只读计算属性始终返回一个值，可以通过点语法访问，但不能设置为不同的值。
+
+ - NOTE:
+ You must declare computed properties—including read-only computed properties—as variable properties with the var keyword, because their value is not fixed. 您必须将计算的属性（包括只读计算属性）声明为具有var关键字的变量属性，因为它们的值不是固定的。 The let keyword is only used for constant properties, to indicate that their values cannot be changed once they are set as part of instance initialization. let关键字仅用于常量属性，表示它们的值在实例初始化后被设置为无法更改。
+ 
+ You can simplify the declaration of a read-only computed property by removing the get keyword and its braces. 您可以通过删除get关键字及其大括号来简化只读计算属性的声明:
+ */
+do {
+    struct Cuboid {
+        var width = 0.0, height = 0.0, depth = 0.0
+        var volume: Double {
+            return width * height * depth
+        }
+    }
+    let fourByFiveByTwo = Cuboid(width: 4.0, height: 5.0, depth: 2.0)
+    print("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
+    // Prints "the volume of fourByFiveByTwo is 40.0"
+}
+
 
 /*:
  # Property Observers
@@ -58,5 +212,6 @@ do {
  - NOTE:
  If you pass a property that has observers to a function as an in-out parameter, the willSet and didSet observers are always called. This is because of the copy-in copy-out memory model for in-out parameters: The value is always written back to the property at the end of the function. For a detailed discussion of the behavior of in-out parameters, see In-Out Parameters https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Declarations.html#//apple_ref/doc/uid/TP40014097-CH34-ID545. 如果将具有观察者的属性作为in-out参数传递给函数，则将始终调用willSet和didSet观察器。 这是因为in-out参数的copy-in copy-out内存模型：该值始终写回函数末尾的属性。 有关in-out参数的行为的详细讨论，请参阅In-Out参数。
  */
+
 
 //: [Next](@next)

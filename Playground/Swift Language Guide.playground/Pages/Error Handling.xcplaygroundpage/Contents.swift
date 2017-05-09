@@ -31,7 +31,8 @@ enum VendingMachineError: Error {
     case outOfStock
 }
 do {
-    throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
+    /// The statement after the throw is not executed
+    //throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
 }
 
 /*:
@@ -115,174 +116,98 @@ struct PurchasedSnack {
     }
 }
 
-///*:
-// ## Propagating Errors Using Throwing Functions
-// To indicate that a function, method, or initializer can throw an error,
-// you write the throws keyword in the function’s declaration after its parameters.
-// */
-//
-//func canThrowErrors() throws -> String { return "" }
-//
-//func cannotThrowErrors() -> String { return "" }
-////: A throwing function propagates errors that are thrown inside of it to the scope from which it’s called.
-////: Only throwing functions can propagate errors. Any errors thrown inside a nonthrowing function must be handled inside the function.
-//
-//struct Item {
-//    var price: Int
-//    var count: Int
-//}
-//
-//class VendingMachine {
-//    var inventory = [
-//        "Candy Bar": Item(price: 12, count: 7),
-//        "Chips": Item(price: 10, count: 4),
-//        "Pretzels": Item(price: 7, count: 11)
-//    ]
-//    var coinsDeposited = 0
-//    func dispenseSnack(snack: String) {
-//        print("Dispensing \(snack)")
-//    }
-//    
-//    func vend(itemNamed name: String) throws {
-//        guard var item = inventory[name] else {
-//            throw VendingMachineError.InvalidSelection
-//        }
-//        
-//        guard item.count > 0 else {
-//            throw VendingMachineError.OutOfStock
-//        }
-//        
-//        guard item.price <= coinsDeposited else {
-//            throw VendingMachineError.InsufficientFunds(coinsNeeded: item.price - coinsDeposited)
-//        }
-//        
-//        coinsDeposited -= item.price
-//        item.count -= 1
-//        inventory[name] = item
-//        dispenseSnack(snack:name)
-//    }
-//}
-//
-///*:
-// The implementation of the vend(itemNamed:) method uses guard statements to exit the method early
-// and throw appropriate errors if any of the requirements for purchasing a snack aren’t met.
-// Because a throw statement immediately transfers program control, an item will be vended only if all of these requirements are met.
-// */
-//
-//
-////: ## Handling Errors Using Do-Catch
-//func buyFavoriteSnack(name: String, vendingMachine: VendingMachine) throws{
-//    throw VendingMachineError.InvalidSelection
-//}
-//
-//var vendingMachine = VendingMachine()
-//vendingMachine.coinsDeposited = 8
-//do {
-//    try buyFavoriteSnack(name:"Alice", vendingMachine: vendingMachine)
-//} catch VendingMachineError.InvalidSelection {
-//    print("Invalid Selection.")
-//} catch VendingMachineError.OutOfStock {
-//    print("Out of Stock.")
-//} catch VendingMachineError.InsufficientFunds(let coinsNeeded) {
-//    print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
-//}
-//
-//// 异常Catch
-//enum myError: Error {
-//    case WrongJSON
-//}
-//func testTry() throws {
-//    do {
-//        try JSONSerialization.jsonObject(with:Data(), options: .allowFragments)
-//    } catch {
-//        throw myError.WrongJSON
-//    }
-//}
-//
-//do {try testTry()} catch myError.WrongJSON {}
-//
-//
-////: ## Converting Errors to Optional Values
-//
-//func someThrowingFunction() throws -> Int {
-//    // ...
-//    return 2
-//}
-//
-//let x = try? someThrowingFunction()
-//let y: Int?
-//do {
-//    y = try someThrowingFunction()
-//} catch {
-//    y = nil
-//}
-//
-//
-///*:
-// If someThrowingFunction() throws an error, the value of x and y is nil. Otherwise, the value of x and y
-// is the value that the function returned. Note that x and y are an optional of whatever type someThrowingFunction() returns.
-// Here the function returns an integer, so x and y are optional integers.
-// 
-// Using try? lets you write concise error handling code when you want to handle all errors in the same way.
-// For example, the following code uses several approaches to fetch data, or returns nil if all of the approaches fail.
-// */
-//
-//
-//
-////: ## Disabling Error Propagation
-//func loadImage(path: String) throws ->String {
-//    return "Image"
-//}
-//
-//let photo = try! loadImage(path:"./Resources/John Appleseed.jpg")
-//
-//
-///*:
-// Sometimes you know a throwing function or method won’t, in fact, throw an error at runtime.
-// On those occasions, you can write try! before the expression to disable error propagation and wrap the call in a
-// runtime assertion that no error will be thrown. If an error actually is thrown, you’ll get a runtime error.
-// */
-//
-//
-////: ## Specifying Cleanup Actions
-//func exists(file: String) -> Bool{
-//    return true
-//}
-//
-//func openFile(file: String) -> String{
-//    return ""
-//}
-//
-//func close(file: String) -> Void{
-//    
-//}
-//
-//func processFile(filename: String) throws {
-//    if exists(file:filename) {
-//        let file = openFile(file:filename)
-//        defer {
-//            close(file: file)
-//        }
-//        //        while let line = try file.readline() {
-//        //            // Work with the file.
-//        //        }
-//        // close(file: file) is called here, at the end of the scope.
-//    }
-//}
-//
-//
-///*:
-// You use a defer statement to execute a set of statements just before code execution leaves the current block of code.
-// This statement lets you do any necessary cleanup that should be performed regardless of how execution leaves the current block
-// of code—whether it leaves because an error was thrown or because of a statement such as return or break.
-// For example, you can use a defer statement to ensure that file descriptors are closed and manually allocated memory is freed.
-// 
-// A defer statement defers execution until the current scope is exited. This statement consists of the defer keyword and the statements
-// to be executed later. The deferred statements may not contain any code that would transfer control out of the statements,
-// such as a break or a return statement, or by throwing an error. Deferred actions are executed in reverse order of how they are
-// specified—that is, the code in the first defer statement executes after code in the second, and so on.
-// 
-// You can use a defer statement even when no error handling code is involved.
-// */
+/*: 
+ ## Handling Errors Using Do-Catch
+ You use a do-catch statement to handle errors by running a block of code. If an error is thrown by the code in the do clause, it is matched against the catch clauses to determine which one of them can handle the error.
+ 
+ Here is the general form of a do-catch statement:
+
+    do {
+        try expression
+        statements
+    } catch pattern 1 {
+        statements
+    } catch pattern 2 where condition {
+        statements
+    }
+
+ You write a pattern after catch to indicate what errors that clause can handle. If a catch clause doesn’t have a pattern, the clause matches any error and binds the error to a local constant named error. For more information about pattern matching, see Patterns.
+ 
+ The catch clauses don’t have to handle every possible error that the code in its do clause can throw. If none of the catch clauses handle the error, the error propagates to the surrounding scope. However, the error must be handled by some surrounding scope—either by an enclosing do-catch clause that handles the error or by being inside a throwing function. 
+ */
+
+do {
+    var vendingMachine = VendingMachine()
+    vendingMachine.coinsDeposited = 8
+    do {
+        try buyFavoriteSnack(person: "Alice", vendingMachine: vendingMachine)
+    } catch VendingMachineError.invalidSelection {
+        print("Invalid Selection.")
+    } catch VendingMachineError.outOfStock {
+        print("Out of Stock.")
+    } catch VendingMachineError.insufficientFunds(let coinsNeeded) {
+        print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
+    }
+    // Prints "Insufficient funds. Please insert an additional 2 coins."
+}
+
+/*:
+ ## Converting Errors to Optional Values
+
+ You use try? to handle an error by converting it to an optional value. If an error is thrown while evaluating the try? expression, the value of the expression is nil. 
+ */
+do {
+    func someThrowingFunction() throws -> Int {
+        return 1
+    }
+
+    let x = try? someThrowingFunction()
+
+    let y: Int?
+    do {
+        y = try someThrowingFunction()
+    } catch {
+        y = nil
+    }
+
+    func fetchData() -> Data? {
+        //if let data = try? fetchDataFromDisk() { return data }
+        //if let data = try? fetchDataFromServer() { return data }
+        return nil
+    }
+}
+
+/*:
+ ## Disabling Error Propagation
+
+ Sometimes you know a throwing function or method won’t, in fact, throw an error at runtime. On those occasions, you can write try! before the expression to disable error propagation and wrap the call in a runtime assertion that no error will be thrown. If an error actually is thrown, you’ll get a runtime error.
+
+    let photo = try! loadImage(atPath: "./Resources/John Appleseed.jpg")
+ */
+
+/*:
+ # Specifying Cleanup Actions
+
+ You use a defer statement to execute a set of statements just before code execution leaves the current block of code. This statement lets you do any necessary cleanup that should be performed regardless of how execution leaves the current block of code—whether it leaves because an error was thrown or because of a statement such as return or break. For example, you can use a defer statement to ensure that file descriptors are closed and manually allocated memory is freed.
+
+ A defer statement defers execution until the current scope is exited. This statement consists of the defer keyword and the statements to be executed later. The deferred statements may not contain any code that would transfer control out of the statements, such as a break or a return statement, or by throwing an error. Deferred actions are executed in reverse order of how they are specified—that is, the code in the first defer statement executes after code in the second, and so on.
+
+    func processFile(filename: String) throws {
+        if exists(filename) {
+            let file = open(filename)
+            defer {
+                close(file)
+            }
+            while let line = try file.readline() {
+                // Work with the file.
+            }
+            // close(file) is called here, at the end of the scope.
+        }
+    }
+
+ - NOTE:
+ You can use a defer statement even when no error handling code is involved. 即使不涉及错误处理代码，也可以使用延迟语句。
+ */
+
 
 //: [Next](@next)

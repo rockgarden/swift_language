@@ -78,7 +78,6 @@ do {
     // Prints "This point is to the right of the line where x == 1.0"
 }
 
-
 /*:
  ## Modifying Value Types from Within Instance Methods
  Structures and enumerations are value types. By default, the properties of a value type cannot be modified from within its instance methods.
