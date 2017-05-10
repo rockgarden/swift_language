@@ -3,6 +3,7 @@
     <pages>
         <page name='Basic Operators'/>
         <page name='Collection Types'/>
+        <page name='Control Flow'/>
         <page name='Functions'/>
         <page name='Closures'/>
         <page name='Enumerations'/>
@@ -37,7 +38,6 @@
         <page name='collection Array'/>
         <page name='collection Dictionary'/>
         <page name='collection Set'/>
-        <page name='Control Flow'/>
         <page name='conditional evaluation'/>
         <page name='loops'/>
         <page name='Define and call'/>

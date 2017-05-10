@@ -213,5 +213,112 @@ do {
  If you pass a property that has observers to a function as an in-out parameter, the willSet and didSet observers are always called. This is because of the copy-in copy-out memory model for in-out parameters: The value is always written back to the property at the end of the function. For a detailed discussion of the behavior of in-out parameters, see In-Out Parameters https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Declarations.html#//apple_ref/doc/uid/TP40014097-CH34-ID545. 如果将具有观察者的属性作为in-out参数传递给函数，则将始终调用willSet和didSet观察器。 这是因为in-out参数的copy-in copy-out内存模型：该值始终写回函数末尾的属性。 有关in-out参数的行为的详细讨论，请参阅In-Out参数。
  */
 
+/*:
+ # Global and Local Variables
+
+ The capabilities described above for computing and observing properties are also available to global variables and local variables. Global variables are variables that are defined outside of any function, method, closure, or type context. Local variables are variables that are defined within a function, method, or closure context. 全局变量是在任何函数，方法，闭包或类型上下文之外定义的变量。局部变量是在函数，方法或闭包上下文中定义的变量。
+
+ The global and local variables you have encountered in previous chapters have all been stored variables. Stored variables, like stored properties, provide storage for a value of a certain type and allow that value to be set and retrieved.
+
+ However, you can also define computed variables and define observers for stored variables, in either a global or local scope. Computed variables calculate their value, rather than storing it, and they are written in the same way as computed properties.
+
+ - NOTE:
+ Global constants and variables are always computed lazily, in a similar manner to Lazy Stored Properties. Unlike lazy stored properties, global constants and variables do not need to be marked with the lazy modifier. 全局常量和变量总是以懒惰存储属性的方式懒惰地计算。与延迟存储的属性不同，全局常量和变量不需要用延迟修饰符标记。
+
+ Local constants and variables are never computed lazily. 本地常量和变量永远不会懒惰地计算。
+ */
+
+/*:
+ # Type Properties
+
+ Instance properties are properties that belong to an instance of a particular type. Every time you create a new instance of that type, it has its own set of property values, separate from any other instance. 实例属性是属于特定类型的实例的属性。每次创建该类型的新实例时，它都有自己的一组属性值，与任何其他实例分开。
+
+ You can also define properties that belong to the type itself, not to any one instance of that type. There will only ever be one copy of these properties, no matter how many instances of that type you create. These kinds of properties are called type properties. 您还可以定义属于类型本身的属性，而不是该类型的任何一个实例。只有这些属性的一个副本，无论你创建了多少个类型的实例。这些属性称为类型属性。
+
+ Type properties are useful for defining values that are universal to all instances of a particular type, such as a constant property that all instances can use (like a static constant in C), or a variable property that stores a value that is global to all instances of that type (like a static variable in C). 类型属性可用于定义通用于特定类型的所有实例的值，例如所有实例可以使用的常量属性（如C中的静态常量）或存储全局值的变量属性该类型的实例（如C中的静态变量）。
+
+ Stored type properties can be variables or constants. Computed type properties are always declared as variable properties, in the same way as computed instance properties.
+
+ - NOTE:
+ Unlike stored instance properties, you must always give stored type properties a default value. This is because the type itself does not have an initializer that can assign a value to a stored type property at initialization time. 与存储的实例属性不同，您必须始终将存储的类型属性指定为默认值。这是因为类型本身没有初始化程序，可以在初始化时为一个存储类型属性分配一个值。
+
+ Stored type properties are lazily initialized on their first access. They are guaranteed to be initialized only once, even when accessed by multiple threads simultaneously, and they do not need to be marked with the lazy modifier. 存储类型属性在其第一次访问时被延迟初始化。它们保证只被初始化一次，即使同时被多个线程访问，也不需要使用延迟修饰符进行标记。
+ 
+ ## Type Property Syntax
+
+ In C and Objective-C, you define static constants and variables associated with a type as global static variables. In Swift, however, type properties are written as part of the type’s definition, within the type’s outer curly braces, and each type property is explicitly scoped to the type it supports. 在C和Objective-C中，将与类型关联的静态常量和变量定义为全局静态变量。 然而，在Swift中，类型属性将作为类型定义的一部分写入类型的外部花括号中，并且每个类型属性都明确地定义为其支持的类型。
+
+ You define type properties with the static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. 您使用static关键字定义类型属性。 对于类类型的计算类型属性，可以使用class关键字来允许子类覆盖超类的实现。
+ */
+struct SomeStructure {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 1
+    }
+}
+enum SomeEnumeration {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 6
+    }
+}
+class SomeClass {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 27
+    }
+    class var overrideableComputedTypeProperty: Int {
+        return 107
+    }
+}
+/// The computed type property examples above are for read-only computed type properties, but you can also define read-write computed type properties with the same syntax as for computed instance properties.
+/*:
+ ## Querying and Setting Type Properties
+
+ Type properties are queried and set with dot syntax, just like instance properties. However, type properties are queried and set on the type, not on an instance of that type. 查询类型属性并使用点语法设置，就像实例属性一样。 但是，类型属性将被查询并设置在类型上，而不是该类型的实例上。
+ */
+do {
+    print(SomeStructure.storedTypeProperty)
+    // Prints "Some value."
+    SomeStructure.storedTypeProperty = "Another value."
+    print(SomeStructure.storedTypeProperty)
+    // Prints "Another value."
+    print(SomeEnumeration.computedTypeProperty)
+    // Prints "6"
+    print(SomeClass.computedTypeProperty)
+    // Prints "27"
+}
+
+/// structure that models an audio level meter for a number of audio channels. https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/staticPropertiesVUMeter_2x.png
+struct AudioChannel {
+    static let thresholdLevel = 10
+    static var maxInputLevelForAllChannels = 0
+    var currentLevel: Int = 0 {
+        didSet {
+            if currentLevel > AudioChannel.thresholdLevel {
+                // cap the new audio level to the threshold level
+                currentLevel = AudioChannel.thresholdLevel
+            }
+            if currentLevel > AudioChannel.maxInputLevelForAllChannels {
+                // store this as the new overall maximum input level
+                AudioChannel.maxInputLevelForAllChannels = currentLevel
+            }
+        }
+    }
+}
+do {
+    var leftChannel = AudioChannel()
+    var rightChannel = AudioChannel()
+    leftChannel.currentLevel = 7
+    print(leftChannel.currentLevel)
+    // Prints "7"
+    print(AudioChannel.maxInputLevelForAllChannels)
+    // Prints "7"
+    rightChannel.currentLevel = 11
+    print(rightChannel.currentLevel)
+    // Prints "10"
+    print(AudioChannel.maxInputLevelForAllChannels)
+    // Prints "10"
+}
 
 //: [Next](@next)
