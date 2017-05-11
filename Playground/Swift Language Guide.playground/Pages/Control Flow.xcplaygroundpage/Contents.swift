@@ -166,20 +166,243 @@ do {
     print("Game over!")
 }
 
+/*:
+ # Conditional Statements
+
+ It is often useful to execute different pieces of code based on certain conditions. You might want to run an extra piece of code when an error occurs, or to display a message when a value becomes too high or too low. To do this, you make parts of your code conditional.
+
+ Swift provides two ways to add conditional branches to your code: the if statement and the switch statement. Typically, you use the if statement to evaluate simple conditions with only a few possible outcomes. The switch statement is better suited to more complex conditions with multiple possible permutations and is useful in situations where pattern matching can help select an appropriate code branch to execute.
+
+ ## If
+
+ In its simplest form, the if statement has a single if condition. It executes a set of statements only if that condition is true.
+ 
+ You can chain multiple if statements together to consider additional clauses.
+
+ The final else clause is optional, however, and can be excluded if the set of conditions does not need to be complete.
+ */
+do {
+    var temperatureInFahrenheit = 30
+    if temperatureInFahrenheit <= 32 {
+        print("It's very cold. Consider wearing a scarf.")
+    }
+    // Prints "It's very cold. Consider wearing a scarf."
+
+    temperatureInFahrenheit = 90
+    if temperatureInFahrenheit <= 32 {
+        print("It's very cold. Consider wearing a scarf.")
+    } else if temperatureInFahrenheit >= 86 {
+        print("It's really warm. Don't forget to wear sunscreen.")
+    } else {
+        print("It's not that cold. Wear a t-shirt.")
+    }
+    // Prints "It's really warm. Don't forget to wear sunscreen."
+
+    temperatureInFahrenheit = 72
+    if temperatureInFahrenheit <= 32 {
+        print("It's very cold. Consider wearing a scarf.")
+    } else if temperatureInFahrenheit >= 86 {
+        print("It's really warm. Don't forget to wear sunscreen.")
+    }
+}
+
+/*:
+ ## Switch
+
+ A switch statement considers a value and compares it against several possible matching patterns. It then executes an appropriate block of code, based on the first pattern that matches successfully. A switch statement provides an alternative to the if statement for responding to multiple potential states.
+
+ In its simplest form, a switch statement compares a value against one or more values of the same type.
+
+    switch some value to consider {
+    case value 1:
+        respond to value 1
+    case value 2, value 3:
+        respond to value 2 or 3
+    default:
+        otherwise, do something else
+    }
+
+ Every switch statement consists of multiple possible cases, each of which begins with the case keyword. In addition to comparing against specific values, Swift provides several ways for each case to specify more complex matching patterns. These options are described later in this chapter.
+
+ Like the body of an if statement, each case is a separate branch of code execution. The switch statement determines which branch should be selected. This procedure is known as switching on the value that is being considered.
+
+ Every switch statement must be exhaustive. That is, every possible value of the type being considered must be matched by one of the switch cases. If it’s not appropriate to provide a case for every possible value, you can define a default case to cover any values that are not addressed explicitly. This default case is indicated by the default keyword, and must always appear last. 每个开关语句都必须详尽无遗。也就是说，所考虑的类型的每个可能的值必须由一个开关情况匹配。如果不适合为每个可能的值提供案例，您可以定义一个默认大小写，以覆盖未明确解决的任何值。默认情况下，默认关键字显示，必须始终显示在最后。
+ */
+do {
+    let someCharacter: Character = "z"
+    switch someCharacter {
+    case "a":
+        print("The first letter of the alphabet")
+    case "z":
+        print("The last letter of the alphabet")
+    default:
+        print("Some other character")
+    }
+    // Prints "The last letter of the alphabet"
+}
+/*:
+ ## No Implicit Fallthrough 没有隐含的落差
+
+ In contrast with switch statements in C and Objective-C, switch statements in Swift do not fall through the bottom of each case and into the next one by default. Instead, the entire switch statement finishes its execution as soon as the first matching switch case is completed, without requiring an explicit break statement. This makes the switch statement safer and easier to use than the one in C and avoids executing more than one switch case by mistake. 与C和Objective-C中的开关语句相反，Swift中的switch语句默认不会落在每种情况的底部，而不是下一个。 相反，只要第一个匹配的switch case完成，整个switch语句就会完成其执行，而不需要显式的break语句。 这使得switch语句比C中的语句更安全，更容易使用，并避免错误地执行多个switch情况。
+ 
+ No need for break, and every case must have some code.
+
+ - NOTE:
+ Although break is not required in Swift, you can use a break statement to match and ignore a particular case or to break out of a matched case before that case has completed its execution. 虽然在Swift中不需要break，但是在这种情况完成执行之前，您可以使用break语句来匹配和忽略特定的情况，或者从匹配的案例中删除。For details, see Break in a Switch Statement.
+
+ */
+do {
+    let anotherCharacter: Character = "a"
+    switch anotherCharacter {
+    case "a": // Invalid, the case has an empty body
+        break //no "break" make error: 'case' label in a 'switch' should have at least one executable statement
+    case "A":
+        print("The letter A")
+    default:
+        print("Not the letter A")
+    }
+    // This will report a compile-time error.
+
+    do {
+        let anotherCharacter: Character = "a"
+        switch anotherCharacter {
+        case "a", "A":
+            print("The letter A")
+        default:
+            print("Not the letter A")
+        }
+        // Prints "The letter A"
+    }
+}
+/*:
+ For readability, a compound case can also be written over multiple lines. For more information about compound cases, see Compound Cases.
+
+ - NOTE:
+ To explicitly fall through at the end of a particular switch case, use the fallthrough keyword, as described in Fallthrough.
+ */
+/*:
+ ## Interval Matching 间隔匹配
+
+ Values in switch cases can be checked for their inclusion in an interval.
+ */
+do {
+    let approximateCount = 62
+    let countedThings = "moons orbiting Saturn"
+    let naturalCount: String
+    switch approximateCount {
+    case 0:
+        naturalCount = "no"
+    case 1..<5:
+        naturalCount = "a few"
+    case 5..<12:
+        naturalCount = "several"
+    case 12..<100:
+        naturalCount = "dozens of"
+    case 100..<1000:
+        naturalCount = "hundreds of"
+    default:
+        naturalCount = "many"
+    }
+    print("There are \(naturalCount) \(countedThings).")
+    // Prints "There are dozens of moons orbiting Saturn."
+}
+/*:
+ ## Tuples
+
+ You can use tuples to test multiple values in the same switch statement. Each element of the tuple can be tested against a different value or interval of values. Alternatively, use the underscore character (_), also known as the wildcard pattern, to match any possible value. 您可以使用元组在同一个switch语句中测试多个值。 可以针对不同的值或间隔值测试元组的每个元素。 或者，使用下划线字符（_）（也称为通配符模式）来匹配任何可能的值。
+ */
+/// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/coordinateGraphSimple_2x.png
+do {
+    let somePoint = (1, 1)
+    switch somePoint {
+    case (0, 0):
+        print("\(somePoint) is at the origin")
+    case (_, 0):
+        print("\(somePoint) is on the x-axis")
+    case (0, _):
+        print("\(somePoint) is on the y-axis")
+    case (-2...2, -2...2):
+        print("\(somePoint) is inside the box")
+    default:
+        print("\(somePoint) is outside of the box")
+    }
+    // Prints "(1, 1) is inside the box"
+}
+/*:
+ ## Value Bindings 价值绑定
+
+ A switch case can name the value or values it matches to temporary constants or variables, for use in the body of the case. This behavior is known as value binding, because the values are bound to temporary constants or variables within the case’s body. switch case可以将其匹配的值或值命名为临时常量或变量，以便在case正文中使用。这个行为被称为值绑定，因为这些值绑定到case的body中的临时常量或变量.
+ 
+ After the temporary constants are declared, they can be used within the case’s code block. 临时常数被声明之后，可以在case的代码块中使用它们。
+ */
+/// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/coordinateGraphMedium_2x.png
+do {
+    let anotherPoint = (2, 0)
+    switch anotherPoint {
+    case (let x, 0):
+        print("on the x-axis with an x value of \(x)")
+    case (0, let y):
+        print("on the y-axis with a y value of \(y)")
+    case let (x, y):
+        print("somewhere else at (\(x), \(y))")
+    }
+    // Prints "on the x-axis with an x value of 2"
+}
+/*:
+ ## Where
+
+ A switch case can use a where clause to check for additional conditions.
+ */
+/// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/coordinateGraphComplex_2x.png
+do {
+    let yetAnotherPoint = (1, -1)
+    switch yetAnotherPoint {
+    case let (x, y) where x == y:
+        print("(\(x), \(y)) is on the line x == y")
+    case let (x, y) where x == -y:
+        print("(\(x), \(y)) is on the line x == -y")
+    case let (x, y):
+        print("(\(x), \(y)) is just some arbitrary point")
+    }
+    // Prints "(1, -1) is on the line x == -y"
+}
+/*:
+ ## Compound Cases 复合案例
+
+ Multiple switch cases that share the same body can be combined by writing several patterns after case, with a comma between each of the patterns. If any of the patterns match, then the case is considered to match. The patterns can be written over multiple lines if the list is long. 共享相同身体的多个开关盒可以通过在案例之后写入几个模式，每个模式之间以逗号组合。 如果任何一种模式匹配，则认为这种情况是匹配的。 如果列表很长，模式可以写在多行上。
+ */
+do {
+    let someCharacter: Character = "e"
+    switch someCharacter {
+    case "a", "e", "i", "o", "u":
+        print("\(someCharacter) is a vowel")
+    case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+        print("\(someCharacter) is a consonant")
+    default:
+        print("\(someCharacter) is not a vowel or a consonant")
+    }
+    // Prints "e is a vowel"
+}
+/*: 
+ Compound cases can also include value bindings. All of the patterns of a compound case have to include the same set of value bindings, and each binding has to get a value of the same type from all of the patterns in the compound case. This ensures that, no matter which part of the compound case matched, the code in the body of the case can always access a value for the bindings and that the value always has the same type. 
+ 
+ 复合案例还可以包括值绑定。复合案例的所有模式必须包含相同的值绑定集合，并且每个绑定必须从复合大小写中的所有模式获取相同类型的值。这可以确保，无论组合案例的哪一部分匹配，案件正文中的代码都可以随时访问绑定的值，并且该值始终具有相同的类型。
+ */
+do {
+    let stillAnotherPoint = (9, 0)
+    switch stillAnotherPoint {
+    case (let distance, 0), (0, let distance):
+        print("On an axis, \(distance) from the origin")
+    default:
+        print("Not on an axis")
+    }
+    // Prints "On an axis, 9 from the origin"
+}
+
 
 
 
 //: ## Switches
-
-// No need for break, and every case must have some code.
-let someChar = "e"
-switch someChar {
-case "a", "e", "i", "o", "u":
-    ("\(someChar) is a vowel")
-default:
-    ("\(someChar) is a consonant")
-}
-
 enum Filter: CustomStringConvertible {
     case Albums
     case Playlists
