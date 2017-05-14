@@ -336,18 +336,23 @@ do {
  After the temporary constants are declared, they can be used within the case’s code block. 临时常数被声明之后，可以在case的代码块中使用它们。
  */
 /// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/coordinateGraphMedium_2x.png
+/// Assign temp values to variables inside the cases.
 do {
     let anotherPoint = (2, 0)
     switch anotherPoint {
+    case(0,0):
+        print("原点")
     case (let x, 0):
         print("on the x-axis with an x value of \(x)")
     case (0, let y):
         print("on the y-axis with a y value of \(y)")
+    /// This acts as the default case. Since it is only assigning a tuple, any value matches.
     case let (x, y):
         print("somewhere else at (\(x), \(y))")
     }
     // Prints "on the x-axis with an x value of 2"
 }
+
 /*:
  ## Where
 
@@ -357,7 +362,7 @@ do {
 do {
     let yetAnotherPoint = (1, -1)
     switch yetAnotherPoint {
-    case let (x, y) where x == y:
+    case let (x, y) where x == y: //条件值绑定
         print("(\(x), \(y)) is on the line x == y")
     case let (x, y) where x == -y:
         print("(\(x), \(y)) is on the line x == -y")
@@ -399,10 +404,205 @@ do {
     // Prints "On an axis, 9 from the origin"
 }
 
+/*:
+ # Control Transfer Statements
+
+ Control transfer statements change the order in which your code is executed, by transferring control from one piece of code to another. Swift has five control transfer statements:
+
+    continue
+    break
+    fallthrough 下通
+    return
+    throw
+
+ The continue, break, and fallthrough statements are described below. The return statement is described in Functions, and the throw statement is described in Propagating Errors Using Throwing Functions.
+
+ ## Continue
+
+ The continue statement tells a loop to stop what it is doing and start again at the beginning of the next iteration through the loop. It says “I am done with the current loop iteration” without leaving the loop altogether.
+ */
+do {
+    let puzzleInput = "great minds think alike"
+    var puzzleOutput = ""
+    let charactersToRemove: [Character] = ["a", "e", "i", "o", "u", " "]
+    for character in puzzleInput.characters {
+        if charactersToRemove.contains(character) {
+            continue
+        } else {
+            puzzleOutput.append(character)
+        }
+    }
+    print(puzzleOutput)
+    // Prints "grtmndsthnklk"
+}
+
+/*:
+ ## Break
+
+ The break statement ends execution of an entire control flow statement immediately. The break statement can be used inside a switch or loop statement when you want to terminate the execution of the switch or loop statement earlier than would otherwise be the case.
+
+ ## Break in a Loop Statement
+
+ When used inside a loop statement, break ends the loop’s execution immediately and transfers control to the code after the loop’s closing brace (}). No further code from the current iteration of the loop is executed, and no further iterations of the loop are started.
+
+ ## Break in a Switch Statement
+
+ When used inside a switch statement, break causes the switch statement to end its execution immediately and to transfer control to the code after the switch statement’s closing brace (}).
+
+ This behavior can be used to match and ignore one or more cases in a switch statement. Because Swift’s switch statement is exhaustive and does not allow empty cases, it is sometimes necessary to deliberately match and ignore a case in order to make your intentions explicit. You do this by writing the break statement as the entire body of the case you want to ignore. When that case is matched by the switch statement, the break statement inside the case ends the switch statement’s execution immediately. 此行为可用于匹配和忽略switch语句中的一个或多个情况。因为Swift的切换语句是详尽无遗的，不允许空的情况，有时需要故意匹配和忽略一个案例，以使您的意图明确。您可以通过将break语句写入您想要忽略的整个案例来执行此操作。当这种情况与switch语句匹配时，case中的break语句会立即结束switch语句的执行。
+
+ - NOTE:
+ A switch case that contains only a comment is reported as a compile-time error. Comments are not statements and do not cause a switch case to be ignored. Always use a break statement to ignore a switch case.
+ */
+do {
+    let numberSymbol: Character = "三"  // Chinese symbol for the number 3
+    var possibleIntegerValue: Int?
+    switch numberSymbol {
+    case "1", "١", "一", "๑":
+        possibleIntegerValue = 1
+    case "2", "٢", "二", "๒":
+        possibleIntegerValue = 2
+    case "3", "٣", "三", "๓":
+        possibleIntegerValue = 3
+    case "4", "٤", "四", "๔":
+        possibleIntegerValue = 4
+    default:
+        break
+    }
+    if let integerValue = possibleIntegerValue {
+        print("The integer value of \(numberSymbol) is \(integerValue).")
+    } else {
+        print("An integer value could not be found for \(numberSymbol).")
+    }
+    // Prints "The integer value of 三 is 3."
+}
+
+/*:
+ ## Fallthrough
+
+ In Swift, switch statements don’t fall through the bottom of each case and into the next one. That is, the entire switch statement completes its execution as soon as the first matching case is completed. By contrast, C requires you to insert an explicit break statement at the end of every switch case to prevent fallthrough. Avoiding default fallthrough means that Swift switch statements are much more concise and predictable than their counterparts in C, and thus they avoid executing multiple switch cases by mistake.
+
+ If you need C-style fallthrough behavior, you can opt in to this behavior on a case-by-case basis with the fallthrough keyword. The example below uses fallthrough to create a textual description of a number.
+ */
+do {
+    let integerToDescribe = 5
+    var description = "The number \(integerToDescribe) is"
+    switch integerToDescribe {
+    case 2, 3, 5, 7, 11, 13, 17, 19:
+        description += " a prime number, and also"
+        fallthrough
+    default:
+        description += " an integer."
+    }
+    print(description)
+    // Prints "The number 5 is a prime number, and also an integer."
+}
+
+/*:
+ ## Labeled Statements
+
+ In Swift, you can nest loops and conditional statements inside other loops and conditional statements to create complex control flow structures. However, loops and conditional statements can both use the break statement to end their execution prematurely. Therefore, it is sometimes useful to be explicit about which loop or conditional statement you want a break statement to terminate. Similarly, if you have multiple nested loops, it can be useful to be explicit about which loop the continue statement should affect. 在Swift中，您可以将循环和条件语句嵌套在其他循环和条件语句中，以创建复杂的控制流结构。但是，循环和条件语句都可以使用break语句来提前结束执行。因此，有意义的是明确地说明要使用break语句终止哪个循环或条件语句。类似地，如果您有多个嵌套循环，那么明确说明continue语句应该影响哪个循环是有用的。
+
+ To achieve these aims, you can mark a loop statement or conditional statement with a statement label. With a conditional statement, you can use a statement label with the break statement to end the execution of the labeled statement. With a loop statement, you can use a statement label with the break or continue statement to end or continue the execution of the labeled statement. 要实现这些目标，您可以使用语句标签来标记循环语句或条件语句。使用条件语句，您可以使用带有break语句的语句标签来结束标记语句的执行。使用循环语句，您可以使用带有break或continue语句的语句标签来结束或继续执行带标签的语句。
+
+ A labeled statement is indicated by placing a label on the same line as the statement’s introducer keyword, followed by a colon. Here’s an example of this syntax for a while loop, although the principle is the same for all loops and switch statements:
+
+    label name: while condition {
+        statements
+    }
+
+ The following example uses the break and continue statements with a labeled while loop for an adapted version of the Snakes and Ladders game that you saw earlier in this chapter. This time around, the game has an extra rule:
+
+ To win, you must land exactly on square 25.
+ If a particular dice roll would take you beyond square 25, you must roll again until you roll the exact number needed to land on square 25.
+ */
+do {
+    let finalSquare = 25
+    var board = [Int](repeating: 0, count: finalSquare + 1)
+
+    board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+    board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+
+    var square = 0
+    var diceRoll = 0
+
+    gameLoop: while square != finalSquare {
+        diceRoll += 1
+        if diceRoll == 7 { diceRoll = 1 }
+        switch square + diceRoll {
+        case finalSquare:
+            // diceRoll will move us to the final square, so the game is over
+            break gameLoop
+        case let newSquare where newSquare > finalSquare:
+            // diceRoll will move us beyond the final square, so roll again
+            continue gameLoop
+        default:
+            // this is a valid move, so find out its effect
+            square += diceRoll
+            square += board[square]
+        }
+    }
+    print("Game over!")
+}
+/*:
+ - NOTE:
+
+ If the break statement above did not use the gameLoop label, it would break out of the switch statement, not the while statement. Using the gameLoop label makes it clear which control statement should be terminated.
+
+ It is not strictly necessary to use the gameLoop label when calling continue gameLoop to jump to the next iteration of the loop. There is only one loop in the game, and therefore no ambiguity as to which loop the continue statement will affect. However, there is no harm in using the gameLoop label with the continue statement. Doing so is consistent with the label’s use alongside the break statement and helps make the game’s logic clearer to read and understand.
+ */
+
+/*:
+ # Early Exit
+
+ A guard statement, like an if statement, executes statements depending on the Boolean value of an expression. You use a guard statement to require that a condition must be true in order for the code after the guard statement to be executed. Unlike an if statement, a guard statement always has an else clause—the code inside the else clause is executed if the condition is not true. 一个保护语句，就像一个if语句，根据表达式的布尔值执行语句。 您使用guard语句要求条件必须为true，以便执行guard语句后的代码。 与if语句不同，保护语句总是有一个else子句，如果条件不成立，则执行else子句中的代码。
+ */
+do {
+    func greet(person: [String: String]) {
+        guard let name = person["name"] else {
+            return
+        }
+
+        print("Hello \(name)!")
+
+        guard let location = person["location"] else {
+            print("I hope the weather is nice near you.")
+            return
+        }
+
+        print("I hope the weather is nice in \(location).")
+    }
+
+    greet(person: ["name": "John"])
+    // Prints "Hello John!"
+    // Prints "I hope the weather is nice near you."
+    greet(person: ["name": "Jane", "location": "Cupertino"])
+    // Prints "Hello Jane!"
+    // Prints "I hope the weather is nice in Cupertino."
+}
+
+/*:
+ # Checking API Availability
+
+ Swift has built-in support for checking API availability, which ensures that you don’t accidentally use APIs that are unavailable on a given deployment target.
+
+ The compiler uses availability information in the SDK to verify that all of the APIs used in your code are available on the deployment target specified by your project. Swift reports an error at compile time if you try to use an API that isn’t available.
+
+ You use an availability condition in an if or guard statement to conditionally execute a block of code, depending on whether the APIs you want to use are available at runtime. The compiler uses the information from the availability condition when it verifies that the APIs in that block of code are available.
+ 
+ The availability condition above specifies that in iOS, the body of the if statement executes only in iOS 10 and later; in macOS, only in macOS 10.12 and later. The last argument, *, is required and specifies that on any other platform, the body of the if executes on the minimum deployment target specified by your target.
+
+ In its general form, the availability condition takes a list of platform names and versions. You use platform names such as iOS, macOS, watchOS, and tvOS—for the full list, see Declaration Attributes. In addition to specifying major version numbers like iOS 8 or macOS 10.10, you can specify minor versions numbers like iOS 8.3 and macOS 10.10.3.
+
+    if #available(platform name version, ..., *) {
+        statements to execute if the APIs are available
+    } else {
+        fallback statements to execute if the APIs are unavailable
+    }
+ */
 
 
-
-//: ## Switches
+//: # Example
 enum Filter: CustomStringConvertible {
     case Albums
     case Playlists
@@ -748,58 +948,10 @@ default:
     ("out of bounds")
 }
 
-// Value binding: Assign temp values to variables inside the cases.
-let anotherPoint = (0, 0)
-var position = ""
-switch anotherPoint {
-case(0,0):
-    position = "原点"
-case (let x, 0):
-    position = "on the x-axis with an x value of \(x)" //(\(anotherPoint.0),0 位于x轴上)
-case (0, let y):
-    position = "on the y-axis with a y value of \(y)"
-case (0...Int.max,0...Int.max):
-    position = "第一象限"
-case let (z, w): //This acts as the default case. Since it is only assigning a tuple, any value matches.
-    ("somewhere else at (\(z), \(w))") //相当于 default:break
-}
 
-switch anotherPoint {
-case let (x, y) where x == y:
-    ("x = y")
-default:
-    break
-}
 
-var point1 = (x: 1,y: -1)
-var position1 = ""
-switch point1 {
-case(0,0):
-    position1 = "原点"
-case(var a,0):
-    position1 = "(\(a),0 位于x轴上)"
-case var (x,y) where x > 0 && y > 0: //条件值绑定
-    position1 = "第一象限"
-default:
-    break
-}
 
-// The fallthrough line forces the switch statement to fall into the default case after a previous case.
-switch anotherPoint {
-case let (x, y) where x == y:
-    ("x = y")
-    fallthrough
-default:
-    (" are equal")
-}
 
-// Nesting while, for and switches can be confusing sometimes
-// Use labels to better use the break and continue statements
-master: while true {
-    loop: for rats in 1...5{
-        continue master
-    }
-}
 
 let num1 = 5
 var desc = "\(num1)是"
