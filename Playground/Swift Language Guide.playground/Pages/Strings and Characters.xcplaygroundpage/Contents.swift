@@ -253,8 +253,8 @@ do {
 
     /// Attempting to access an index outside of a string’s range or a Character at an index outside of a string’s range will trigger a runtime error.
 
-    greeting[greeting.endIndex] // Error
-    greeting.index(after: greeting.endIndex) // Error
+    //greeting[greeting.endIndex] // Error: fatal error: Can't form a Character from an empty String
+    //greeting.index(after: greeting.endIndex) // Error
 
     /// Use the indices property of the characters property to access all of the indices of individual characters in a string.
 
@@ -262,6 +262,41 @@ do {
         print("\(greeting[index]) ", terminator: "")
     }
     // Prints "G u t e n   T a g ! "
+}
+do {
+    var str = "Hello, playground"
+
+    /// startIndex is the index of the first character, endIndex is the index after the last character.
+    str[str.startIndex] // H
+    //str[str.endIndex]   // error: after last character
+    var range = str.startIndex..<str.endIndex
+    str[range]  // "Hello, playground"
+
+    /// after As in: index(after: String.Index); after refers to the index of the character directly after the given index.
+    var index = str.index(after: str.startIndex)
+    str[index]  // "e"
+    range = str.index(after: str.startIndex)..<str.endIndex
+    str[range]  // "ello, playground"
+
+    /// before As in: index(before: String.Index); before refers to the index of the character directly before the given index.
+    index = str.index(before: str.endIndex)
+    str[index]  // d
+    range = str.startIndex..<str.index(before: str.endIndex)
+    str[range]  // Hello, playgroun
+
+    /// offsetBy As in: index(String.Index, offsetBy: String.IndexDistance). The offsetBy value can be positive or negative and starts from the given index. Although it is of the type String.IndexDistance, you can give it an Int.
+    index = str.index(str.startIndex, offsetBy: 7)
+    str[index]  // p
+    let start = str.index(str.startIndex, offsetBy: 7)
+    let end = str.index(str.endIndex, offsetBy: -6)
+    range = start..<end
+    str[range]  // play
+
+    /// limitedBy As in: index(String.Index, offsetBy: String.IndexDistance, limitedBy: String.Index). The limitedBy is useful for making sure that the offset does not cause the index to go out of bounds. It is a bounding index. Since it is possible for the offset to exceed the limit, this method returns an Optional. It returns nil if the index is out of bounds.
+    if let i = str.index(str.startIndex, offsetBy: 7, limitedBy: str.endIndex) {
+        str[i]  // p
+    }
+
 }
 
 /*:
@@ -291,98 +326,186 @@ do {
  You can use the the insert(_:at:), insert(contentsOf:at:), remove(at:), and removeSubrange(_:) methods on any type that conforms to the RangeReplaceableCollection protocol. This includes String, as shown here, as well as collection types such as Array, Dictionary, and Set. 您可以使用符合RangeReplaceableCollection协议的任何类型的插入（_：at :)，insert（contentsOf：at :)，remove（at :)和removeSubrange（_ :)方法。 这包括String，如此处所示，以及集合类型，如Array，Dictionary和Set。
  */
 
+/*:
+ # Comparing Strings
 
+ Swift provides three ways to compare textual values: string and character equality, prefix equality, and suffix equality.
 
+ ## String and Character Equality
 
-
-
-
-
-
-
-/**
- var str = "Hello, playground"
- startIndex and endIndex
-
- startIndex is the index of the first character
- endIndex is the index after the last character.
- Example
-
- // character
- str[str.startIndex] // H
- str[str.endIndex]   // error: after last character
-
- // range
- let range = str.startIndex..<str.endIndex
- str[range]  // "Hello, playground"
- after
-
- As in: index(after: String.Index)
-
- after refers to the index of the character directly after the given index.
- Examples
-
- // character
- let index = str.index(after: str.startIndex)
- str[index]  // "e"
-
- // range
- let range = str.index(after: str.startIndex)..<str.endIndex
- str[range]  // "ello, playground"
- before
-
- As in: index(before: String.Index)
-
- before refers to the index of the character directly before the given index.
- Examples
-
- // character
- let index = str.index(before: str.endIndex)
- str[index]  // d
-
- // range
- let range = str.startIndex..<str.index(before: str.endIndex)
- str[range]  // Hello, playgroun
- offsetBy
-
- As in: index(String.Index, offsetBy: String.IndexDistance)
-
- The offsetBy value can be positive or negative and starts from the given index. Although it is of the type String.IndexDistance, you can give it an Int.
- Examples
-
- // character
- let index = str.index(str.startIndex, offsetBy: 7)
- str[index]  // p
-
- // range
- let start = str.index(str.startIndex, offsetBy: 7)
- let end = str.index(str.endIndex, offsetBy: -6)
- let range = start..<end
- str[range]  // play
- limitedBy
-
- As in: index(String.Index, offsetBy: String.IndexDistance, limitedBy: String.Index)
-
- The limitedBy is useful for making sure that the offset does not cause the index to go out of bounds. It is a bounding index. Since it is possible for the offset to exceed the limit, this method returns an Optional. It returns nil if the index is out of bounds.
- Example
-
- // character
- if let index = str.index(str.startIndex, offsetBy: 7, limitedBy: str.endIndex) {
- str[index]  // p
- }
+ String and character equality is checked with the “equal to” operator (==) and the “not equal to” operator (!=), as described in Comparison Operators.
  */
+do {
+    let quotation = "We're a lot alike, you and I."
+    let sameQuotation = "We're a lot alike, you and I."
+    if quotation == sameQuotation {
+        print("These two strings are considered equal")
+    }
+    // Prints "These two strings are considered equal"
+}
+/*: 
+ Two String values (or two Character values) are considered equal if their extended grapheme clusters are canonically equivalent. Extended grapheme clusters are canonically equivalent if they have the same linguistic meaning and appearance, even if they are composed from different Unicode scalars behind the scenes. 如果两个字符串值（或两个字符值）的扩展字形集合在规范上是等效的，则它们被认为是相等的。 如果扩展的字母集合具有相同的语言意义和外观，即使它们是由幕后不同的Unicode标量组成的，则扩展的图形集群也是经典的等效的。
+ */
+do {
+    // "Voulez-vous un café?" using LATIN SMALL LETTER E WITH ACUTE
+    let eAcuteQuestion = "Voulez-vous un caf\u{E9}?"
 
+    // "Voulez-vous un café?" using LATIN SMALL LETTER E and COMBINING ACUTE ACCENT
+    let combinedEAcuteQuestion = "Voulez-vous un caf\u{65}\u{301}?"
+
+    if eAcuteQuestion == combinedEAcuteQuestion {
+        print("These two strings are considered equal")
+    }
+    // Prints "These two strings are considered equal"
+}
+//: The characters are visually similar, but do not have the same linguistic meaning. 若字符只是在视觉上相似，但语言意义不一样，则不相等：
+do {
+    let latinCapitalLetterA: Character = "\u{41}"
+
+    let cyrillicCapitalLetterA: Character = "\u{0410}"
+
+    if latinCapitalLetterA != cyrillicCapitalLetterA {
+        print("These two characters are not equivalent.")
+    }
+}
+
+/*:
+ ## Prefix and Suffix Equality
+
+ To check whether a string has a particular string prefix or suffix, call the string’s hasPrefix(_:) and hasSuffix(_:) methods, both of which take a single argument of type String and return a Boolean value.
+ 
+ - NOTE:
+ The hasPrefix(_:) and hasSuffix(_:) methods perform a character-by-character canonical equivalence comparison between the extended grapheme clusters in each string, as described in String and Character Equality. hasPrefix（_ :)和hasSuffix（_ :)方法在String和Character Equality中描述的每个字符串中的扩展字形集合之间执行逐个字符的等效对等比较。
+ */
+do {
+    let romeoAndJuliet = [
+        "Act 1 Scene 1: Verona, A public place",
+        "Act 1 Scene 2: Capulet's mansion",
+        "Act 1 Scene 3: A room in Capulet's mansion",
+        "Act 1 Scene 4: A street outside Capulet's mansion",
+        "Act 1 Scene 5: The Great Hall in Capulet's mansion",
+        "Act 2 Scene 1: Outside Capulet's mansion",
+        "Act 2 Scene 2: Capulet's orchard",
+        "Act 2 Scene 3: Outside Friar Lawrence's cell",
+        "Act 2 Scene 4: A street in Verona",
+        "Act 2 Scene 5: Capulet's mansion",
+        "Act 2 Scene 6: Friar Lawrence's cell"
+    ]
+
+    var act1SceneCount = 0
+    for scene in romeoAndJuliet {
+        if scene.hasPrefix("Act 1 ") {
+            act1SceneCount += 1
+        }
+    }
+    print("There are \(act1SceneCount) scenes in Act 1")
+    // Prints "There are 5 scenes in Act 1"
+
+    var mansionCount = 0
+    var cellCount = 0
+    for scene in romeoAndJuliet {
+        if scene.hasSuffix("Capulet's mansion") {
+            mansionCount += 1
+        } else if scene.hasSuffix("Friar Lawrence's cell") {
+            cellCount += 1
+        }
+    }
+    print("\(mansionCount) mansion scenes; \(cellCount) cell scenes")
+    // Prints "6 mansion scenes; 2 cell scenes"
+}
+
+/*:
+ # Unicode Representations of Strings
+
+ When a Unicode string is written to a text file or some other storage, the Unicode scalars in that string are encoded in one of several Unicode-defined encoding forms. Each form encodes the string in small chunks known as code units. These include the UTF-8 encoding form (which encodes a string as 8-bit code units), the UTF-16 encoding form (which encodes a string as 16-bit code units), and the UTF-32 encoding form (which encodes a string as 32-bit code units).
+
+ Swift provides several different ways to access Unicode representations of strings. You can iterate over the string with a for-in statement, to access its individual Character values as Unicode extended grapheme clusters. This process is described in Working with Characters.
+
+ Alternatively, access a String value in one of three other Unicode-compliant representations:
+
+ - A collection of UTF-8 code units (accessed with the string’s utf8 property)
+ - A collection of UTF-16 code units (accessed with the string’s utf16 property)
+ - A collection of 21-bit Unicode scalar values, equivalent to the string’s UTF-32 encoding form (accessed with the string’s unicodeScalars property)
+
+ ## UTF-8 Representation
+
+ You can access a UTF-8 representation of a String by iterating over its utf8 property. This property is of type String.UTF8View, which is a collection of unsigned 8-bit (UInt8) values, one for each byte in the string’s UTF-8 representation.
+
+ example: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/UTF8_2x.png
+ 
+ ## UTF-16 Representation
+
+ You can access a UTF-16 representation of a String by iterating over its utf16 property. This property is of type String.UTF16View, which is a collection of unsigned 16-bit (UInt16) values, one for each 16-bit code unit in the string’s UTF-16 representation:
+ 
+ example: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/UTF16_2x.png
+ 
+ ## Unicode Scalar Representation
+
+ You can access a Unicode scalar representation of a String value by iterating over its unicodeScalars property. This property is of type UnicodeScalarView, which is a collection of values of type UnicodeScalar.
+
+ Each UnicodeScalar has a value property that returns the scalar’s 21-bit value, represented within a UInt32 value:
+ 
+ example: https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/UnicodeScalar_2x.png
+ 
+ As an alternative to querying their value properties, each UnicodeScalar value can also be used to construct a new String value, such as with string interpolation.
+ */
+do {
+    /// Each example below shows a different representation of the following string, which is made up of the characters D, o, g, ‼ (DOUBLE EXCLAMATION MARK, or Unicode scalar U+203C), and the 🐶 character (DOG FACE, or Unicode scalar U+1F436):
+    let dogString = "Dog‼🐶"
+    for codeUnit in dogString.utf8 {
+        print("UTF8: \(codeUnit) ", terminator: "")
+    }
+    print("")
+    // Prints "68 111 103 226 128 188 240 159 144 182 "
+    /*
+     the first three decimal codeUnit values (68, 111, 103) represent the characters D, o, and g, whose UTF-8 representation is the same as their ASCII representation. The next three decimal codeUnit values (226, 128, 188) are a three-byte UTF-8 representation of the DOUBLE EXCLAMATION MARK character. The last four codeUnit values (240, 159, 144, 182) are a four-byte UTF-8 representation of the DOG FACE character.
+     */
+
+    for codeUnit in dogString.utf16 {
+        print("UTF16: \(codeUnit) ", terminator: "")
+    }
+    print("")
+    // Prints "68 111 103 8252 55357 56374 "
+
+    /*
+     The value properties for the first three UnicodeScalar values (68, 111, 103) once again represent the characters D, o, and g.
+
+     The fourth codeUnit value (8252) is a decimal equivalent of the hexadecimal value 203C, which represents the Unicode scalar U+203C for the DOUBLE EXCLAMATION MARK character. This character can be represented as a single code unit in UTF-16. 第四个代码单元值（8252）是十六进制值203C的十进制数，表示DOUBLE EXCLAMATION MARK字符的Unicode标量U + 203C。 该字符可以在UTF-16中表示为单个代码单元。
+
+     The fifth and sixth codeUnit values (55357 and 56374) are a UTF-16 surrogate pair representation of the DOG FACE character. These values are a high-surrogate value of U+D83D (decimal value 55357) and a low-surrogate value of U+DC36 (decimal value 56374). 第五和第六个代码单元值（55357和56374）是DOG FACE字符的UTF-16代理对表示。 这些值是U + D83D（十进制值55357）的高替代值和U + DC36（十进制值56374）的低替代值。
+     */
+
+    for scalar in dogString.unicodeScalars {
+        print("\(scalar.value) ", terminator: "")
+    }
+    print("")
+    // Prints "68 111 103 8252 128054 "
+    /*
+     The value properties for the first three UnicodeScalar values (68, 111, 103) once again represent the characters D, o, and g.
+
+     The fourth codeUnit value (8252) is again a decimal equivalent of the hexadecimal value 203C, which represents the Unicode scalar U+203C for the DOUBLE EXCLAMATION MARK character. 第四个代码单元值（8252）也是十六进制值203C的十进制等效值，表示DOUBLE EXCLAMATION MARK字符的Unicode标量U + 203C。
+
+     The value property of the fifth and final UnicodeScalar, 128054, is a decimal equivalent of the hexadecimal value 1F436, which represents the Unicode scalar U+1F436 for the DOG FACE character. 第五个也是最后一个UnicodeScalar，128054的value属性是十进制值，十六进制值为1F436，表示DOG FACE字符的Unicode标量U + 1F436。
+     */
+
+    for scalar in dogString.unicodeScalars {
+        print("\(scalar) ")
+    }
+    // D
+    // o
+    // g
+    // ‼
+    // 🐶
+}
+
+
+
+//: # Example
 do {
     let greeting = "hello"
     let leftTripleArrow = "\u{21DA}"
     let n = 5
     let s = "You have \(n) widgets."
-}
-
-do {
-    let m = 4
-    let n = 5
-    let s = "You have \(m + n) widgets."
 }
 
 do {
@@ -401,21 +524,15 @@ do {
 do {
     var s = "hello"
     let s2 = " world"
-    // "extend" has changed to "appendContentsOf"
-    s.append(s2) // or: sss += sss2
+    s += s2
+    s.append(s2)
 }
 
 do {
     let s = "hello"
     let s2 = "world"
     let space = " "
-    // "join" has changed to "joinWithSeparator", which works the other way round
     let greeting = [s,s2].joined(separator: space)
-}
-
-do {
-    ("hello".hasPrefix("he"))
-    ("hello".hasSuffix("lo"))
 }
 
 do {
@@ -441,11 +558,6 @@ do {
 do {
     let s = "31.34"
     let i = Int(s) // nil because it wasn't an Int; you don't get magical double-coercion
-}
-
-do {
-    let s = "hello"
-    let length = s.characters.count // 5
 }
 
 do {
@@ -496,11 +608,9 @@ do {
 
 do {
     let s = "hello"
-    // let ss = s.substringWithRange(NSMakeRange(1,3)) // compile error
     let ss = (s as NSString).substring(with: NSMakeRange(1,3))
 }
 
-//: ## String And Range
 do {
     let c = Character("h")
     let s = (String(c)).uppercased()
@@ -515,13 +625,7 @@ do {
 do {
     let s = "hello: ello: ekjfwijfiwjqifj!"
     let firstL = s.index(after: s.characters.index(of: "!")!)
-        //.index(after: "!")
-
-
-        //.successor() // Optional(2), meaning the third character
-    firstL
     s.substring(to: firstL)
-    firstL
     let lastL = String(s.characters.reversed()).characters.index(of: "l")
 }
 
@@ -555,7 +659,7 @@ do {
 
 do {
     let s = "hello"
-    let s2 = String(s.characters.dropFirst()) //???
+    let s2 = String(s.characters.dropFirst())
     print(s2)
 }
 
@@ -567,25 +671,11 @@ do {
 do {
     let s = "hello world"
     let arra = s.characters.split{$0 == " "}
-    print(arra) //???
+    print(arra)
     let arr = s.characters.split{$0 == " "}.map{String($0)}
     print(arr)
 }
 
-do {
-    let s = "hello"
-    // let c = s[1] // compile error
-    // let c = s.characters[1] // compile error
-}
-
-do {
-    let s = "hello"
-    let ix = s.startIndex
-    // "advance" is now an instance method "advancedBy"
-    let c = s.index(ix, offsetBy: 1) //[ix.advancedBy(1)] // "e"
-}
-
-//example removed: ++ operator deprecated in Swift 2.2, will be removed in Swift 3
 do {
     let s = "hello"
     let ix = s.startIndex
@@ -595,7 +685,6 @@ do {
 do {
     var s = "hello"
     let ix = s.index(s.characters.startIndex, offsetBy: 1)
-    // "splice" is now "insertContentsOf"
     s.insert(contentsOf: "ey, h".characters, at: ix)
 }
 
@@ -609,9 +698,6 @@ do {
     let _ = 1...3
     let _ = -1000...(-1)
     // let _ = 3...1 // legal but you'll crash
-}
-for ix in 1 ... 3 {
-    // 1, 2, 3
 }
 
 do {
@@ -640,34 +726,9 @@ do {
     let s2 = s[ix1...ix2] // "ell"
 }
 
-// removed ++ and -- from this example
-do {
-    let s = "hello"
-    var r = s.characters.indices
-    //r.startIndex = r.startIndex.successor()
-    //r.endIndex = r.endIndex.predecessor()
-    //let s2 = s[r] // "ell"
-}
-
-do {
-    var s = "hello"
-    let ix = s.startIndex
-    //let r = ix.advancedBy(1)...ix.advancedBy(3)
-    //s.replaceRange(r, with: "ipp") // s is now "hippo"
-}
-
-do {
-    var s = "hello"
-    let ix = s.startIndex
-    //let r = ix.advancedBy(1)...ix.advancedBy(3)
-    //s.removeRange(r) // s is now "ho"
-}
-
 do {
     let r = NSRange(2..<4)
-    (r)
     let r2 = r.toRange()
-    (r2)
 }
 
 //: [Next](@next)
