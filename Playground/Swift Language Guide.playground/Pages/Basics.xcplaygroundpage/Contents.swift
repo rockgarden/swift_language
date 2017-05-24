@@ -186,6 +186,82 @@ do {
  Double has a precision of at least 15 decimal digits, whereas the precision of Float can be as little as 6 decimal digits. The appropriate floating-point type to use depends on the nature and range of values you need to work with in your code. In situations where either type would be appropriate, Double is preferred. Double的精度至少为15位十进制数，而Float的精度可以是6位十进制数。 要使用的适当浮点类型取决于您需要在代码中处理的值的性质和范围。 在任何一种类型适合的情况下，优选Double。
  */
 
+/*:
+ # Type Safety and Type Inference
+
+ Swift is a type-safe language. A type safe language encourages you to be clear about the types of values your code can work with. If part of your code expects a String, you can’t pass it an Int by mistake. Swift是一种类型安全的语言。一种类型的安全语言鼓励您清楚代码可以使用的值的类型。如果你的一部分代码需要一个String，那么你就不能错误地传给Int。
+
+ Because Swift is type safe, it performs type checks when compiling your code and flags any mismatched types as errors. This enables you to catch and fix errors as early as possible in the development process. 因为Swift是类型安全的，它在编译代码时执行类型检查，并将任何不匹配的类型标记为错误。这使您能够在开发过程中尽可能早地捕获并修复错误。
+
+ Type-checking helps you avoid errors when you’re working with different types of values. However, this doesn’t mean that you have to specify the type of every constant and variable that you declare. If you don’t specify the type of value you need, Swift uses type inference to work out the appropriate type. Type inference enables a compiler to deduce the type of a particular expression automatically when it compiles your code, simply by examining the values you provide. 当您使用不同类型的值时，类型检查可帮助您避免错误。但是，这并不意味着您必须指定您声明的每个常量和变量的类型。如果您没有指定所需的值类型，Swift将使用类型推断来确定适当的类型。类型推断使得编译器可以在编译代码时自动推导特定表达式的类型，只需检查您提供的值即可。
+
+ Because of type inference, Swift requires far fewer type declarations than languages such as C or Objective-C. Constants and variables are still explicitly typed, but much of the work of specifying their type is done for you.
+
+ Type inference is particularly useful when you declare a constant or variable with an initial value. This is often done by assigning a literal value (or literal) to the constant or variable at the point that you declare it. 当您声明具有初始值的常量或变量时，类型推断特别有用。这通常是在您声明的那一点上为常量或变量分配文字值（或文字）来完成的。
+ 
+ Swift always chooses Double (rather than Float) when inferring the type of floating-point numbers. 当推断出浮点数的类型时，Swift总是选择Double（而不是Float）.
+
+ If you combine integer and floating-point literals in an expression, a type of Double will be inferred from the context. 如果在表达式中组合整数和浮点数字，则会从上下文中推断出Double类型.
+ */
+do {
+    let meaningOfLife = 42
+    // meaningOfLife is inferred to be of type Int
+
+    let pi = 3.14159
+    // pi is inferred to be of type Double
+
+    let anotherPi = 3 + 0.14159
+    // anotherPi is also inferred to be of type Double
+}
+
+/*:
+ # Numeric Literals
+
+ Integer literals can be written as:
+
+ - A decimal number, with no prefix 十进制数，无前缀
+ - A binary number, with a 0b prefix 一个二进制数，带有0b前缀
+ - An octal number, with a 0o prefix 八进制数，前缀为0
+ - A hexadecimal number, with a 0x prefix 十六进制数，带0x前缀
+ */
+do {
+    let decimalInteger = 17
+    let binaryInteger = 0b10001       // 17 in binary notation
+    let octalInteger = 0o21           // 17 in octal notation
+    let hexadecimalInteger = 0x11     // 17 in hexadecimal notation
+}
+/*:
+ Floating-point literals can be decimal (with no prefix), or hexadecimal (with a 0x prefix). They must always have a number (or hexadecimal number) on both sides of the decimal point. Decimal floats can also have an optional exponent, indicated by an uppercase or lowercase e; hexadecimal floats must have an exponent, indicated by an uppercase or lowercase p. 浮点文字可以是十进制（没有前缀）或十六进制（带有0x前缀）。 它们必须始终在小数点的两侧都有一个数字（或十六进制数字）。 十进制浮点也可以有一个可选指数，用大写或小写e表示; 十六进制浮点必须具有指数，以大写或小写p表示。
+ */
+do {
+    let decimalDouble = 12.1875
+    let exponentDouble = 1.21875e1
+    let ex1 = 1.25e2
+    let ex2 = 1.25e-2
+    let hexadecimalDouble = 0xC.3p0
+    let sixty = 0xF.0p2
+    let hexthreepoint = 0xF.0p-2
+}
+/*:
+ Numeric literals can contain extra formatting to make them easier to read. Both integers and floats can be padded with extra zeros and can contain underscores to help with readability. Neither type of formatting affects the underlying value of the literal: 数字文字可以包含额外的格式，使其更容易阅读。 这两个整数和浮点数可以用额外的零填充，并且可以包含下划线以帮助可读性。 两种类型的格式都会影响文字的底层值
+ */
+do {
+    let paddedDouble = 000123.456
+    let oneMillion = 1_000_000
+    let justOverOneMillion = 1_000_000.000_000_1
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -306,7 +382,7 @@ do {
     var pair = (1, "One")
     let ix = pair.0 // now ix is 1
     pair.0 = 2 // now pair is (2, "One")
-    (pair)
+    print(pair)
     _ = ix
 }
 do {
@@ -455,7 +531,7 @@ let stringMaybe2 : String? = "howdy"
 do {
     let stringMaybe2: String? = nil
     let upper4 = stringMaybe2?.uppercased() // no crash!
-    print(upper4!)
+    //print(upper4!) // crash: unexpectedly found nil while unwrapping an Optional value
 }
 optionalExpecter(stringMaybe)
 optionalExpecter("howdy") // wrapped implicitly as it is passed
