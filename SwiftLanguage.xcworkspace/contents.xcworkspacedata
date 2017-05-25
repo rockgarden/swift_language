@@ -20,6 +20,9 @@
          location = "group:Swift Language Guide.playground">
       </FileRef>
       <FileRef
+         location = "group:Swift Language Reference.playground">
+      </FileRef>
+      <FileRef
          location = "group:FibonacciSequence.playground">
       </FileRef>
       <FileRef
@@ -60,9 +63,6 @@
       </FileRef>
       <FileRef
          location = "group:SwiftAndCPlayground.playground">
-      </FileRef>
-      <FileRef
-         location = "group:Swift Language Reference.playground">
       </FileRef>
    </Group>
 </Workspace>

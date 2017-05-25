@@ -17,7 +17,7 @@ class KeyValueObserver {
     let keyPath: String
     private let observer: KVObserver
 
-    init(source: NSObject, keyPath: String, options: NSKeyValueObservingOptions, observer: KVObserver) {
+    init(source: NSObject, keyPath: String, options: NSKeyValueObservingOptions, observer: @escaping KVObserver) {
         self.source = source
         self.keyPath = keyPath
         self.observer = observer
@@ -31,12 +31,12 @@ class KeyValueObserver {
     }()
 
     private class func fromPointer(pointer: UnsafeMutablePointer<KeyValueObserver>) -> KeyValueObserver {
-        return Unmanaged<KeyValueObserver>.fromOpaque(COpaquePointer(pointer)).takeUnretainedValue()
+        return Unmanaged<KeyValueObserver>.fromOpaque(OpaquePointer(pointer)).takeUnretainedValue()
     }
 
     class func observe(pointer: UnsafeMutablePointer<KeyValueObserver>, change: [NSObject : AnyObject]) {
-        let kvo = fromPointer(pointer)
-        kvo.observer(kvo: kvo, change: change)
+        let kvo = fromPointer(pointer: pointer)
+        kvo.observer(kvo, change)
     }
 
     /**
@@ -52,27 +52,27 @@ class KVODispatcher : NSObject {
     /**
      KVODispatcher.observeValueForKeyPath() retrieves the KeyValueObserver instance from the context pointer and invokes the closure.
      */
-    override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [String : AnyObject]!, context: UnsafeMutablePointer<()>) {
-        KeyValueObserver.observe(UnsafeMutablePointer<KeyValueObserver>(context), change: change)
+    func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [String : AnyObject]!, context: UnsafeMutableRawPointer) {
+        KeyValueObserver.observe(pointer: UnsafeMutablePointer<KeyValueObserver>(context), change: change)
     }
 }
 private let defaultKVODispatcher = KVODispatcher()
 
 
 let button = UIButton()
-KeyValueObserver(source: button, keyPath: "selected", options: .New) {
+KeyValueObserver(source: button, keyPath: "selected", options: .new) {
     (kvo, change) in
     NSLog("OBSERVE 1 %@ %@", kvo.keyPath, change)
 }
-button.selected = true
-button.selected = false
+button.isSelected = true
+button.isSelected = false
 
 /// save the observer in an optional member and release it in the observation closure to implement a single-shot observation.
-var kvo: KeyValueObserver? = KeyValueObserver(source: button, keyPath: "selected", options: .New) {
+var kvo: KeyValueObserver? = KeyValueObserver(source: button, keyPath: "selected", options: .new) {
     (kvo, change) in
     NSLog("OBSERVE 2 %@ %@", kvo.keyPath, change)
 }
-button.selected = true
-button.selected = false
+button.isSelected = true
+button.isSelected = false
 kvo = nil //When you have finished observing, assign your KeyValueObserver optional to nil to remove the observer.
-button.selected = true
+button.isSelected = true

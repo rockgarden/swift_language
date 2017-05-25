@@ -251,10 +251,77 @@ do {
     let justOverOneMillion = 1_000_000.000_000_1
 }
 
+/*:
+ # Type Aliases
 
+ Type aliases define an alternative name for an existing type. You define type aliases with the typealias keyword.
 
+ Type aliases are useful when you want to refer to an existing type by a name that is contextually more appropriate, such as when working with data of a specific size from an external source. 当您想通过上下文更合适的名称引用现有类型时，例如在从外部源处理特定大小的数据时，类型别名很有用。
+ */
+do {
+    typealias AudioSample = UInt16
+    var maxAmplitudeFound = AudioSample.min
+    // maxAmplitudeFound is now 0
+}
 
+/*:
+ # Booleans
 
+ Swift has a basic Boolean type, called Bool. Boolean values are referred to as logical, because they can only ever be true or false. Swift provides two Boolean constant values, true and false.
+ */
+do {
+    let orangesAreOrange = true
+    let turnipsAreDelicious = false
+    if turnipsAreDelicious {
+        print("Mmm, tasty turnips!")
+    } else {
+        print("Eww, turnips are horrible.")
+    }
+    // Prints "Eww, turnips are horrible."
+
+    let i = 1
+    if i == 1 {
+        // this example will compile successfully
+    }
+}
+
+/*:
+ # Tuples
+
+ Tuples group multiple values into a single compound value. The values within a tuple can be of any type and do not have to be of the same type as each other. 元组将多个值组合成单个复合值。 元组中的值可以是任何类型的，并且不必彼此具有相同的类型。
+ */
+do {
+    let http404Error = (404, "Not Found")
+    // http404Error is of type (Int, String), and equals (404, "Not Found")
+
+    let (statusCode, statusMessage) = http404Error
+    print("The status code is \(statusCode)")
+    // Prints "The status code is 404"
+    print("The status message is \(statusMessage)")
+    // Prints "The status message is Not Found"
+
+    let (justTheStatusCode, _) = http404Error
+    print("The status code is \(justTheStatusCode)")
+    // Prints "The status code is 404"
+
+    print("The status code is \(http404Error.0)")
+    // Prints "The status code is 404"
+    print("The status message is \(http404Error.1)")
+    // Prints "The status message is Not Found"
+
+    let http200Status = (statusCode: 200, description: "OK")
+
+    print("The status code is \(http200Status.statusCode)")
+    // Prints "The status code is 200"
+    print("The status message is \(http200Status.description)")
+    // Prints "The status message is OK"
+}
+/*:
+ Tuples are particularly useful as the return values of functions. A function that tries to retrieve a web page might return the (Int, String) tuple type to describe the success or failure of the page retrieval. By returning a tuple with two distinct values, each of a different type, the function provides more useful information about its outcome than if it could only return a single value of a single type. 元组作为函数的返回值特别有用。 尝试检索网页的功能可能会返回（Int，String）元组类型来描述页面检索的成功或失败。 通过返回一个具有两个不同值的元组，每个元素都有一个不同的类型，该函数提供了有关其结果的更有用的信息，而不是仅返回单个类型的单个值。
+ 
+ - NOTE:
+ Tuples are useful for temporary groups of related values. They are not suited to the creation of complex data structures. If your data structure is likely to persist beyond a temporary scope, model it as a class or structure, rather than as a tuple. 元组对于相关值的临时组是有用的。 它们不适合创建复杂的数据结构。 如果您的数据结构可能持续超出临时范围，则将其建模为类或结构，而不是作为元组。
+ */
 
 
 
