@@ -213,7 +213,9 @@ do {
 /*:
  # Unowned References
  Like a weak reference, an unowned reference does not keep a strong hold on the instance it refers to. Unlike a weak reference, however, an unowned reference is used when the other instance has the same lifetime or a longer lifetime. You indicate an unowned reference by placing the unowned keyword before a property or variable declaration.
+ 
  An unowned reference is expected to always have a value. As a result, ARC never sets an unowned reference’s value to nil, which means that unowned references are defined using nonoptional types.
+ 
  weak引用和unowned引用有些类似但不完全相同。Unowned 引用，像weak引用一样，不会增加对象的引用计数。然而，在Swift里，一个unowned引用有着非可选类型的优点。这样相比于借助和使用optional binding更易于管理。这和隐式可选类型（Implicity Unwarpped Optionals）区别不大。此外，unowned引用是non-zeroing(非零的) ,这表示着当一个对象被销毁时，它指引的对象不会清零。也就是说使用unowned引用在某些情况下可能导致 dangling pointers(野指针url)。你是不是跟我一样想起了用Objective -C的时候, unowned引用映射到了 unsafe_unretained引用。
  - IMPORTANT:
  Use an unowned reference only when you are sure that the reference always refers to an instance that has not been deallocated.

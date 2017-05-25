@@ -17,6 +17,9 @@
       location = "group:Playground"
       name = "Playground">
       <FileRef
+         location = "group:Swift Language Guide.playground">
+      </FileRef>
+      <FileRef
          location = "group:FibonacciSequence.playground">
       </FileRef>
       <FileRef
@@ -45,9 +48,6 @@
       </FileRef>
       <FileRef
          location = "group:KVOPlayground.playground">
-      </FileRef>
-      <FileRef
-         location = "group:/Users/rockgarden/GitHub/swift_language/Playground/Swift Language Guide.playground">
       </FileRef>
       <FileRef
          location = "group:Swift Standard Library.playground">
