@@ -171,4 +171,27 @@ let optionalNumber: Int? = 3
 things.append(optionalNumber)//警告
 things.append(optionalNumber as Any)//没有警告
 
+
+//: # Example
+do {
+    let a1: UInt8 = 10
+    let b1: UInt16 = 100
+    print("\(UInt16(a1) + b1)")
+
+    let sa = 3
+    let pi = 3.1415
+    let add = Double(sa) + pi
+    print(add)
+
+    /*:
+     显式类型如整型,在使用时要显式转换
+     Explicit conversion must be made when working with explicit types.
+     For any other case, use the Int class
+     */
+    let thousand: UInt16 = 1_000
+    let one: UInt8 = 1
+    let thousandAndOne = thousand + UInt16(one)
+}
+
+
 //: [Next](@next)

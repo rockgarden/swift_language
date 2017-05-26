@@ -1,5 +1,5 @@
 //: [Previous](@previous)
-
+import MediaPlayer
 /*:
  # Properties
  Properties associate values with a particular class, structure, or enumeration. Stored properties store constant and variable values as part of an instance, whereas computed properties calculate (rather than store) a value. Computed properties are provided by classes, structures, and enumerations. Stored properties are provided only by classes and structures. 属性将值与特定类，结构或枚举相关联。 存储的属性将常量和变量值存储为实例的一部分，而计算的属性计算（而不是存储）值。 计算属性由类，结构和枚举提供。 存储的属性仅由类和结构提供。
@@ -85,6 +85,7 @@ do {
  */
 /*:
  # Computed Properties
+ computed Variables
 
  In addition to stored properties, classes, structures, and enumerations can define computed properties, which do not actually store a value. Instead, they provide a getter and an optional setter to retrieve and set other properties and values indirectly. 除了存储的属性之外，类，结构和枚举可以定义计算的属性，而实际上并不存储值。 相反，它们提供一个getter和一个可选的setter来间接检索和设置其他属性和值。
  */
@@ -119,6 +120,63 @@ do {
     square.center = Point(x: 15.0, y: 15.0)
     print("square.origin is now at (\(square.origin.x), \(square.origin.y))")
     // Prints "square.origin is now at (10.0, 10.0)"
+}
+do {
+    /// Normal get and set
+    var now : String {
+        get {
+            return NSDate().description
+        }
+        set {
+            print(newValue)
+        }
+    }
+
+    /// showing you can omit "get" if there is no "set"
+    var now2: String {
+        return NSDate().description
+    }
+
+    var mp : MPMusicPlayerController {
+        return MPMusicPlayerController.systemMusicPlayer()
+    }
+}
+do {
+    /// typical "facade" structure
+    var _p : String = "" // 一般定义为 private, but at here make error: attribute 'private' can only be used in a non-local scope
+    var p : String {
+        get {
+            return _p //在类里加self._p
+        }
+        set {
+            _p = newValue
+        }
+    }
+    p="test"
+}
+//: ## example
+private var myBigDataReal : NSData! = nil
+var myBigData : NSData! {
+    set (newdata) {
+        myBigDataReal = newdata
+    }
+    get {
+        if myBigDataReal == nil {
+            let fm = FileManager()
+            let f = (NSTemporaryDirectory() as NSString).appendingPathComponent("myBigData")
+            if fm.fileExists(atPath: f) {
+                print("loading big data from disk")
+                myBigDataReal = NSData(contentsOfFile: f)
+                do {
+                    try fm.removeItem(atPath: f)
+                    print("deleted big data from disk")
+                } catch {
+                    print("Couldn't remove temp file")
+                }
+            }
+        }
+        return myBigDataReal
+    }
 }
 
 /*:
@@ -207,6 +265,17 @@ do {
     stepCounter.totalSteps = 896
     // About to set totalSteps to 896
     // Added 536 steps
+
+    var s = "whatever" {
+        willSet {
+            print(newValue)
+        }
+        didSet {
+            print(oldValue)
+        }
+    }
+    s = "Hello"
+    s = "Bonjour"
 }
 /*:
  - NOTE:

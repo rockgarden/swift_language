@@ -16,6 +16,14 @@ import MediaPlayer
  Swift is a type-safe language, which means the language helps you to be clear about the types of values your code can work with. If part of your code expects a String, type safety prevents you from passing it an Int by mistake. Likewise, type safety prevents you from accidentally passing an optional String to a piece of code that expects a nonoptional String. Type safety helps you catch and fix errors as early as possible in the development process.
  */
 
+/*:
+ # 基本数据类型
+ - Int整型 Double/Float浮点型
+ - Bool布尔值
+ - String文本型数据
+ - Array数组 Dictionary字典
+ */
+
 /*: 
  # Constants and Variables
  Constants and variables associate a name (such as maximumNumberOfLoginAttempts or welcomeMessage) with a value of a particular type (such as the number 10 or the string "Hello"). The value of a constant cannot be changed once it is set, whereas a variable can be set to a different value in the future.
@@ -323,45 +331,234 @@ do {
  Tuples are useful for temporary groups of related values. They are not suited to the creation of complex data structures. If your data structure is likely to persist beyond a temporary scope, model it as a class or structure, rather than as a tuple. 元组对于相关值的临时组是有用的。 它们不适合创建复杂的数据结构。 如果您的数据结构可能持续超出临时范围，则将其建模为类或结构，而不是作为元组。
  */
 
+/*:
+ # Optionals
 
+ You use optionals in situations where a value may be absent. An optional represents two possibilities: Either there is a value, and you can unwrap the optional to access that value, or there isn’t a value at all. 在值可能不存在的情况下，您可以使用可选项。一个可选的代表了两种可能性：有一个值，你可以打开可选的来访问该值，或者根本没有一个值。
 
-
-
-
-
-
-
-
-
-
-//: ## 类型转换
-let a1: UInt8 = 10
-let b1: UInt16 = 100
-("\(UInt16(a1) + b1)")
-
-let sa = 3
-let pi = 3.1415
-let add = Double(sa) + pi
-(add)
+ - NOTE:
+ The concept of optionals doesn’t exist in C or Objective-C. The nearest thing in Objective-C is the ability to return nil from a method that would otherwise return an object, with nil meaning “the absence of a valid object.” However, this only works for objects—it doesn’t work for structures, basic C types, or enumeration values. For these types, Objective-C methods typically return a special value (such as NSNotFound) to indicate the absence of a value. This approach assumes that the method’s caller knows there is a special value to test against and remembers to check for it. Swift’s optionals let you indicate the absence of a value for any type at all, without the need for special constants.C或Objective-C中不存在可选项的概念。 Objective-C中最接近的东西是从一个否则返回一个对象的方法返回nil的能力，其中nil表示“没有有效对象”。但是，这仅适用于对象 - 它不适用于结构，基本C类型或枚举值。对于这些类型，Objective-C方法通常返回一个特殊值（例如NSNotFound）来表示没有值。这种方法假设方法的调用者知道有一个特殊的值来测试和记住它来检查它。 Swift的可选项可让您指出任何类型的值都不存在，而不需要特殊的常量。
+ */
+let possibleNumber = "123"
+do {
+    let convertedNumber = Int(possibleNumber)
+    // convertedNumber is inferred to be of type "Int?", or "optional Int"
+}
 
 /*:
- ## 基本数据类型
- Int整型 Double/Float浮点型
- Bool布尔值 
- String文本型数据
- Array数组 Dictionary字典
- Padding numbers with "_" makes them more readable
+ ## nil
+
+ You set an optional variable to a valueless state by assigning it the special value nil.
+ 
+ - NOTE:
+ nil cannot be used with nonoptional constants and variables. If a constant or variable in your code needs to work with the absence of a value under certain conditions, always declare it as an optional value of the appropriate type.
+ 
+
+ - NOTE:
+ Swift’s nil is not the same as nil in Objective-C. In Objective-C, nil is a pointer to a nonexistent object. In Swift, nil is not a pointer—it is the absence of a value of a certain type. Optionals of any type can be set to nil, not just object types. Objective-C中的Swift的零点不同于零。 在Objective-C中，nil是指向不存在对象的指针。 在Swift中，nil不是一个指针 - 它是没有某种类型的值。 任何类型的可选项可以设置为nil，而不仅仅是对象类型。
+
  */
-var paddedInteger = 1_000_000
+do {
+    var serverResponseCode: Int? = 404
+    // serverResponseCode contains an actual Int value of 404
+    serverResponseCode = nil
+    // serverResponseCode now contains no value
+
+    var surveyAnswer: String?
+    // surveyAnswer is automatically set to nil
+}
 
 /*:
- 显式类型如整型,在使用时要显式转换
- Explicit conversion must be made when working with explicit types.
- For any other case, use the Int class
+ ## If Statements and Forced Unwrapping
+
+ You can use an if statement to find out whether an optional contains a value by comparing the optional against nil. You perform this comparison with the “equal to” operator (==) or the “not equal to” operator (!=).
+ 
+ - NOTE
+ Trying to use ! to access a nonexistent optional value triggers a runtime error. Always make sure that an optional contains a non-nil value before using ! to force-unwrap its value. 试图使用！ 访问不存在的可选值会触发运行时错误。 始终确保可选项在使用前包含非零值！ 强制解开它的价值。
  */
-let thousand: UInt16 = 1_000
-let one: UInt8 = 1
-let thousandAndOne = thousand + UInt16(one)
+do {
+    let convertedNumber = Int(possibleNumber)
+
+    if convertedNumber != nil {
+        print("convertedNumber contains some integer value.")
+    }
+    // Prints "convertedNumber contains some integer value."
+
+    if convertedNumber != nil {
+        print("convertedNumber has an integer value of \(convertedNumber!).")
+    }
+    // Prints "convertedNumber has an integer value of 123."
+}
+
+/*:
+ ## Optional Binding
+ 可选绑定
+
+ You use optional binding to find out whether an optional contains a value, and if so, to make that value available as a temporary constant or variable. Optional binding can be used with if and while statements to check for a value inside an optional, and to extract that value into a constant or variable, as part of a single action. if and while statements are described in more detail in Control Flow. 您可以使用可选绑定来确定可选项是否包含值，如果是，则将该值用作临时常量或变量。 可选绑定可以与if和while语句一起使用，以检查可选内容中的值，并将该值提取为常量或变量，作为单个操作的一部分。 if和while语句在Control Flow中有更详细的描述。
+
+ Write an optional binding for an if statement as follows:
+
+    if let constantName = someOptional {
+        statements
+    }
+ */
+do {
+    if let actualNumber = Int(possibleNumber) {
+        print("\"\(possibleNumber)\" has an integer value of \(actualNumber)")
+    } else {
+        print("\"\(possibleNumber)\" could not be converted to an integer")
+    }
+    // Prints ""123" has an integer value of 123"
+
+    if let firstNumber = Int("4"), let secondNumber = Int("42"), firstNumber < secondNumber && secondNumber < 100 {
+        print("\(firstNumber) < \(secondNumber) < 100")
+    }
+    // Prints "4 < 42 < 100"
+
+    if let firstNumber = Int("4") {
+        if let secondNumber = Int("42") {
+            if firstNumber < secondNumber && secondNumber < 100 {
+                print("\(firstNumber) < \(secondNumber) < 100")
+            }
+        }
+    }
+    // Prints "4 < 42 < 100"
+}
+/*:
+ - NOTE:
+ Constants and variables created with optional binding in an if statement are available only within the body of the if statement. In contrast, the constants and variables created with a guard statement are available in the lines of code that follow the guard statement, as described in Early Exit.
+ */
+/*:
+ # Implicitly Unwrapped Optionals
+ 隐式展开的可选项
+
+ As described above, optionals indicate that a constant or variable is allowed to have “no value”. Optionals can be checked with an if statement to see if a value exists, and can be conditionally unwrapped with optional binding to access the optional’s value if it does exist.
+
+ Sometimes it is clear from a program’s structure that an optional will always have a value, after that value is first set. In these cases, it is useful to remove the need to check and unwrap the optional’s value every time it is accessed, because it can be safely assumed to have a value all of the time. 有时从程序的结构中可以清楚地看到，可选项将始终具有一个值，该值首先设置为该值。在这些情况下，删除在每次访问时检查和解除可选项值的需要是有用的，因为可以安全地假定所有时间都具有值。
+
+ These kinds of optionals are defined as implicitly unwrapped optionals. You write an implicitly unwrapped optional by placing an exclamation mark (String!) rather than a question mark (String?) after the type that you want to make optional. 这些可选项定义为隐式解包选项。通过在想要选择的类型之后放置一个感叹号（String！）而不是一个问号（String？）来编写一个隐式解开的可选项。
+
+ Implicitly unwrapped optionals are useful when an optional’s value is confirmed to exist immediately after the optional is first defined and can definitely be assumed to exist at every point thereafter. The primary use of implicitly unwrapped optionals in Swift is during class initialization, as described in Unowned References and Implicitly Unwrapped Optional Properties. 当可选的值在第一次定义可选项之后立即确认存在可选值时，隐式展开的可选项是有用的，并且可以肯定地假设存在于其后的每个点。在Swift中主要使用隐式解包的可选项是在类初始化期间，如“未知引用”和“隐式解包”可选属性中所述。
+
+ An implicitly unwrapped optional is a normal optional behind the scenes, but can also be used like a nonoptional value, without the need to unwrap the optional value each time it is accessed. The following example shows the difference in behavior between an optional string and an implicitly unwrapped optional string when accessing their wrapped value as an explicit String. 隐式解开的可选项是幕后的常规可选选项，但也可以像非选用值一样使用，无需在每次访问时解除可选的值。以下示例显示了在将其包装值作为显式字符串访问时，可选字符串与隐式解除的可选字符串之间的行为差​​异.
+ */
+let possibleString: String? = "An optional string."
+let forcedString: String = possibleString! // requires an exclamation mark
+
+let assumedString: String! = "An implicitly unwrapped optional string."
+let implicitString: String = assumedString // no need for an exclamation mark
+/*:
+ You can think of an implicitly unwrapped optional as giving permission for the optional to be unwrapped automatically whenever it is used. Rather than placing an exclamation mark after the optional’s name each time you use it, you place an exclamation mark after the optional’s type when you declare it. 您可以将隐式解包的可选作为给予权限，使其可以自动被自动解包。 在每次使用可选名称之后，不要在可选名称之后放置一个感叹号，而是在您声明该选项后的类型之后放置一个感叹号。
+
+ - NOTE:
+ If an implicitly unwrapped optional is nil and you try to access its wrapped value, you’ll trigger a runtime error. The result is exactly the same as if you place an exclamation mark after a normal optional that does not contain a value. 如果隐式解除的可选项为nil，并尝试访问其包装值，则会触发运行时错误。 结果与在不包含值的常规可选项之后放置感叹号完全相同。
+ */
+do {
+    if assumedString != nil {
+        print(assumedString)
+    }
+    // Prints "An implicitly unwrapped optional string."
+
+    if let definiteString = assumedString {
+        print(definiteString)
+    }
+    // Prints "An implicitly unwrapped optional string."
+}
+/*:
+ - NOTE:
+ Do not use an implicitly unwrapped optional when there is a possibility of a variable becoming nil at a later point. Always use a normal optional type if you need to check for a nil value during the lifetime of a variable. 当有可能的变量在以后变为零时，不要使用隐式解开的可选。 如果需要在变量生命周期内检查一个零值，请始终使用正常的可选类型。
+ */
+
+/*:
+ # Error Handling
+
+ You use error handling to respond to error conditions your program may encounter during execution.
+
+ In contrast to optionals, which can use the presence or absence of a value to communicate success or failure of a function, error handling allows you to determine the underlying cause of failure, and, if necessary, propagate the error to another part of your program. 与可选项相反，可以使用值的存在或不存在来传达功能的成功或失败，错误处理允许您确定故障的根本原因，如有必要，将错误传播到程序的另一部分。
+
+ When a function encounters an error condition, it throws an error. That function’s caller can then catch the error and respond appropriately. 当函数遇到错误条件时，会引发错误。 那个函数的调用者可以捕获错误并作出适当的响应。
+ 
+ A function indicates that it can throw an error by including the throws keyword in its declaration. When you call a function that can throw an error, you prepend the try keyword to the expression. 一个函数表示它可以通过在其声明中包含throws关键字来引发错误。 当你调用一个可以引发错误的函数时，你可以在表达式中添加try关键字。
+
+ Swift automatically propagates errors out of their current scope until they are handled by a catch clause. Swift自动将错误传播到当前范围之外，直到被catch子句处理。
+ 
+ A do statement creates a new containing scope, which allows errors to be propagated to one or more catch clauses. do语句创建一个新的包含范围，允许将错误传播到一个或多个catch子句。
+ */
+do {
+    func canThrowAnError() throws {
+        // this function may or may not throw an error
+    }
+    do {
+        try canThrowAnError()
+        // no error was thrown
+    } catch {
+        // an error was thrown
+    }
+}
+
+do {
+    enum SandwichError {
+        case outOfCleanDishes
+        case missingIngredients
+    }
+
+    func makeASandwich() throws {}
+    func eatASandwich() {}
+    func washDishes() {}
+    func buyGroceries() {}
+
+    do {
+        try makeASandwich()
+        eatASandwich()
+    } catch SandwichError.outOfCleanDishes {
+        washDishes()
+    } catch SandwichError.missingIngredients(let ingredients) {
+        buyGroceries(ingredients)
+    }
+}
+
+/*:
+ # Assertions
+ 断言
+
+ In some cases, it is simply not possible for your code to continue execution if a particular condition is not satisfied. In these situations, you can trigger an assertion in your code to end code execution and to provide an opportunity to debug the cause of the absent or invalid value. 在某些情况下，如果特定条件不满足，您的代码根本无法继续执行。在这些情况下，您可以在代码中触发断言以结束代码执行，并提供调试缺失值或无效值的原因的机会。
+
+ ## Debugging with Assertions
+
+ An assertion is a runtime check that a Boolean condition definitely evaluates to true. Literally put, an assertion “asserts” that a condition is true. You use an assertion to make sure that an essential condition is satisfied before executing any further code. If the condition evaluates to true, code execution continues as usual; if the condition evaluates to false, code execution ends, and your app is terminated. 一个断言是一个运行时检查，一个布尔条件绝对评估为真。一个断言“断言”一个条件是真实的。在执行任何其他代码之前，您使用断言确保满足基本条件。如果条件评估为真，代码执行按照惯例继续执行;如果条件评估为false，则代码执行结束，并且您的应用程序被终止。
+
+ If your code triggers an assertion while running in a debug environment, such as when you build and run an app in Xcode, you can see exactly where the invalid state occurred and query the state of your app at the time that the assertion was triggered. An assertion also lets you provide a suitable debug message as to the nature of the assert. 如果您的代码在调试环境中运行时触发断言，例如在Xcode中构建和运行应用程序时，您可以确定发生无效状态的位置，并在断言被触发时查询应用程序的状态。断言还允许您提供关于断言本质的适当调试信息。
+
+ You write an assertion by calling the Swift standard library global assert(_:_:file:line:) function. You pass this function an expression that evaluates to true or false and a message that should be displayed if the result of the condition is false. 您通过调用Swift标准库全局assert（_：_：file：line :)函数来写入断言。您传递此函数的一个表达式，其计算结果为true或false，如果条件的结果为false，则应显示该消息.
+ 
+
+ - NOTE:
+ Assertions are disabled when your code is compiled with optimizations, such as when building with an app target’s default Release configuration in Xcode.
+ */
+do {
+    let age = -3
+    //assert(age >= 0, "A person's age cannot be less than zero")
+    // this causes the assertion to trigger, because age is not >= 0
+
+}
+
+/*:
+ ## When to Use Assertions
+
+ Use an assertion whenever a condition has the potential to be false, but must definitely be true in order for your code to continue execution. Suitable scenarios for an assertion check include:
+
+ - An integer subscript index is passed to a custom subscript implementation, but the subscript index value could be too low or too high.
+ - A value is passed to a function, but an invalid value means that the function cannot fulfill its task.
+ - An optional value is currently nil, but a non-nil value is essential for subsequent code to execute successfully.
+
+ - NOTE:
+ Assertions cause your app to terminate and are not a substitute for designing your code in such a way that invalid conditions are unlikely to arise. Nonetheless, in situations where invalid conditions are possible, an assertion is an effective way to ensure that such conditions are highlighted and noticed during development, before your app is published. 断言导致您的应用程序终止，并且不能替代设计您的代码，使得无法产生无效的条件。 然而，在无效条件可能的情况下，断言是在应用程序发布之前确保在开发过程中突出显示和注意到这些条件的有效方法。
+ */
+
+
+
+
+//: # Example
 
 //: 类型标注
 let anotherNumber: Int = Int(UINT32_MAX)
@@ -587,7 +784,7 @@ if knownString != nil {
     knownString // No need for explicit unwrapping
 }
 
-//: ### Example
+
 var stringMaybe = Optional("howdy")
 stringMaybe = Optional("farewell")
 //print(stringMaybe) // 包含Optional("farewell")
@@ -658,79 +855,6 @@ do {
     }
     let d = Dog()
     let bigname = d.speak()?.uppercased()
-}
-
-//: ## 断言
-let age2 = 10
-assert(age2 >= 0, "年龄要大于0") //<0时可触发
-assert(true == true, "True isn't equal to false")
-//: ## computed Variables
-var now : String {
-get {
-    return NSDate().description
-}
-set {
-    print(newValue)
-}
-}
-now = "Howdy"
-(now)
-
-var now2 : String { // showing you can omit "get" if there is no "set"
-    return NSDate().description
-}
-
-var mp : MPMusicPlayerController {
-    return MPMusicPlayerController.systemMusicPlayer()
-}
-
-// typical "facade" structure
-private var _p : String = ""
-var p : String {
-get {
-    return _p //在类里加self._p
-}
-set {
-    _p = newValue
-}
-}
-p="test"
-
-// observer
-var s = "whatever" {
-willSet {
-    print(newValue)
-}
-didSet {
-    print(oldValue)
-    // self.s = "something else"
-}
-}
-s = "Hello"
-s = "Bonjour"
-
-private var myBigDataReal : NSData! = nil
-var myBigData : NSData! {
-set (newdata) {
-    myBigDataReal = newdata
-}
-get {
-    if myBigDataReal == nil {
-        let fm = FileManager()
-        let f = (NSTemporaryDirectory() as NSString).appendingPathComponent("myBigData")
-        if fm.fileExists(atPath: f) {
-            print("loading big data from disk")
-            myBigDataReal = NSData(contentsOfFile: f)
-            do {
-                try fm.removeItem(atPath: f)
-                print("deleted big data from disk")
-            } catch {
-                print("Couldn't remove temp file")
-            }
-        }
-    }
-    return myBigDataReal
-}
 }
 
 //: 注释 多行注释可以嵌套

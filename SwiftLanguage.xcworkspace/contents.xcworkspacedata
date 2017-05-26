@@ -20,6 +20,9 @@
          location = "group:Swift Language Guide.playground">
       </FileRef>
       <FileRef
+         location = "group:Temp.playground">
+      </FileRef>
+      <FileRef
          location = "group:Swift Language Reference.playground">
       </FileRef>
       <FileRef
