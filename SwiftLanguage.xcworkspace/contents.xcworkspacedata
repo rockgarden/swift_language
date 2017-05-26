@@ -5,9 +5,6 @@
       location = "group:Main/Main.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:C-Demo/C-Demo.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Demo/Demo.xcodeproj">
    </FileRef>
    <FileRef
@@ -63,9 +60,6 @@
       </FileRef>
       <FileRef
          location = "group:Swift_LocalizedString.playground">
-      </FileRef>
-      <FileRef
-         location = "group:SwiftAndCPlayground.playground">
       </FileRef>
    </Group>
 </Workspace>

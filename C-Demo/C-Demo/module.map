@@ -1,4 +1,0 @@
-module CExample [system] {
-    header "CExample.h"
-    export *
-}
