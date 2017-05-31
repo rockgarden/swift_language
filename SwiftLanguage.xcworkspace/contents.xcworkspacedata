@@ -20,9 +20,6 @@
          location = "group:Temp.playground">
       </FileRef>
       <FileRef
-         location = "group:Swift Language Reference.playground">
-      </FileRef>
-      <FileRef
          location = "group:FibonacciSequence.playground">
       </FileRef>
       <FileRef
