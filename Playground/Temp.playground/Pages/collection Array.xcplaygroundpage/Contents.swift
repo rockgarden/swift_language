@@ -39,16 +39,18 @@ do {
     let i1 = 1
     let i2 = 2
     let i3 = 3
-    if [1, 2, 3] == [i1, i2, i3] { // they are equal!
+    if [1, 2, 3].elementsEqual([i1, i2, i3]) { // they are equal!
         ("equal")
     }
     let nd1 = NoisyDog()
     let d1 = nd1 as Dog
     let nd2 = NoisyDog()
     let d2 = nd2 as Dog
-    if [d1, d2] == [nd1, nd2] { // they are equal!
-        ("equal")
-    }
+    // TODO: elementsEqual 处理类
+//    if [d1, d2].elementsEqual([nd1, nd2], by: { (_, _) -> Bool in
+//    })  { // they are equal!
+//        ("equal")
+//    }
 }
 
 do {
@@ -83,16 +85,15 @@ do {
 
     // new in beta 6
     do {
-        let arr2 = arr.suffixFrom(1)
-        let arr3 = arr.prefixUpTo(1)
-        let arr4 = arr.prefixThrough(1)
+        let arr2 = arr.suffix(from: 1)
+        let arr3 = arr.prefix(upTo: 1)
+        let arr4 = arr.prefix(through: 1)
     }
-    // let arr5 = arr[0..<10] // fatal error: Array index out of range
     do {
         let arr = [1, 2, 3]
         var r = arr.indices
-        r.startIndex = r.endIndex - 2
-        let arr2 = arr[r] // [2,3]
+        let newStartIndex = r.endIndex - 2
+        let arr2 = arr[newStartIndex] // [2,3]
     }
 }
 
@@ -105,32 +106,32 @@ do {
     let arr = [1, 2, 3]
     let ok = arr.contains(2) // ***
     let okk = arr.contains { $0 > 3 } // false
-    let ix = arr.indexOf(2) // *** Optional wrapping 1
+    let ix = arr.index(of: 2) // *** Optional wrapping 1
     let aviary = [Bird(name: "Tweety"), Bird(name: "Flappy"), Bird(name: "Lady")]
-    let ix2 = aviary.indexOf { $0.name.characters.count < 5 }
-    (ix2)
+    let ix2 = aviary.index { $0.name.characters.count < 5 }
+    print(ix2 as Any)
     do {
-        let ok = arr.startsWith([1, 2])
-        let ok2 = arr.startsWith([1, 2]) { $0 == $1 } // ***
-        let ok3 = arr.startsWith([1, 2], isEquivalent: ==) // ***
-        let ok4 = arr.startsWith([1, 2])
-        let ok5 = arr.startsWith(1...2)
-        let ok6 = arr.startsWith([1, -2]) { abs($0) == abs($1) }
+        let ok = arr.starts(with: [1, 2])
+        let ok2 = arr.starts(with: [1, 2]) { $0 == $1 } // ***
+        let ok3 = arr.starts(with:[1, 2], by: == ) // ***
+        let ok4 = arr.starts(with: [1, 2])
+        let ok5 = arr.starts(with: 1...2)
+        let ok6 = arr.starts(with: [1, -2]) { abs($0) == abs($1) }
     }
 }
 
 do {
     let arr = [3, 1, -2]
-    let min = arr.minElement() // *** -2
-    let min2 = arr.minElement { abs($0) < abs($1) }
+    let min = arr.min() //.minElement() // *** -2
+    let min2 = arr.min { abs($0) < abs($1) }
     (min2)
 }
 
 do {
     var arr = [1, 2, 3]
     arr.append(4)
-    arr.appendContentsOf([5, 6])
-    arr.appendContentsOf(7...8) // arr is now [1,2,3,4,5,6,7,8]
+    arr.append(contentsOf:[5, 6])
+    arr.append(contentsOf:7...8) // arr is now [1,2,3,4,5,6,7,8]
     let arr2 = arr + [4] // arr2 is now [1,2,3,4]
     var arr3 = [1, 2, 3]
     arr3 += [4] // arr3 is now [1,2,3,4]
@@ -138,9 +139,9 @@ do {
 
 do {
     var arr = [1, 2, 3]
-    arr.insert(4, atIndex: 1)
-    arr.insertContentsOf([10, 9, 8], at: 1)
-    let i = arr.removeAtIndex(3)
+    arr.insert(4, at: 1)
+    arr.insert(contentsOf:[10, 9, 8], at: 1)
+    let i = arr.remove(at:3)
     let ii = arr.removeLast()
     let iii = arr.popLast()
     (arr)
@@ -156,18 +157,18 @@ do {
 
 do {
     let arr = [[1, 2], [3, 4], [5, 6]]
-    let arr2 = arr.joinWithSeparator([10, 11]) // [1, 2, 10, 11, 3, 4, 10, 11, 5, 6]
-    let arr3 = arr.joinWithSeparator([]) // [1, 2, 3, 4, 5, 6]
+    let arr2 = arr.joined(separator:[10, 11]) // [1, 2, 10, 11, 3, 4, 10, 11, 5, 6]
+    let arr3 = arr.joined(separator:[]) // [1, 2, 3, 4, 5, 6]
     let arr4 = arr.flatMap { $0 } // new in Swift 1.2
-    let arr5 = Array(arr.flatten()) // new in Xcode 7 beta 6
+    let arr5 = Array(arr.joined()) // new in Xcode 7 beta 6
 }
 
 do {
     var arr = [4, 3, 5, 2, 6, 1]
-    arr.sortInPlace()
-    arr.sortInPlace { $0 > $1 } // *** [1, 2, 3, 4, 5, 6]
+    arr.sort()
+    arr.sort { $0 > $1 } // *** [1, 2, 3, 4, 5, 6]
     arr = [4, 3, 5, 2, 6, 1]
-    arr.sortInPlace(>) // *** [1, 2, 3, 4, 5, 6]
+    arr.sort(by:>) // *** [1, 2, 3, 4, 5, 6]
 
 }
 
@@ -179,8 +180,8 @@ do {
 
 do {
     let arr = [[1, 2], [3, 4], [5, 6]]
-    let flat = arr.reduce([], combine: +) // [1, 2, 3, 4, 5, 6]
-    let arr2 = [[1, 2], [3, 4], [5, 6], 7]
+    let flat = arr.reduce([], +) // [1, 2, 3, 4, 5, 6]
+    let arr2 = [[1, 2], [3, 4], [5, 6], 7] as [Any]
     let arr3 = arr2.flatMap { $0 }
     print(arr3)
 }
@@ -198,8 +199,8 @@ do {
     let target = "m"
     let arr2 = arr.map {
         $0.filter {
-            let options = NSStringCompareOptions.CaseInsensitiveSearch
-            let found = $0.rangeOfString(target, options: options)
+            let options = String.CompareOptions.caseInsensitive
+            let found = $0.range(of: target, options: options, range: nil, locale: nil) //rangeOfString(target, options: options)
             return (found != nil)
         }
         }.filter { $0.count > 0 }
@@ -209,9 +210,9 @@ do {
 do {
     var arr = ["Manny", "Moe", "Jack"]
     // let ss = arr.componentsJoinedByString(", ") // compile error
-    let s = (arr as NSArray).componentsJoinedByString(", ")
+    let s = (arr as NSArray).componentsJoined(by:", ")
     let arr2 = NSMutableArray(array: arr)
-    arr2.removeObject("Moe")
+    arr2.remove("Moe")
     arr = arr2 as NSArray as! [String]
 }
 
@@ -219,12 +220,18 @@ do {
     let arr = [String?]()
     // let arr2 = arr.map{if $0 == nil {return NSNull()} else {return $0!}} // compile error
     // let arr2 = arr.map{s -> AnyObject in if s == nil {return NSNull()} else {return s!}}
-    let arr2: [AnyObject] = arr.map { if $0 == nil { return NSNull() } else { return $0! } }
+    let arr2 = arr.map {
+        s -> Any in
+        if s == nil {
+            return NSNull()
+        } else {
+            return s! }
+    }
 }
 
 do {
-    let arr = UIFont.familyNames().map {
-        UIFont.fontNamesForFamilyName($0)
+    let arr = UIFont.familyNames.map {
+        UIFont.fontNames(forFamilyName: $0)
     }
     (arr)
 }
@@ -251,8 +258,8 @@ do {
     let arr = [Dog()]
     let nsarr = arr as NSArray
     // there is no problem even if it is NOT an NSObject, so what's the big deal?
-    (nsarr.objectAtIndex(0))
-    let arr2 = ["howdy", Dog()]
+    (nsarr.object(at:0))
+    let arr2 = ["howdy", Dog()] as [Any]
     let nsarr2 = arr2 as NSArray
     (nsarr2)
 }
@@ -272,7 +279,7 @@ class ViewController: UIViewController {
         do {
             let arrCGPoints = [CGPoint]()
             // let arrr = arrCGPoints as NSArray // compiler stops you
-            let arrNSValues = arrCGPoints.map { NSValue(CGPoint: $0) }
+            let arrNSValues = arrCGPoints.map { NSValue(cgPoint: $0) }
             let arr = arrNSValues as NSArray
             _ = arrNSValues
             _ = arr
