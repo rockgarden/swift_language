@@ -439,4 +439,52 @@ do {
     // Prints "648.9"
 }
 
+/*:
+ # Associated Types with a Generic Where Clause
+ You can include a generic where clause on an associated type. 您可以在关联类型上包含一个通用的where子句。For example, suppose you wanted to make a version of Container that includes an iterator, like what the Sequence protocol uses in the standard library.
+ */
+
+protocol Container {
+    associatedtype Item
+    mutating func append(_ item: Item)
+    var count: Int { get }
+    subscript(i: Int) -> Item { get }
+    
+    associatedtype Iterator: IteratorProtocol where Iterator.Element == Item
+    func makeIterator() -> Iterator
+}
+
+/*:
+ The generic where clause on Iterator requires that the iterator traverses over elements of the same item type as the container’s items, regardless of the iterator’s type. The makeIterator() function provides access to a container’s iterator. Iterator中的generic where子句要求迭代器遍历与容器的项目相同的项目类型的元素，而不管迭代器的类型。 makeIterator（）函数提供对容器迭代器的访问。
+ 
+ For a protocol that inherits from another protocol, you add a constraint to an inherited associated type by including the generic where clause in the protocol declaration. 对于从另一个协议继承的协议，您可以通过在协议声明中包含通用的where子句来将约束添加到继承的关联类型。
+ */
+
+protocol ComparableContainer: Container where Item: Comparable {
+}
+
+/*:
+ # Generic Subscripts
+ You can include a generic where clause on an associated type. 您可以在关联类型上包含一个通用的where子句。For example, suppose you wanted to make a version of Container that includes an iterator, like what the Sequence protocol uses in the standard library.
+ */
+extension Container {
+    subscript<Indices: Sequence>(indices: Indices) -> [Item]
+    where Indices.Iterator.Element == Int {
+    var result = [Item]()
+    for index in indices {
+    result.append(self[index])
+    }
+    return result
+    }
+}
+/*:
+ Subscripts can be generic, and they can include generic where clauses. You write the placeholder type name inside angle brackets after subscript, and you write a generic where clause right before the opening curly brace of the subscript’s body.
+ 
+ This extension to the Container protocol adds a subscript that takes a sequence of indices and returns an array containing the items at each given index. This generic subscript is constrained as follows:
+ 
+  - The generic parameter Indices in angle brackets has to be some type that conforms to the Sequence protocol from the standard library.
+  - The subscript takes a single parameter, indices, which is an instance of that Indices type.
+  - The generic where clause requires that the iterator for the sequence must traverse over elements of type Int. This ensures that the indices in the sequence are the same type as the indices used for a container.
+ Taken together, these constraints mean that the value passed for the indices parameter is a sequence of integers.
+ */
 //: [Next](@next)
