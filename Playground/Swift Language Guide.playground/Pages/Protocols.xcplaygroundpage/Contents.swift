@@ -591,7 +591,6 @@ do {
 
 //: # Example
 
-
 // just showing the notation
 func f(f:protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
 

@@ -26,9 +26,9 @@ do {
 }
 
 do {
-    let dog1: Dog = NoisyDog()
-    let dog2: Dog = NoisyDog()
-    let dog3: Dog = Dog()
+    let dog1 = NoisyDog()
+    let dog2 = NoisyDog()
+    let dog3 = Dog()
     let arr = [dog1, dog2]
     let arr2 = arr as? [NoisyDog] // Optional wrapping an array of NoisyDog
     let arr3 = [dog2, dog3]

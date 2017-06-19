@@ -11,8 +11,8 @@ import UIKit
 */
 
 //过滤数组中的数字
-extension SequenceType{
-    typealias Element = Self.Generator.Element
+extension Sequence{
+    typealias Element = Self.Iterator
     func partitionBy(fu: (Element)->Bool)->([Element],[Element]){
         var first=[Element]()
         var second=[Element]()
@@ -28,7 +28,7 @@ extension SequenceType{
 }
 let part = [82, 58, 76, 49, 88, 90].partitionBy{$0 < 60}
 part // ([58, 49], [82, 76, 88, 90])
-extension SequenceType{
+extension Sequence{
     func anotherPartitionBy(fu: (Self.Generator.Element)->Bool)->([Self.Generator.Element],[Self.Generator.Element]){
         return (self.filter(fu),self.filter({!fu($0)}))
     }
@@ -111,13 +111,13 @@ while let fib = fg.next() {
 }
 
 /*:
- ## SequenceType
+ ## Sequence
  此标准协议在官方文档中被定义为一种简单的数据类型，该类型可以用 for...in 来循环遍历。
- 协议中关联了另一个 GeneratorType 协议类型（Swift 让协议泛型化的独特方式）。当我们要自定义序列的时候，我们同时也要自定义一个实现这个协议的生成器，保证我们自定义的 SequenceType 在调用 generate() 方法时能够返回指定元素类型的生成器。
+ 协议中关联了另一个 GeneratorType 协议类型（Swift 让协议泛型化的独特方式）。当我们要自定义序列的时候，我们同时也要自定义一个实现这个协议的生成器，保证我们自定义的 Sequence 在调用 generate() 方法时能够返回指定元素类型的生成器。
  This way we'll iterate on the generator elements until *nil* is returned.
- Implementing a **SequenceType** for this generator is straightforward: */
+ Implementing a **Sequence** for this generator is straightforward: */
 
-class FibonacciSequence : SequenceType {
+class FibonacciSequence : Sequence {
     var endAt:Int
 
     init(end:Int){
@@ -138,7 +138,7 @@ for f in FibonacciSequence(end: 10) {
 
 //: But there is no need to declare the generator as a separated entity, we can use the **anyGenerator** utility method with the **AnyGenerator<T>** class to make this example more compact:
 
-class CompactFibonacciSequence : SequenceType {
+class CompactFibonacciSequence : Sequence {
     var endAt:Int
 
     init(end:Int){
@@ -203,7 +203,7 @@ var compactLucas = AnyGenerator{ c<10 ? luc(c+1): nil }
 
 let a2 = Array(compactLucas) //[2, 1, 3, 4, 7, 11, 18, 29, 47, 76]
 
-//: To try out some of the functional(ish) facilities that **SequenceType** provide, we'll now build a derived sequence that will only return *even* numbers from the Lucas sequence:
+//: To try out some of the functional(ish) facilities that **Sequence** provide, we'll now build a derived sequence that will only return *even* numbers from the Lucas sequence:
 
 c = 0
 var evenCompactLucas = AnyGenerator{ c<10 ? luc(c+1): nil }.filter({$0 % 2 == 0})
@@ -232,7 +232,7 @@ for var f in onlyEvenLucas.prefix(10){
 
 
 //: Let's see visually what's happening if we remove *.lazy* using a more verbose infinite sequence of integers that will print some text every time a value is requested from the generator:
-class InfiniteSequence :SequenceType {
+class InfiniteSequence :Sequence {
     func generate() -> AnyGenerator<Int> {
         var i = 0
         return AnyGenerator{

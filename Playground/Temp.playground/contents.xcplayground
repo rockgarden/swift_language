@@ -1,2 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' executeOnSourceChanges='false'/>
+<playground version='6.0' target-platform='ios' executeOnSourceChanges='false'>
+    <pages>
+        <page name='annotation'/>
+        <page name='Associated Types'/>
+        <page name='boolAndNumbers'/>
+        <page name='branching'/>
+        <page name='Class &amp; Struct Properties'/>
+        <page name='Class polymorphism'/>
+        <page name='Class type reference'/>
+        <page name='collection Array'/>
+        <page name='collection Dictionary'/>
+        <page name='collection Set'/>
+        <page name='conditional evaluation'/>
+        <page name='Convariance &amp; Contravariance'/>
+        <page name='defer'/>
+        <page name='Define and call'/>
+        <page name='didSet'/>
+        <page name='ErrorType'/>
+        <page name='Generics Functions'/>
+        <page name='Generics where clause'/>
+        <page name='guard'/>
+        <page name='Higher Order Functions'/>
+        <page name='Instance'/>
+        <page name='lazy'/>
+        <page name='loops'/>
+        <page name='operator'/>
+        <page name='privacy'/>
+        <page name='recursion'/>
+        <page name='SequenceType'/>
+        <page name='singleton'/>
+        <page name='Summary'/>
+        <page name='Temp'/>
+        <page name='typealias'/>
+        <page name='TypeErasure'/>
+        <page name='umbrella types'/>
+        <page name='Untitled Page 2'/>
+        <page name='Untitled Page 3'/>
+        <page name='Sequence'/>
+        <page name='Untitled Page'/>
+    </pages>
+</playground>
