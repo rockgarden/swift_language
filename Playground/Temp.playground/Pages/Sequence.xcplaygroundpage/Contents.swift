@@ -147,31 +147,55 @@ do {
         public mutating func next() -> Self.Element?
     }
  */
-class ReverseIterator: IteratorProtocol{
+do {
+    class ReverseIterator: IteratorProtocol{
 
-    var element:Int
+        var element:Int
 
-    init<T>(array:[T]) {
-        self.element = array.count-1
+        init<T>(array:[T]) {
+            self.element = array.count-1
+        }
+
+        func next() ->Int?{
+            let result:Int? = self.element < 0 ? nil : element
+            element -= 1
+            return result
+        }
     }
 
-    func next() ->Int?{
-        let result:Int? = self.element < 0 ? nil : element
-        element -= 1
-        return result
+    let arr = ["A","B","C","D","E"]
+
+    let itertator = ReverseIterator(array:arr)
+    while let i = itertator.next(){
+        print("element \(i) of the array is \(arr[i])")
     }
 }
 
 
-let arr = ["A","B","C","D","E"]
+extension Sequence{
 
-let itertator = ReverseIterator(array:arr)
-while let i = itertator.next(){
-    print("element \(i) of the array is \(arr[i])")
+    /// Sequence 实现 PartitionBy
+    ///
+    /// - Parameter fu: <#fu description#>
+    /// - Returns: <#return value description#>
+    func anotherPartitionBy(fu: (Self.Iterator.Element)->Bool)->([Self.Iterator.Element],[Self.Iterator.Element]){
+        return (self.filter(fu),self.filter({!fu($0)}))
+    }
 }
 
 do {
+    let part2 = [82, 58, 76, 49, 88, 90].anotherPartitionBy{$0 < 60}
+    part2 // ([58, 49], [82, 76, 88, 90])
+    //构建了包含两个分区的结果元组,一次一个元素,使用过滤函数测试初始序列中的每个元素,并根据过滤结果追加该元素到第一或第二分区数组中,即分区数组通过追加被构建
+    var part3 = [82, 58, 76, 49, 88, 90].reduce(([],[]), {
+        (a:([Int],[Int]),n:Int) in
+        (n<60) ? (a.0+[n], a.1) : (a.0, a.1+[n])
+    })
+    part3 // ([58, 49], [82, 76, 88, 90])
+}
 
+
+do {
     // 图书
     struct Book {
         var name: String

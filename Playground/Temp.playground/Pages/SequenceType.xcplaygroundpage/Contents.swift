@@ -11,33 +11,33 @@ import UIKit
 */
 
 //过滤数组中的数字
+//extension Sequence{
+//    typealias Element = Self.Iterator
+//    func partitionBy(fu: (Element)->Bool)->([Element],[Element]){
+//        var first=[Element]()
+//        var second=[Element]()
+//        for el in self {
+//            if fu(el) {
+//                first.append(el)
+//            }else{
+//                second.append(el)
+//            }
+//        }
+//        return (first,second)
+//    }
+//}
+//let part = [82, 58, 76, 49, 88, 90].partitionBy{$0 < 60}
+//part // ([58, 49], [82, 76, 88, 90])
 extension Sequence{
-    typealias Element = Self.Iterator
-    func partitionBy(fu: (Element)->Bool)->([Element],[Element]){
-        var first=[Element]()
-        var second=[Element]()
-        for el in self {
-            if fu(el) {
-                first.append(el)
-            }else{
-                second.append(el)
-            }
-        }
-        return (first,second)
-    }
-}
-let part = [82, 58, 76, 49, 88, 90].partitionBy{$0 < 60}
-part // ([58, 49], [82, 76, 88, 90])
-extension Sequence{
-    func anotherPartitionBy(fu: (Self.Generator.Element)->Bool)->([Self.Generator.Element],[Self.Generator.Element]){
+    func anotherPartitionBy(fu: (Self.Iterator.Element)->Bool)->([Self.Iterator.Element],[Self.Iterator.Element]){
         return (self.filter(fu),self.filter({!fu($0)}))
     }
 }
 let part2 = [82, 58, 76, 49, 88, 90].anotherPartitionBy{$0 < 60}
 part2 // ([58, 49], [82, 76, 88, 90])
 //构建了包含两个分区的结果元组,一次一个元素,使用过滤函数测试初始序列中的每个元素,并根据过滤结果追加该元素到第一或第二分区数组中,即分区数组通过追加被构建
-var part3 = [82, 58, 76, 49, 88, 90].reduce( ([],[]), combine: {
-    (a:([Int],[Int]),n:Int) -> ([Int],[Int]) in
+var part3 = [82, 58, 76, 49, 88, 90].reduce(([],[]), {
+    (a:([Int],[Int]),n:Int) in
     (n<60) ? (a.0+[n],a.1) : (a.0,a.1+[n])
 })
 part3 // ([58, 49], [82, 76, 88, 90])
@@ -84,7 +84,7 @@ nsArray
  Let's build a simple generator that produces numbers from the well known Fibonacci sequence
  */
 //
-class FibonacciGenerator : GeneratorType {
+class FibonacciGenerator : IteratorProtocol {
     var last = (0,1)
     var endAt: Int
     var lastIteration = 0
@@ -136,7 +136,7 @@ for f in FibonacciSequence(end: 10) {
 }
 
 
-//: But there is no need to declare the generator as a separated entity, we can use the **anyGenerator** utility method with the **AnyGenerator<T>** class to make this example more compact:
+//: But there is no need to declare the generator as a separated entity, we can use the **AnyIterator** utility method with the **AnyIterator<T>** class to make this example more compact:
 
 class CompactFibonacciSequence : Sequence {
     var endAt:Int
@@ -145,11 +145,11 @@ class CompactFibonacciSequence : Sequence {
         endAt = end
     }
 
-    func generate() -> AnyGenerator<Int> {
+    func generate() -> AnyIterator<Int> {
         var last = (0,1)
         var lastIteration = 0
 
-        return AnyGenerator{
+        return AnyIterator{
             guard lastIteration<self.endAt else {
                 return nil
             }
@@ -166,13 +166,13 @@ for f in CompactFibonacciSequence(end: 10) {
     print(f)
 }
 
-//: In some circumstances, a simple sequence generated with **anyGenerator()** could be more than enough for what we want to do.
+//: In some circumstances, a simple sequence generated with **AnyIterator()** could be more than enough for what we want to do.
 //: Let's create a sequence with the first 10 numbers of the [Lucas sequence](https://en.wikipedia.org/wiki/Lucas_number) (clearly not *that* Lucas), a numeric series similar to Fibonacci sequence that starts with *2,1* instead of *0,1*, using a generator and initialize an array with it:
 
 var last = (2,1)
 var c = 0
 
-let lucas = AnyGenerator{
+let lucas = AnyIterator{
     ()->Int? in
     guard c<10 else {
         return nil
@@ -194,26 +194,26 @@ import Darwin
 let Phi = (sqrt(5)+1.0)/2
 let phi = 1/Phi
 
-func luc(n:Int)->Int {
+func luc(_ n:Int)->Int {
     return Int(pow(Phi, Double(n))+pow(-phi,Double(n)))
 }
 
 c = 0
-var compactLucas = AnyGenerator{ c<10 ? luc(c+1): nil }
+var compactLucas = AnyIterator{ c<10 ? luc(c+1): nil }
 
 let a2 = Array(compactLucas) //[2, 1, 3, 4, 7, 11, 18, 29, 47, 76]
 
 //: To try out some of the functional(ish) facilities that **Sequence** provide, we'll now build a derived sequence that will only return *even* numbers from the Lucas sequence:
 
 c = 0
-var evenCompactLucas = AnyGenerator{ c<10 ? luc(c+1): nil }.filter({$0 % 2 == 0})
+var evenCompactLucas = AnyIterator{ c<10 ? luc(c+1): nil }.filter({$0 % 2 == 0})
 
 let a3 = Array(evenCompactLucas) //[2, 4, 18, 76]
 
 //: But now, what it we remove the nil termination requirement described above to build an infinite sequence of all the possible Lucas numbers?
 
 c = 0
-var infiniteLucas = AnyGenerator{luc(c+1)}
+var infiniteLucas = AnyIterator{luc(c+1)}
 
 
 let a4 = Array(infiniteLucas.prefix(10)) //[2, 1, 3, 4, 7, 11, 18, 29, 47, 76]
@@ -233,9 +233,9 @@ for var f in onlyEvenLucas.prefix(10){
 
 //: Let's see visually what's happening if we remove *.lazy* using a more verbose infinite sequence of integers that will print some text every time a value is requested from the generator:
 class InfiniteSequence :Sequence {
-    func generate() -> AnyGenerator<Int> {
+    func generate() -> AnyIterator<Int> {
         var i = 0
-        return AnyGenerator{
+        return AnyIterator{
             print("# Returning "+String(i))
             i += 1
             return i

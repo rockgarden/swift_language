@@ -1,5 +1,7 @@
 //: [Previous](@previous)
 
+import UIKit
+
 /*: 
  # Collection Types
  Swift provides three primary collection types, known as arrays, sets, and dictionaries, for storing collections of values. Arrays are ordered collections of values. Sets are unordered collections of unique values. Dictionaries are unordered collections of key-value associations.
@@ -77,10 +79,10 @@ do {
 
     /// Retrieve a value from the array by using subscript syntax, passing the index of the value you want to retrieve within square brackets immediately after the name of the array.
     var firstItem = shoppingList[0]
-    /*:
-     - NOTE:
-     The first item in the array has an index of 0, not 1. Arrays in Swift are always zero-indexed.
-     */
+/*:
+ - NOTE:
+ The first item in the array has an index of 0, not 1. Arrays in Swift are always zero-indexed.
+ */
     /// 0 替换
     shoppingList[0] = "Six eggs"
     shoppingList[0...2] = ["Bananas", "Apples", "Strawberries"]
@@ -90,18 +92,18 @@ do {
     shoppingList
     shoppingList[0...6] = ["Bananas", "Apples"]
     shoppingList
-    /*:
-     - NOTE:
-     You can’t use subscript syntax to append a new item to the end of an array.
-     */
+/*:
+ - NOTE:
+ You can’t use subscript syntax to append a new item to the end of an array.
+ */
 
     shoppingList.insert("Maple Syrup", at: 0) //Inserts element at index
 
     let mapleSyrup = shoppingList.remove(at: 0) //Returns removed item
-    /*:
-     - NOTE:
-     If you try to access or modify a value for an index that is outside of an array’s existing bounds, you will trigger a runtime error. You can check that an index is valid before using it by comparing it to the array’s count property. Except when count is 0 (meaning the array is empty), the largest valid index in an array will always be count - 1, because arrays are indexed from zero.
-     */
+/*:
+ - NOTE:
+ If you try to access or modify a value for an index that is outside of an array’s existing bounds, you will trigger a runtime error. You can check that an index is valid before using it by comparing it to the array’s count property. Except when count is 0 (meaning the array is empty), the largest valid index in an array will always be count - 1, because arrays are indexed from zero.
+ */
     var sl = shoppingList
     firstItem = sl[0]
     let Firstone = sl.removeFirst()
@@ -135,7 +137,7 @@ do {
     }
 }
 
-//: ## Example
+//: ## Array Example
 do {
     var a10 = Array(0 ... 10) //包含10
     a10 = Array(0 ..< 10) //小于10
@@ -157,13 +159,291 @@ do {
 }
 
 /*:
- ## 判定两个数组是否共用相同元素
+ ### 判定两个数组是否共用相同元素
  通过使用恒等运算符(identity operators)( == and !=)来判定两个数组共用相同的储存空间或元素.
  */
 do {
     let a = [1,3,4], b = [2,3,7], c = [1,3,4]
     a == b
     a != c
+}
+
+/*:
+ ### Map
+ map函数能够被数组调用，它接受一个闭包作为参数，作用于数组中的每个元素。闭包返回一个变换后的元素，接着将所有这些变换后的元素组成一个新的数组
+ */
+do {
+    // 可以看到我们甚至可以不再定义可变的数组直接用不可变的就可以
+    let numbers = [1,2,3]
+    let sumNumbers = numbers.map { (number: Int) -> Int in
+        return number + number
+    }
+    // 简便写法 因为map闭包里面的类型可以自动推断所以可以省略
+    let sumNumbers1 = numbers.map { number in
+        return number + number
+    }
+    // 可以省了return 但是循环次数多了一次 目前不知道这是什么原因(循环次数是3次这是4次) 结果是一样的
+    let sumNumbers2 = numbers.map { number in number + number }
+    print(sumNumbers2) // [2,4,6]
+    // 最终简化写法
+    let sumNumbers3 = numbers.map { $0 + $0 }
+}
+do {
+    let arr = [String?]()
+    let arr2 = arr.map {
+        s -> Any in
+        if s == nil {
+            return NSNull()
+        } else {
+            return s! }
+    }
+}
+do {
+    let arr = UIFont.familyNames.map {
+        UIFont.fontNames(forFamilyName: $0)
+    }
+    print(arr)
+}
+
+do { /// Map函数返回数组的元素类型不一定要与原数组相同
+    let fruits = ["apple", "banana", "orange", ""]
+    // 这里数组中存在一个""的字符串 为了后面来比较 map 和 flatMap
+    let counts = fruits.map { fruit -> Int? in
+        let length = fruit.characters.count
+        guard length > 0 else {
+            return nil
+        }
+        return length
+    }
+    // [Optional(5), Optional(6), Optional(6), nil]
+    print(counts)
+
+    let arr = [Any]()
+    let arr2: [String] = arr.map {
+        if $0 is String {
+            return $0 as! String
+        } else {
+            return ""
+        }
+    }
+    _ = arr2
+
+    let array = [1,2,3,4,5,6]
+    let isEven = array.map { $0 % 2 == 0 }
+    let isEven1 = array.map { num in
+        return num % 2 == 0
+    }
+    // [false, true, false, true, false, true]
+    print(isEven)
+}
+
+/*:
+ ### FlatMap
+ flatMap 与 map 不同之处是:
+ - 1. flatMap返回后的数组中不存在 nil 同时它会把Optional safely unwraps 解包(unwraps Optionals safely while eliminating nils);
+ - 2. flatMap还能把数组中存有数组的数组 一同打开变成一个新的数组 ;
+ - 3. flatMap也能把两个不同的数组合并成一个数组 这个合并的数组元素个数是前面两个数组元素个数的乘积
+ */
+do { // 1.
+    let fruits = ["apple", "banana", "orange", ""]
+    let counts = fruits.flatMap { fruit -> Int? in
+        let length = fruit.characters.count
+        guard length > 0 else {
+            return nil
+        }
+        return length
+    }
+    // [5,6,6]
+    print(counts)
+
+    do {
+        let arr: [String?] = ["Manny", nil, nil, "Moe", nil, "Jack", nil]
+        let arr2 = arr.flatMap { $0 }
+        (arr2)
+    }
+}
+do {// 2.
+    let array = [[1,2,3], [4,5,6], [7,8,9]]
+    let arrayMap = array.map { $0 }
+    // [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    print(arrayMap)
+    let arrayFlatMap = array.flatMap { $0 }
+    // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    print(arrayFlatMap)
+}
+do {// 3.
+    let fruits = ["apple", "banana", "orange"]
+    let counts = [1, 2, 3]
+    let fruitCounts = counts.flatMap { count in
+        fruits.map { fruit in
+            //        title + "(index)"
+            // 也可以返回元组
+            (fruit, count)
+        }
+    }
+    // [("apple", 1), ("banana", 1), ("orange", 1), ("apple", 2), ("banana", 2), ("orange", 2), ("apple", 3), ("banana", 3), ("orange", 3)]
+    print(fruitCounts)
+}
+
+/*:
+ ### filter
+ filter 可以取出数组中符合条件的元素 重新组成一个新的数组
+ */
+do {
+    let numbers = [1,2,3,4,5,6]
+    let evens = numbers.filter { $0 % 2 == 0 }
+    // [2, 4, 6]
+    print(evens)
+}
+do {
+    let arr = [["Manny", "Moe", "Jack"], ["Harpo", "Chico", "Groucho"]]
+    let target = "m"
+    let arr2 = arr.map {
+        $0.filter {
+            let options = String.CompareOptions.caseInsensitive
+            let found = $0.range(of: target, options: options, range: nil, locale: nil) //rangeOfString(target, options: options)
+            return (found != nil)
+        }
+        }.filter { $0.count > 0 }
+    print(arr2)
+}
+
+/*:
+ ### Reduce
+ map,flatMap和filter方法都是通过一个已存在的数组，生成一个新的、经过修改的数组。然而有时候我们需要把所有元素的值合并成一个新的值 那么就用到了Reduce
+ */
+do {// 获得一个数组中所有元素的和
+    let numbers = [1,2,3,4,5]
+    let sum = numbers.reduce(0) { $0 + $1 }
+    let sum1 = numbers.reduce(0) { total, num in
+        return total + num
+    }
+    // 15
+    print(sum)
+}
+do {// 合并成的新值不一定跟原数组中元素的类型相同
+    let numbers = [1,5,1,8,8,8,8,8,8,8,8]
+    // reduce 函数第一个参数是返回值的初始化值, 通过 "" 推导 是 String
+    let tel = numbers.reduce("") { "\($0)" + "\($1)" }
+    // 15188888888
+    print(tel)
+}
+do {
+    let arr = [[1, 2], [3, 4], [5, 6]]
+    let flat = arr.reduce([], +) // [1, 2, 3, 4, 5, 6]
+    print(flat)
+}
+do {
+    // interesting misuse of `reduce`: implement each_cons
+    // this is probably incredibly inefficient but it was fun to write
+    let arr = [1,2,3,4,5,6,7,8]
+    let clump = 2
+    let cons : [[Int]] = arr.reduce([[Int]]()) {
+        memo, cur in
+        var memo = memo
+        if memo.count == 0 {
+            return [[cur]]
+        }
+        if memo.count < arr.count - clump + 1 {
+            memo.append([])
+        }
+        return memo.map {
+            if $0.count == clump {
+                return $0
+            }
+            var arr = $0
+            arr.append(cur)
+            return arr
+        }
+    }
+    print(cons)
+}
+
+extension Array {
+    
+    func mMap<U> (transform: (Element) -> U) -> [U] {
+        return reduce([], { $0 + [transform($1)] })
+    }
+
+    func mFilter (includeElement: (Element) -> Bool) -> [Element] {
+        return reduce([]) { includeElement($1) ? $0 + [$1] : $0 }
+    }
+}
+
+
+/*:
+ ### partition
+ partition 会根据条件把集合里的元素重新排序，符合条件的元素移动到最后，返回一个两个部分分界元素的索引, 再通过prefix和suffix可以分别获得集合的两段元素。
+ */
+do {
+    var numbers = [30, 40, 20, 30, 30, 60, 10]
+    let p = numbers.partition(by: { $0 > 30 })
+    // p == 5
+    // numbers == [30, 10, 20, 30, 30, 60, 40]
+
+    let head = numbers.prefix(upTo: p)
+    // head == [30, 10, 20, 30, 30]
+    let end = numbers.suffix(from: p)
+    // end == [60, 40]
+}
+
+/*:
+ ### sequence(first: next: )
+
+ 根据next里的闭包来生成下一个元素，和reduce完全相反。特别的是这个函数返回的是一个 UnfoldSequence ，即里面的值是lazy的，只要在访问时才生成，这也可能是一个无限的队列。
+
+ 似乎特别适合用来寻祖，当next闭包返回的是nil时队列就终止了:
+
+    for view in sequence(first: someView, next: { $0.superview }) {
+        // someView, someView.superview, someView.superview.superview, ...
+    }
+ */
+do {
+    for x in sequence(first: 0.1, next: { $0 * 2 }).prefix(while: { $0 < 4 }) {
+        print(x)// 0.1, 0.2, 0.4, 0.8, ...
+    }
+}
+
+/*:
+ ### lexicographicallyPrecedes
+ 
+ 返回一个布尔值，指示序列在词典（字典）排序中是否先于另一个序列，使用小于运算符（<）来比较元素。
+
+
+ lexicographic 是词典的意思。这个方法声明在 AnyCollection 里。会按照顺序比较两个集合元素的大小。
+ */
+extension String {
+    func versionToInt() -> [Int] {
+        return self.characters.split(separator: ".").map { Int.init(String($0)) ?? 0 }
+    }
+}
+do {
+    let storeVersion = "3.14.10"
+    let currentVersion = "3.130.10"
+
+    storeVersion.versionToInt()
+    currentVersion.versionToInt()
+    //true
+    storeVersion.versionToInt().lexicographicallyPrecedes(currentVersion.versionToInt())
+
+    /// 此示例使用词典预测法来测试字符串排序中的哪个整数数组是第一个。
+    let a = [1, 2, 2, 2]
+    let b = [1, 2, 3, 4]
+
+    print(a.lexicographicallyPrecedes(b))
+    // Prints "true"
+    print(b.lexicographicallyPrecedes(b))
+    // Prints "false"
+}
+
+/*:
+ ### reserveCapacity
+
+ 如果明确的知道一个数组的容量大小，可以调用这个方法告诉系统这个数组至少需要的容量，避免在数组添加元素过程中重复的申请内存。
+ */
+do {
+    var alphabet = [String]()
+    alphabet.reserveCapacity(26)
 }
 
 
