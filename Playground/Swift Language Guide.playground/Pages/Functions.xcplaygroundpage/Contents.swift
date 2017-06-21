@@ -742,7 +742,10 @@ do {
 
 //: # Other
 
-//: ## copy let Parameter then new var
+/*: 
+ ## Modifiable Parameters 
+ by copy let Parameter then new var
+ */
 do {
     /// instead copy let then new var
     func removeCharacterNot(_ c:Character, from s:String) -> Int {
@@ -760,6 +763,8 @@ do {
         print(result)
         print(s) // no effect on s
     }
+}
+do {
     /// 阶乘积:常量形参和变量形参,默认参数是常量,Swift 3.0 不可用
     func factorial(_ max: Int) -> Int {
         var result: Int = 1
@@ -771,31 +776,18 @@ do {
         return result
     }
     ("factorial Result:\(factorial(10))") //注意不要Int超界
-    do {
-        let myRect = CGRect.zero
-        var arrow = CGRect.zero
-        var body = CGRect.zero
-        struct Arrow {
-            static let ARHEIGHT : CGFloat = 0
-        }
-        // but the whole example may fall to the ground...
-        // as they may be blocking access to the original C functions entirely
-        // the won't let me write this:
-        // let r = CGRectDivide(myRect, &arrow, &body, Arrow.ARHEIGHT, .minYEdge)
-        // but they do seem to let me access it as a kind of method!
-        // seed 4, dodged a bullet; they renamified it but they didn't kill it
-        // seed 6, they renamified it further; I hope they don't totally kill it...
-        myRect.__divided(slice: &arrow, remainder: &body, atDistance: Arrow.ARHEIGHT, from: .minYEdge)
-        // hmm, maybe I can subsitute this example:
-        let c = UIColor.purple
-        var r : CGFloat = 0
-        var g : CGFloat = 0
-        var b : CGFloat = 0
-        var a : CGFloat = 0
-        c.getRed(&r, green: &g, blue: &b, alpha: &a)
-        print(r,g,b,a)
-    }
 }
+do {
+    // hmm, maybe I can subsitute this example:
+    let c = UIColor.purple
+    var r : CGFloat = 0
+    var g : CGFloat = 0
+    var b : CGFloat = 0
+    var a : CGFloat = 0
+    c.getRed(&r, green: &g, blue: &b, alpha: &a)
+    print(r,g,b,a)
+}
+
 
 //: ## Class instance parameter is mutable in a function without "inout"
 do {
@@ -811,8 +803,10 @@ do {
     print(d.name) // "Fido"
     changeName(of:d, to:"Rover")
     print(d.name) // "Rover"
-
-    // Example
+}
+do {
+    // Example: 访问由self引用的Pointee实例。
+    // 前提条件：被委托人已经初始化了一个类型Pointee的实例。
     class ViewController: UIViewController,UIPopoverPresentationControllerDelegate {
         var button : UIButton!, button2 : UIButton!
         func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
@@ -823,6 +817,16 @@ do {
             }
         }
     }
+}
+do {// struct like class
+    let myRect = CGRect.zero
+    var arrow = CGRect.zero
+    var body = CGRect.zero
+    struct Arrow {
+        static let ARHEIGHT : CGFloat = 0
+    }
+    /// 不能对原始C函数的访问 如： let r = CGRectDivide（myRect，＆arrow，＆body，Arrow.ARHEIGHT，.minYEdge），但可以用下面的方式访问：
+    myRect.__divided(slice: &arrow, remainder: &body, atDistance: Arrow.ARHEIGHT, from: .minYEdge)
 }
 
 //: ## Void

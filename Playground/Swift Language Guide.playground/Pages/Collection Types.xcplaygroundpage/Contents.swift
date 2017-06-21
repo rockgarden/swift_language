@@ -204,6 +204,23 @@ do {
     }
     print(arr)
 }
+do {
+    let anim = CAKeyframeAnimation(keyPath:"position") // dummy
+    let (oldP,p1,p2,newP) = (CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero) // dummy
+    let points = [oldP,p1,p2,newP]
+    anim.values = points.map {NSValue(cgPoint:$0)}
+    print(anim.values)
+    anim.values = points
+    anim.values
+
+    do {
+        let sec = 0
+        let ct = 10
+        print(Array(0..<ct).map {IndexPath(row:$0, section:sec)})
+        (0..<ct).map {IndexPath(row:$0, section:sec)}
+        sec
+    }
+}
 
 do { /// Map函数返回数组的元素类型不一定要与原数组相同
     let fruits = ["apple", "banana", "orange", ""]
@@ -445,6 +462,18 @@ do {
     var alphabet = [String]()
     alphabet.reserveCapacity(26)
 }
+
+/*:
+ ### sort
+ */
+do {
+    var arr = [4,3,5,2,6,1]
+    arr.sort()
+    arr.sort {$0 > $1} // *** [1, 2, 3, 4, 5, 6]
+    arr = [4,3,5,2,6,1]
+    arr.sort(by:>) // *** [1, 2, 3, 4, 5, 6]
+}
+
 
 
 //: # Sets

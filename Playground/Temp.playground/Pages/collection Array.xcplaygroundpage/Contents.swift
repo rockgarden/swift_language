@@ -296,14 +296,7 @@ do {
     _ = arr5
 }
 
-do {
-    var arr = [4,3,5,2,6,1]
-    arr.sort()
-    arr.sort {$0 > $1} // *** [1, 2, 3, 4, 5, 6]
-    arr = [4,3,5,2,6,1]
-    arr.sort(by:>) // *** [1, 2, 3, 4, 5, 6]
 
-}
 
 do {
     let arr = [1,2,3,4,5,6]
@@ -339,12 +332,7 @@ _ = sum2
 
 
 
-do {
-    let sec = 0
-    let ct = 10
-    _ = Array(0..<ct).map {IndexPath(row:$0, section:sec)}
-    _ = (0..<ct).map {IndexPath(row:$0, section:sec)}
-}
+
 
 do {
     let arr = [[1,2], [3,4], [5,6]]
@@ -395,15 +383,7 @@ do {
     lay.locations = [0.25, 0.5, 0.75]
 }
 
-do {
-    let anim = CAKeyframeAnimation(keyPath:"position") // dummy
-    let (oldP,p1,p2,newP) = (CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero) // dummy
-    let points = [oldP,p1,p2,newP]
-    anim.values = points.map {NSValue(cgPoint:$0)}
-    // this, on the other hand, is _legal_, but it isn't going to work:
-    anim.values = points
-    // FLASH! New in Xcode 8.1 it _is_ going to work
-}
+
 
 do {
     var arr = ["Manny", "Moe", "Jack"]
@@ -604,15 +584,6 @@ do {
 }
 
 do {
-    var arr = [4, 3, 5, 2, 6, 1]
-    arr.sort()
-    arr.sort { $0 > $1 } // *** [1, 2, 3, 4, 5, 6]
-    arr = [4, 3, 5, 2, 6, 1]
-    arr.sort(by:>) // *** [1, 2, 3, 4, 5, 6]
-
-}
-
-do {
     let arr = [1, 2, 3, 4, 5, 6]
     let arr2 = arr.split { $0 % 2 == 0 } // split at evens: [[1], [3], [5]]
     (arr2)
@@ -666,18 +637,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-
-        
         do {
             let views = self.view.subviews
             _ = views
-            // but you can still receive an untyped array
-//            let p = Pep()
-//            let boys = p.boys() as! [String]
-//            print(boys)
-//            let boys2 = p.boysGood() // it's already a [String]
-//            print(boys2)
         }
     }
 }
