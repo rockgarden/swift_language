@@ -474,6 +474,28 @@ do {
     arr.sort(by:>) // *** [1, 2, 3, 4, 5, 6]
 }
 
+/*:
+ ### joined
+ Returns the elements of this collection of collections, concatenated. 返回集合集合的元素，连接。
+ */
+do {
+    /// In this example, an array of three ranges is flattened so that the elements of each range can be iterated in turn. 将三个范围的数组变平，以便依次迭代每个范围的元素。
+    let ranges = [0..<3, 8..<10, 15..<17]
+
+    // A for-in loop over 'ranges' accesses each range:
+    for range in ranges {
+        print(range)
+    }
+    // Prints "0..<3"
+    // Prints "8..<10"
+    // Prints "15..<17"
+
+    // Use 'joined()' to access each element of each range:
+    for index in ranges.joined() {
+        print(index, terminator: " ")
+    }
+    // Prints: "0 1 2 8 9 15 16"
+}
 
 
 //: # Sets
