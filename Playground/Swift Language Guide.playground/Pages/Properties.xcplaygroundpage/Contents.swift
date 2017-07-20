@@ -298,7 +298,7 @@ do {
  */
 
 /*:
- # Type Properties
+ # Type Properties 类型属性
 
  Instance properties are properties that belong to an instance of a particular type. Every time you create a new instance of that type, it has its own set of property values, separate from any other instance. 实例属性是属于特定类型的实例的属性。每次创建该类型的新实例时，它都有自己的一组属性值，与任何其他实例分开。
 
@@ -341,6 +341,58 @@ class SomeClass {
     }
 }
 /// The computed type property examples above are for read-only computed type properties, but you can also define read-write computed type properties with the same syntax as for computed instance properties.
+
+/*:
+ ## override type property and func
+ 提示: 在静态计算属性中不能访问实例属性（包括存储属性和计算属性），但可以访问其他静态属性。在实例计算属性中能访问实例属性，也能访问静态属性。
+ */
+do {
+    class Person {
+        //class修饰：支持子类对该实现进行重写
+        class func show(){
+            print("class-func...")
+        }
+
+        //static修饰：不支持子类对该实现进行重写
+        static func display() {
+            print("static-func...")
+        }
+    }
+
+    class Student:Person {
+        override class func show(){
+            print("Student重写:class-func...")
+        }
+
+        //    //这里报错...cannot override static method
+        //    override static func display(){}
+    }
+
+    /// 使用关键字static来定义类型属性。在为类定义 “计算型” 类型属性时，可以改用关键字class来支持子类对父类的实现进行重写
+    class SomeClass {
+        static var storedTypeProperty = "Some value."
+        static var computedTypeProperty: Int {
+            return 1
+        }
+
+        //class修饰“计算型” ：支持子类对该实现进行重写
+        class var overrideableComputedTypeProperty: Int {
+            return 2
+        }
+    }
+
+    class OneClass : SomeClass {
+        //     //这里报错...cannot override static var
+        //    override static var computedTypeProperty: Int {
+        //        return 111
+        //    }
+
+        override class var overrideableComputedTypeProperty: Int {
+            return 222
+        }
+    }
+}
+
 /*:
  ## Querying and Setting Type Properties
 
@@ -389,5 +441,40 @@ do {
     print(AudioChannel.maxInputLevelForAllChannels)
     // Prints "10"
 }
+
+/*:
+ ## type property access each other
+ 在静态计算属性中不能访问实例属性（包括存储属性和计算属性），但可以访问其他静态属性。在实例计算属性中能访问实例属性，也能访问静态属性。
+ */
+
+/*:
+ ## type property in protocol
+ class methods are only allowed within classes, so protocol only can use key word static.
+ 有一个比较特殊的是protocol。在Swift中class、struct和enum都是可以实现protocol的。那么如果我们想在protocol里定义一个类型域上的方法或者计算属性的话，应该用哪个关键字呢？答案是使用class进行定义，但是在实现时还是按照上面的规则：在class里使用class关键字，而在struct或enum中仍然使用static——虽然在protocol中定义时使用的是class：
+ */
+
+protocol MyProtocol {
+    static func foo() -> String
+}
+struct MyStruct: MyProtocol {
+    static func foo() -> String {
+        return "MyStruct"
+    }
+}
+enum MyEnum: MyProtocol {
+    static func foo() -> String {
+        return "MyEnum"
+    }
+}
+class MyClass: MyProtocol {
+    class func foo() -> String {
+        return "MyClass"
+    }
+}
+
+do {
+    MyClass.foo()
+}
+
 
 //: [Next](@next)
