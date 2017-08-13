@@ -336,4 +336,11 @@ do {
     // Prints "Now serving Daniella!"
 }
 
+/**
+ # 可选型闭包
+ */
+do {
+    var returnGpsInfo:((String)->Void)?
+}
+
 //: [Next](@next)

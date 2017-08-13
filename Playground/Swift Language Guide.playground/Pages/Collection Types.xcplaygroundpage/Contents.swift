@@ -573,11 +573,94 @@ do {
     }
 }
 
+//: ## Set to Array
+do {
+    var s = Set<Int>()
+    s.insert(1)
+    let arr = Array(s)
+    let nsArr = Array(s) as NSArray
+    print(nsArr)
+}
+
+//: ## Example
+do {
+    let arr = [1,2,1,3,2,4,3,5]
+    let set = Set(arr)
+    let arr2 = Array(set) // [5,2,3,1,4], perhaps
+}
+
+do {
+    let set : Set = [1,2,3,4,5]
+    let set2 = Set(set.map {$0+1}) // {6, 5, 2, 3, 4}, perhaps
+}
+
+do {
+    let opts = UIViewAnimationOptions(rawValue:0b00011000)
+    _ = opts
+}
+
+do {
+    let val = UIViewAnimationOptions.autoreverse.rawValue | UIViewAnimationOptions.repeat.rawValue
+    let opts = UIViewAnimationOptions(rawValue: val)
+    print(opts)
+}
+
+do {
+    let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
+    print(opts)
+}
+
+do {
+    var opts = UIViewAnimationOptions.autoreverse
+    _ = opts.insert(.repeat)
+    print(opts)
+}
+
+do {
+    UIView.animate(withDuration:0.4, delay: 0, options: [.autoreverse, .repeat],
+                   animations: {
+                    // ...
+    })
+}
+
+do {
+    let RECENTS = "recents"
+    let PIXCOUNT = 20
+    func test() {
+        let ud = UserDefaults.standard
+        var recents = ud.object(forKey:RECENTS) as? [Int]
+        if recents == nil {
+            recents = []
+        }
+        var forbiddenNumbers = Set(recents!)
+        let legalNumbers = Set(1...PIXCOUNT).subtracting(forbiddenNumbers)
+        let newNumber = Array(legalNumbers)[
+            Int(arc4random_uniform(UInt32(legalNumbers.count)))
+        ]
+        forbiddenNumbers.insert(newNumber)
+        ud.set(Array(forbiddenNumbers), forKey:RECENTS)
+    }
+}
+
+do {
+    class MyTableViewCell : UITableViewCell {
+        override func didTransition(to state: UITableViewCellStateMask) {
+            let editing = UITableViewCellStateMask.showingEditControlMask.rawValue
+            if state.rawValue & editing != 0 {
+                // ... the ShowingEditControlMask bit is set ...
+            }
+            if state.contains(.showingEditControlMask) {
+                // ... the ShowingEditControlMask bit is set ...
+            }
+        }
+    }
+}
+
 //: # Performing Set Operations
 
 //: ## Fundamental Set Operations
 /*:
- https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/setVennDiagram_2x.png 
+ https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/setVennDiagram_2x.png
  - Use the intersection(_:) method to create a new set with only the values common to both sets.
  - Use the symmetricDifference(_:) method to create a new set with values in either set, but not both.
  - Use the union(_:) method to create a new set with all of the values in both sets.
@@ -636,6 +719,9 @@ do {
     // namesOfIntegers now contains 1 key-value pair
     namesOfIntegers = [:]
     // namesOfIntegers is once again an empty dictionary of type [Int: String]
+    namesOfIntegers[10] = "ten"
+    namesOfIntegers[16] = nil
+    print(namesOfIntegers[16])
 }
 
 //: ## Creating a Dictionary with a Dictionary Literal
@@ -711,5 +797,107 @@ do {
  Swift’s Dictionary type does not have a defined ordering. To iterate over the keys or values of a dictionary in a specific order, use the sorted() method on its keys or values property.
  */
 
+//: ## Example
+do {
+    class Dog {}
+    class NoisyDog : Dog {}
+
+    let dog1 : Dog = NoisyDog()
+    let dog2 : Dog = NoisyDog()
+    let d = ["fido": dog1, "rover": dog2]
+    let d2 = d as! [String : NoisyDog]
+    print(d2)
+}
+
+do {
+    let d = ["CA": "California", "NY": "New York"]
+    for s in d.keys {
+        print(s)
+    }
+
+    let keys = Array(d.keys)
+
+    for (abbrev, state) in d {
+        print("\(abbrev) stands for \(state)")
+    }
+
+    let arr = Array(d) // [(key: "NY", value: "New York"), (key: "CA", value: "California")]
+    print(arr)
+}
+
+
+
+do {
+    var d1 = ["NY":"New York", "CA":"California"]
+    let d2 = ["MD":"Maryland"]
+    let mutd1 = NSMutableDictionary(dictionary:d1)
+    mutd1.addEntries(from:d2)
+    d1 = mutd1 as! [String:String]
+    // d1 is now ["MD": "Maryland", "NY": "New York", "CA": "California"]
+    print(d1)
+}
+
+extension Dictionary {
+    mutating func addEntries(from d:[Key:Value]) {
+        for (k,v) in d {
+            self[k] = v
+        }
+    }
+}
+do {
+    var d1 = ["NY":"New York", "CA":"California"]
+    let d2 = ["MD":"Maryland"]
+    d1.addEntries(from:d2)
+    print(d1)
+}
+
+do {
+    let d : [String:Int] = ["one":1, "two":2]
+    let sum = d.values.reduce(0, +) // ***
+    print(sum)
+
+    let min = d.values.min()
+    print(min) // Optional(1)
+
+    let arr = Array(d.values.filter{$0 < 2})
+    print(arr)
+
+    let keysSorted = d.keys.sorted()
+    print(keysSorted)
+}
+
+do {
+    class ViewController: UIViewController {
+
+        var progress = 0.0
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+
+            let nc = NotificationCenter.default
+            let test = Notification.Name("test")
+            nc.addObserver(self, selector:#selector(notificationArrived), name: test, object: nil)
+            nc.post(name:test, object: self, userInfo: ["junk":"nonsense"])
+            nc.post(name:test, object: self, userInfo: ["progress":"nonsense"])
+            nc.post(name:test, object: self, userInfo: ["progress":3])
+        }
+
+        func notificationArrived(_ n:Notification) {
+            let prog = (n.userInfo?["progress"] as? NSNumber)?.doubleValue
+            if prog != nil {
+                self.progress = prog!
+                print("at last! \(self.progress)")
+            } else {
+                print("invalid notification")
+            }
+        }
+        
+        func anotherWay(n:Notification) {
+            if let prog = n.userInfo?["progress"] as? Double { // chapter 10
+                self.progress = prog
+            }
+        }
+    }
+}
 
 //: [Next](@next)
