@@ -10,7 +10,8 @@ enum ConversionError : ErrorType {
 extension UInt8 {
     init(fromString string: String) throws {
         // check the string's format
-        guard let _ = string.rangeOfString("^\\d+$", options: [.RegularExpressionSearch])
+        guard let _ = string.range(of: "^\\d+$")
+            //.rangeOfString("^\\d+$", options: [.RegularExpressionSearch])
             else { throw ConversionError.InvalidFormat }
         // make sure the value is in bounds
         guard string.compare("\(UInt8.max)", options: [.NumericSearch]) != NSComparisonResult.OrderedDescending
@@ -24,7 +25,7 @@ extension UInt8 {
 
 UInt8.init("kllkk")
 
-func checkInt8(string: String) -> Int8 {
+func checkInt8(_ string: String) -> Int8 {
     guard let _ = string.rangeOfString("^\\d+$", options: [.RegularExpressionSearch])
         else {
             print(ConversionError.InvalidFormat)
@@ -46,7 +47,7 @@ func checkInt8(string: String) -> Int8 {
 }
 checkInt8("999999")
 
-func check(person: [String: String]) {
+func check(_ person: [String: String]) {
     guard let id = person ["id"] else {
         debugPrint("no id)")
         return

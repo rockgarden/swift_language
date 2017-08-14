@@ -58,5 +58,8 @@
       <FileRef
          location = "group:Swift_LocalizedString.playground">
       </FileRef>
+      <FileRef
+         location = "group:RegularExpression.playground">
+      </FileRef>
    </Group>
 </Workspace>
