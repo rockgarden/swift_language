@@ -3,11 +3,6 @@
 import Foundation
 //: # Protocol
 
-/// class关键字用来限制该协议只能应用在类上
-protocol GameMode: class{
-    var userInterface: String! {get}
-    func gameplay()
-}
 /*:
  ### mutating
  */

@@ -23,9 +23,9 @@ class SomeClass: SomeSuperclass, FirstProtocol, AnotherProtocol {
 
 /*: 
  # Property Requirements
- A protocol can require any conforming type to provide an instance property or type property with a particular name and type. The protocol doesn’t specify whether the property should be a stored property or a computed property—it only specifies the required property name and type. The protocol also specifies whether each property must be gettable or gettable and settable.
- If a protocol requires a property to be gettable and settable, that property requirement cannot be fulfilled by a constant stored property or a read-only computed property. If the protocol only requires a property to be gettable, the requirement can be satisfied by any kind of property, and it is valid for the property to be also settable if this is useful for your own code.
- Property requirements are always declared as variable properties, prefixed with the var keyword. Gettable and settable properties are indicated by writing { get set } after their type declaration, and gettable properties are indicated by writing { get }.
+ A protocol can require any conforming type to provide an instance property or type property with a particular name and type. The protocol doesn’t specify whether the property should be a stored property or a computed property—it only specifies the required property name and type. The protocol also specifies whether each property must be gettable or gettable and settable. 协议可以要求任何一致的类型来提供具有特定名称和类型的实例属性或类型属性。 协议不指定属性是存储属性还是计算属性，它只指定必需的属性名称和类型。 该协议还规定了每个属性是否必须是gettable或gettable和可设置的。
+ If a protocol requires a property to be gettable and settable, that property requirement cannot be fulfilled by a constant stored property or a read-only computed property. If the protocol only requires a property to be gettable, the requirement can be satisfied by any kind of property, and it is valid for the property to be also settable if this is useful for your own code. 如果一个协议需要一个属性来获取和设置属性，则该属性要求不能由常量存储属性或只读计算属性来实现。 如果协议只需要一个属性为gettable，则可以通过任何类型的属性来满足要求，如果对于您自己的代码有用，属性也可以设置。
+ Property requirements are always declared as variable properties, prefixed with the var keyword. Gettable and settable properties are indicated by writing { get set } after their type declaration, and gettable properties are indicated by writing { get }. 属性要求始终声明为变量属性，前缀为var关键字。 Gettable和可设置的属性通过在类型声明之后编写{get set}来表示，gettable属性通过写{get}来表示。
  */
 protocol PR_SomeProtocol {
     var mustBeSettable: Int { get set }
@@ -94,9 +94,10 @@ print("And another one: \(generator.random())")
 /*: 
  # Mutating Method Requirements
  https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Methods.html#//apple_ref/doc/uid/TP40014097-CH15-ID239
- If you define a protocol instance method requirement that is intended to mutate instances of any type that adopts the protocol, mark the method with the mutating keyword as part of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement.
+ If you define a protocol instance method requirement that is intended to mutate instances of any type that adopts the protocol, mark the method with the mutating keyword as part of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement. 如果您定义了一个协议实例方法要求，该要求旨在使采用协议的任何类型的实例变异，请使用mutating关键字将该方法标记为协议定义的一部分。 这使得结构和枚举能够采用协议并满足该方法的要求。
  - NOTE:
- If you mark a protocol instance method requirement as mutating, you do not need to write the mutating keyword when writing an implementation of that method for a class. The mutating keyword is only used by structures and enumerations. 在 class 中实现带有mutating方法的接口时, 不用mutating进行修饰, 因为对于class来说, 类的成员变量和方法都是透明的, 所以不必使用 mutating 来进行修饰
+ If you mark a protocol instance method requirement as mutating, you do not need to write the mutating keyword when writing an implementation of that method for a class. The mutating keyword is only used by structures and enumerations. 
+ 在 class 中实现带有mutating方法的接口时, 不用mutating进行修饰, 因为对于class来说, 类的成员变量和方法都是透明的, 所以不必使用 mutating 来进行修饰
  */
 protocol Togglable {
     mutating func toggle()
@@ -140,29 +141,28 @@ do {
     onOffClass.toggle()
 }
 
-
 //: # Initializer Requirements
 protocol IR_SomeProtocol {
     init(someParameter: Int)
 }
 /*: 
  ## Class Implementations of Protocol Initializer Requirements
- You can implement a protocol initializer requirement on a conforming class as either a designated initializer or a convenience initializer. In both cases, you must mark the initializer implementation with the required modifier:
+ You can implement a protocol initializer requirement on a conforming class as either a designated initializer or a convenience initializer. In both cases, you must mark the initializer implementation with the required modifier 您可以将一个符合类的协议初始化器要求实现为指定的初始化程序或方便的初始化程序。 在这两种情况下，您必须使用必需的修饰符标记初始化程序实现:
  */
 class CIoPIR_SomeClass: IR_SomeProtocol {
     required init(someParameter: Int) {
         // initializer implementation goes here
     }
 }
-//: The use of the required modifier ensures that you provide an explicit or inherited implementation of the initializer requirement on all subclasses of the conforming class, such that they also conform to the protocol.For more information on required initializers, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Initialization.html#//apple_ref/doc/uid/TP40014097-CH18-ID231.
+//: The use of the required modifier ensures that you provide an explicit or inherited implementation of the initializer requirement on all subclasses of the conforming class, such that they also conform to the protocol.For more information on required initializers, 使用必需的修饰符确保您提供对符合类的所有子类的初始化程序要求的显式或继承的实现，以便它们也符合协议。有关所需初始化程序的更多信息, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Initialization.html#//apple_ref/doc/uid/TP40014097-CH18-ID231.
 final class SomeFinalClass: IR_SomeProtocol {
     init(someParameter: Int) {}
 }
 /*:
  - NOTE:
- You do not need to mark protocol initializer implementations with the required modifier on classes that are marked with the final modifier, because final classes cannot be subclassed. For more on the final modifier, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Inheritance.html#//apple_ref/doc/uid/TP40014097-CH17-ID202.
+ You do not need to mark protocol initializer implementations with the required modifier on classes that are marked with the final modifier, because final classes cannot be subclassed. For more on the final modifier, 您不需要在标有最后修饰符的类上标记具有必需修饰符的协议初始化程序实现，因为最终类不能被子类化。 有关最终修饰符的更多信息, see https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Inheritance.html#//apple_ref/doc/uid/TP40014097-CH17-ID202.
  */
-//: If a subclass overrides a designated initializer from a superclass, and also implements a matching initializer requirement from a protocol, mark the initializer implementation with both the required and override modifiers:
+//: If a subclass overrides a designated initializer from a superclass, and also implements a matching initializer requirement from a protocol, mark the initializer implementation with both the required and override modifiers 如果一个子类覆盖了一个超类的指定的初始化器，并且还从一个协议中实现了一个匹配的初始化器要求，那么使用必需和覆盖修饰符来标记初始化器实现:
 protocol ODI_SomeProtocol {
     init()
 }
@@ -187,18 +187,18 @@ class SomeSubClass: SomeSuperClass, ODI_SomeProtocol {
 /*:
  ## Protocols as Types
  Because it is a type, you can use a protocol in many places where other types are allowed, including:
- - As a parameter type or return type in a function, method, or initializer
- - As the type of a constant, variable, or property
- - As the type of items in an array, dictionary, or other container
+ - As a parameter type or return type in a function, method, or initializer 作为函数，方法或初始化程序中的参数类型或返回类型
+ - As the type of a constant, variable, or property 作为常量，变量或属性的类型
+ - As the type of items in an array, dictionary, or other container 作为数组，字典或其他容器中的项目类型
  - NOTE:
- Because protocols are types, begin their names with a capital letter (such as FullyNamed and RandomNumberGenerator) to match the names of other types in Swift (such as Int, String, and Double).
+ Because protocols are types, begin their names with a capital letter (such as FullyNamed and RandomNumberGenerator) to match the names of other types in Swift (such as Int, String, and Double). 由于协议是类型，请使用大写字母（如FullyNamed和RandomNumberGenerator）开始其名称，以匹配Swift中其他类型的名称（如Int，String和Double）.
  */
 class Dice {
     let sides: Int
-    /// The generator property is of type RandomNumberGenerator. Therefore, you can set it to an instance of any type that adopts the RandomNumberGenerator protocol. Nothing else is required of the instance you assign to this property, except that the instance must adopt the RandomNumberGenerator protocol.
+    /// The generator property is of type RandomNumberGenerator. Therefore, you can set it to an instance of any type that adopts the RandomNumberGenerator protocol. Nothing else is required of the instance you assign to this property, except that the instance must adopt the RandomNumberGenerator protocol. generator属性的类型为RandomNumberGenerator。 因此，您可以将其设置为采用RandomNumberGenerator协议的任何类型的实例。 除了实例必须采用RandomNumberGenerator协议外，您不需要为此属性分配的实例。
     let generator: RandomNumberGenerator
 
-    /// Dice also has an initializer, to set up its initial state. This initializer has a parameter called generator, which is also of type RandomNumberGenerator. You can pass a value of any conforming type in to this parameter when initializing a new Dice instance.
+    /// Dice also has an initializer, to set up its initial state. This initializer has a parameter called generator, which is also of type RandomNumberGenerator. You can pass a value of any conforming type in to this parameter when initializing a new Dice instance. 骰子还有一个初始化器，设置它的初始状态。 这个初始化器有一个叫做generator的参数，它也是RandomNumberGenerator类型。 在初始化新的Dice实例时，可以将任何符合类型的值传递给此参数。
     init(sides: Int, generator: RandomNumberGenerator) {
         self.sides = sides
         self.generator = generator
@@ -240,7 +240,7 @@ class SnakesAndLadders: DiceGame {
         board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
     }
 
-    /// Because the delegate property is an optional DiceGameDelegate, the play() method uses optional chaining each time it calls a method on the delegate. If the delegate property is nil, these delegate calls fail gracefully and without error. If the delegate property is non-nil, the delegate methods are called, and are passed the SnakesAndLadders instance as a parameter(将实例作为参数传递). 影响ARC
+    /// Because the delegate property is an optional DiceGameDelegate, the play() method uses optional chaining each time it calls a method on the delegate. If the delegate property is nil, these delegate calls fail gracefully and without error. If the delegate property is non-nil, the delegate methods are called, and are passed the SnakesAndLadders instance as a parameter(因为delegate属性是可选的DiceGameDelegate，所以play（）方法在每次调用委托方法时使用可选链接。 如果委托属性为nil，那么这些委托调用将以正常方式正常运行，而且没有错误。 如果委托属性不为零，则委托方法被调用，并将SnakesAndLadders实例作为参数传递). 影响ARC
     var delegate: DiceGameDelegate?
 
     func play() {
@@ -293,9 +293,9 @@ game.play()
 
 /*: 
  # Adding Protocol Conformance with an Extension
- You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand.
+ You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand. 即使您无法访问现有类型的源代码，也可以扩展现有类型以采用并符合新协议。 扩展可以将新的属性，方法和下标添加到现有类型，因此能够添加协议可能需要的任何要求。
  - NOTE:
- Existing instances of a type automatically adopt and conform to a protocol when that conformance is added to the instance’s type in an extension.
+ Existing instances of a type automatically adopt and conform to a protocol when that conformance is added to the instance’s type in an extension. 当扩展中添加实例的类型时，类型的现有实例会自动采用并符合协议。
  */
 protocol TextRepresentable {
     var textualDescription: String { get }
@@ -329,6 +329,7 @@ struct Hamster {
 extension Hamster: TextRepresentable {}
 
 let simonTheHamster = Hamster(name: "Simon")
+simonTheHamster.textualDescription
 /// Must explicitly declare their adoption of the protocol: 必须显式声明其采用的协议.
 let somethingTextRepresentable: TextRepresentable = simonTheHamster
 print(somethingTextRepresentable.textualDescription)
