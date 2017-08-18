@@ -61,5 +61,8 @@
       <FileRef
          location = "group:RegularExpression.playground">
       </FileRef>
+      <FileRef
+         location = "group:SwiftTypecasing.playground">
+      </FileRef>
    </Group>
 </Workspace>

@@ -47,6 +47,23 @@ import UIKit
 
  Marking a class as open explicitly indicates that you’ve considered the impact of code from other modules using that class as a superclass, and that you’ve designed your class’s code accordingly. 将类标记为open，表示您已经考虑了使用该类作为超类的其他模块的代码的影响，并且相应地设计了类的代码。
  
+ 权限则依次为：open->public->internal->fileprivate->private
+ 
+ fileprivate
+ 在原有的swift中的 private其实并不是真正的私有，如果一个变量定义为private，在同一个文件中的其他类依然是可以访问到的。这个场景在使用extension的时候很明显。
+ 这样带来了两个问题：
+ - 当我们标记为private时，意为真的私有还是文件内可共享呢？
+ - 当我们如果意图为真正的私有时，必须保证这个类或者结构体在一个单独的文件里。否则可能同文件里其他的代码访问到。
+ 由此，在swift 3中，新增加了一个 fileprivate来显式的表明，这个元素的访问权限为文件内私有。过去的private对应现在的fileprivate。现在的private则是真正的私有，离开了这个类或者结构体的作用域外面就无法访问。
+ 
+ open
+ open则是弥补public语义上的不足。现在的pubic有两层含义：
+ - 这个元素可以在其他作用域被访问
+ - 这个元素可以在其他作用域被继承或者override
+ 继承是一件危险的事情。尤其对于一个framework或者module的设计者而言。在自身的module内，类或者属性对于作者而言是清晰的，能否被继承或者override都是可控的。但是对于使用它的人，作者有时会希望传达出这个类或者属性不应该被继承或者修改。这个对应的就是 final。
+ final的问题在于在标记之后，在任何地方都不能override。而对于lib的设计者而言，希望得到的是在module内可以被override，在被import到其他地方后其他用户使用的时候不能被override。
+ 这就是open产生的初衷。通过open和public标记区别一个元素在其他module中是只能被访问还是可以被override。
+ 
  ## Guiding Principle of Access Levels
 
  Access levels in Swift follow an overall guiding principle: No entity can be defined in terms of another entity that has a lower (more restrictive) access level.
@@ -183,7 +200,6 @@ private class SomePrivateClass_CT {                // explicitly private class
  ## Nested Types
 
  Nested types defined within a private type have an automatic access level of private. Nested types defined within a file-private type have an automatic access level of file private. Nested types defined within a public type or an internal type have an automatic access level of internal. If you want a nested type within a public type to be publicly available, you must explicitly declare the nested type as public. 在私有类型中定义的嵌套类型具有私有的自动访问级别。 在文件 - 私有类型中定义的嵌套类型具有文件私有的自动访问级别。 在公共类型或内部类型中定义的嵌套类型具有内部自动访问级别。 如果您希望公共类型中的嵌套类型可以公开使用，则必须将该嵌套类型显式声明为public。
-
  */
 
 
