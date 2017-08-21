@@ -85,7 +85,7 @@ enum Character {
 
 // MARK: - Typecasing
 
-let characters: [Character] = []
+var characters: [Character] = []
 
 characters.forEach { (character) in
     
@@ -110,13 +110,13 @@ func printPower(character: Character) {
     }
 }
 
-var characters = [Character]()
+
 // Model initialisation
-func initModel() {
-    if let characters = json["characters"] as? [[String : AnyObject]] {
-        // flatMap过程中会抛弃为nil的值
-        characters = characters.flatMap { Character(json: $0) }
-    }
-}
+//func initModel() {
+//    if let characters = json["characters"] as? [[String : AnyObject]] {
+//        // flatMap过程中会抛弃为nil的值
+//        characters = characters.flatMap { Character(json: $0) }
+//    }
+//}
 
 

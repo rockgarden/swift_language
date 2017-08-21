@@ -64,5 +64,8 @@
       <FileRef
          location = "group:SwiftTypecasing.playground">
       </FileRef>
+      <FileRef
+         location = "group:Algorithm.playground">
+      </FileRef>
    </Group>
 </Workspace>
