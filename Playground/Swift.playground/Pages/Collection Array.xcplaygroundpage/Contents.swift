@@ -1,20 +1,6 @@
 //: [Previous](@previous)
 import Foundation
 //: # Array
-
-//: Array map
-do {
-    let arr = [1, 2, 3]
-    let arr2 = arr.map { $0 * 2 }
-    let arr3 = arr.map { Double($0) }
-    
-    let cast = ["Vivien", "Marlon", "Kim", "Karl"]
-    let lowercaseNames = cast.map { $0.lowercased() }
-    lowercaseNames
-    let letterCounts = cast.map { $0.characters.count }
-    letterCounts
-}
-
 //: Array forEach
 do {
     let cast = ["Vivien", "Marlon", "Kim", "Karl"]

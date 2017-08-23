@@ -187,6 +187,8 @@ do {
     print(sumNumbers2) // [2,4,6]
     // 最终简化写法
     let sumNumbers3 = numbers.map { $0 + $0 }
+    
+    let doubleArr = numbers.map { Double($0) }
 }
 do {
     let arr = [String?]()
@@ -224,6 +226,10 @@ do {
 
 do { /// Map函数返回数组的元素类型不一定要与原数组相同
     let fruits = ["apple", "banana", "orange", ""]
+    
+    let lowercaseNames = fruits.map { $0.lowercased() }
+    let letterCounts = fruits.map { $0.characters.count }
+    
     // 这里数组中存在一个""的字符串 为了后面来比较 map 和 flatMap
     let counts = fruits.map { fruit -> Int? in
         let length = fruit.characters.count

@@ -1,12 +1,12 @@
 //: [Previous](@previous)
 
-import Foundation
+//import Foundation
 /*:
  # UnsafePointer and UnsafeMutablePointer
  
  Swift 中，指针都使用一个特殊的类型来表示，那就是 UnsafePointer<T>。遵循了 Cocoa 的一贯不可变原则，UnsafePointer<T> 也是不可变的。当然对应地，它还有一个可变变体，UnsafeMutablePointer<T>。绝大部分时间里，C 中的指针都会被以这两种类型引入到 Swift 中：C 中 const 修饰的指针对应 UnsafePointer (最常见的应该就是 C 字符串的 const char * 了)，而其他可变的指针则对应 UnsafeMutablePointer。
  
- 除此之外，Swift 中存在表示一组连续数据指针的 UnsafeBufferPointer<T>，表示非完整结构的不透明指针 COpaquePointer 等等。另外你可能已经注意到了，能够确定指向内容的指针类型都是泛型的 struct，我们可以通过这个泛型来对指针指向的类型进行约束以提供一定安全性。
+ 除此之外，Swift 中存在表示一组连续数据指针的 UnsafeBufferPointer<T>，表示非完整结构的不透明指针 COpaquePointer 等等。另外你可能已经注意到了，能够确定指向内容的指针类型都是泛型的struct，我们可以通过这个泛型来对指针指向的类型进行约束以提供一定安全性。
 
  对于一个 UnsafePointer<T> 类型，我们可以通过 pointee 属性对其进行取值，如果这个指针是可变的 UnsafeMutablePointer<T> 类型，我们还可以通过 pointee 对它进行赋值。比如我们想要写一个利用指针直接操作内存的计数器的话，可以这么做：
  */
@@ -144,6 +144,5 @@ do {
     var intPtr = unsafeBitCast(voidPtr,  to: UnsafePointer<Int>.self)
     intPtr.pointee
 }
-
 
 //: [Next](@next)

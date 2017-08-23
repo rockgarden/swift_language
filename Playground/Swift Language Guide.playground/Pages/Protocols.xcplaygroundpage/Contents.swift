@@ -114,16 +114,13 @@ enum OnOffSwitch: Togglable {
     }
 }
 class OnOffClass: Togglable {
-
     enum OnOff {
         case off, on
     }
-
     var onOff: OnOff
     init(oo: OnOff) {
         self.onOff = oo
     }
-
     func toggle() {
         switch onOff {
         case .off:
@@ -139,6 +136,46 @@ do {
     var onOffClass = OnOffClass(oo: .off)
     lightSwitch.toggle()
     onOffClass.toggle()
+}
+
+protocol ExampleProtocol {
+    var simpleDescription: String { get }
+    mutating func adjust()
+}
+
+// 一个 enum 只能 申明 一个 case
+enum SimpleEnum: ExampleProtocol {
+    case First, Second, Third
+    var simpleDescription: String {
+        get {
+            switch self {
+            case .First:
+                return "first"
+            case .Second:
+                return "second"
+            case .Third:
+                return "third"
+            }
+        }
+        set {
+            simpleDescription = newValue
+        }
+    }
+    mutating func adjust() { }
+}
+
+class SimpleClass: ExampleProtocol {
+    var simpleDescription: String = "A very simple class"
+    var anotherProperty: Int = 110
+    func adjust() {
+        simpleDescription += " Now 100% adjusted"
+    }
+}
+struct SimpleStruct: ExampleProtocol {
+    var simpleDescription: String = "A simple structure"
+    mutating func adjust() {
+        simpleDescription += "(adjusted)"
+    }
 }
 
 //: # Initializer Requirements

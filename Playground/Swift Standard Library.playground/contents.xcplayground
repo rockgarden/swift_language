@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios' display-mode='raw' executeOnSourceChanges='false'>
     <pages>
+        <page name='Pointer'/>
         <page name='Table of Contents'/>
         <page name='Text'/>
         <page name='Indexing and Slicing Strings'/>
@@ -12,7 +13,6 @@
         <page name='Understanding Sequence and Collection Protocols'/>
         <page name='Revision History'/>
         <page name='License'/>
-        <page name='String'/>
         <page name='foundation Classes'/>
     </pages>
 </playground>
