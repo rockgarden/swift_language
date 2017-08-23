@@ -7,7 +7,7 @@ import UIKit
  # Defining and Calling Functions
  these DO just illustrates some declaration syntax
  - All of this information is rolled up into the function’s definition, which is prefixed with the func keyword. 
- - You indicate the function’s return type with the return arrow -> (a hyphen followed by a right angle bracket), which is followed by the name of the type to return.
+ - You indicate the function’s return type with the return arrow -> (a hyphen followed by a right angle bracket), which is followed by the name of the type to return. 使用返回箭头 - >（连字符后跟直角括号）指示函数的返回类型，后跟要返回的类型的名称。
  */
 func greet(person: String) -> String {
     let greeting = "Hello, " + person + "!"
@@ -831,12 +831,13 @@ do {// struct like class
 
 //: ## Void
 /*:
- Passing a void is the same as no parameters
+ Passing a void is the same as no parameters 传递一个空白与无参数相同
  Void 可省略, Void 多用于 Closures
  return Void = translates in returning an empty tuple: ()
  没有定义返回类型的函数会返回特殊的值Void,它其实是一个空的元组tuple,没有任何元素,也可简写成()
  */
 do {
+
     func say1(_ s:String) -> Void { (s) }
     func say2(_ s:String) -> () { (s) }
     func say3(_ s:String) { (s) }
