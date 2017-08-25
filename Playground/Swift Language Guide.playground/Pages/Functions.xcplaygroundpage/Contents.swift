@@ -248,7 +248,7 @@ do {
     join(string: "", toString: "")
 }
 
-//: ## Variadic Parameters
+//: ## 可变参数 Variadic Parameters
 /*:
  - NOTE:
  A function may have at most one variadic parameter.
@@ -465,13 +465,33 @@ do {
     func whatToDo() {
         print("I did it")
     }
-    doThis(whatToDo)
+    doThis(whatToDo) //no parentheses 括号!
 
     func printMathResult(_ mathFunction: (Int, Int) -> Int, _ a: Int, _ b: Int) {
         print("Result: \(mathFunction(a, b))")
     }
     printMathResult(addTwoInts, 3, 5)
     // Prints "Result: 8"
+
+    func greeting() -> String {
+        return "Howdy"
+    }
+    func performAndPrint(_ f:()->String) {
+        let s = f()
+        print(s)
+    }
+    performAndPrint({ () -> String in
+        greeting()
+    })
+    performAndPrint({ _ in
+        greeting()
+    })
+    performAndPrint({
+        greeting()
+    })
+    performAndPrint {
+        greeting()
+    }
 }
 //: Example
 do {
@@ -866,9 +886,7 @@ do {
  - 外部参数可reload
  - 局部参数不能reload
  */
-do {
-    //?
-}
+
 /// this is legal too, but _calling_ is error, how to call it, trickier!
 func say() -> String { return "one" }
 func say() -> Int { return 1 }
@@ -876,7 +894,7 @@ func giveMeAString(_ s:String) { print("thanks!") }
 do {
     //say()//error: ambiguous use of 'say()',therefore illegal
     // but these are fine:
-    giveMeAString(say()) //p:thanks!
+    giveMeAString(say())
     let result = say() + "two"
 }
 /// this is legal
@@ -885,6 +903,7 @@ func say (_ what:Int) { }
 /// but in DO this is not legal
 do {
     func say (_ what:String) { }
+    //  warning: extraneous duplicate parameter name; 'type' already has an argument label
     //func say (_ what:Int) { }
 }
 do {
@@ -925,7 +944,7 @@ extension Thing {
 }
 
 
-//: # Anonymous Functions
+//: # Anonymous Functions 匿名
 do {
     func test(h:(Int, Int, Int) -> Int) {}
     test {
@@ -960,11 +979,11 @@ do {
     })
     print(arr3)
 
-    let arr4 = arr.map {$0*2} // it doesn't get any Swiftier than this
+    let arr4 = arr.map {$0*2}
     print(arr4)
 }
 
-//: ## Use for define and call
+//: ## Use for define and call 用于定义和调用
 do {
     var content = NSMutableAttributedString()
 
@@ -992,6 +1011,25 @@ do {
     }
 }
 
+//: # Recursion Functions 递归
+do {
+    func countDownFrom(_ ix:Int) {
+        print(ix)
+        if ix > 0 { // stopper
+            countDownFrom(ix-1) // recurse!
+        }
+    }
+
+    func countDownFrom2(_ ix:Int) {
+        print(ix)
+        if ix < 10 { // stopper
+            countDownFrom2(ix+1) // legal
+        }
+    }
+    
+    countDownFrom(5)
+    countDownFrom2(5)
+}
 
 //: # Example
 do {
@@ -1028,7 +1066,7 @@ do {
     print("Manny", "Moe", separator:", ", terminator: ", ")
     print("Jack")
 
-    // ignored
+    /// ignored 省略参数名
     func say(_ s:String, times:Int, loudly _:Bool) {Dog().say(s, times:times)}
     func say2(_ s:String, times:Int, _:Bool) {Dog().say(s, times:times)}
 

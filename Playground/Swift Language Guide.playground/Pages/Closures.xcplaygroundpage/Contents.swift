@@ -243,7 +243,7 @@ do {
 /*:
  # Escaping Closures
  A closure is said to escape a function when the closure is passed as an argument to the function, but is called after the function returns. When you declare a function that takes a closure as one of its parameters, you can write @escaping before the parameter’s type to indicate that the closure is allowed to escape.
- 当闭包作为参数传递给函数时，闭包被称为逃逸函数，但在函数返回后被调用。当你声明一个函数，它接受一个闭包作为其参数之一，你可以在参数的类型之前写入@escaping，表示允许闭包逃脱。
+ 当闭包作为参数传递给函数时，闭包被称为逃逸函数，但在函数返回后被调用。当你声明一个函数，它接受一个闭包作为其参数之一，你可以在参数的类型之前写入@escaping，表示允许闭包逃脱。说白了就是函数传入后又return传出。
  One way that a closure can escape is by being stored in a variable that is defined outside the function. As an example, many functions that start an asynchronous operation take a closure argument as a completion handler. The function returns after it starts the operation, but the closure isn’t called until the operation is completed—the closure needs to escape, to be called later. 
  闭包可以逃逸的一种方式是通过存储在函数外部定义的变量中。作为示例，许多启动异步操作的函数将闭包参数作为完成处理程序。 该函数在启动操作后返回，但是在操作完成之前不会调用闭包 - 闭包需要转义，稍后调用。
  */
@@ -273,6 +273,86 @@ do {
 
     completionHandlers.first?()
     print(instance.x)
+}
+do {
+    /// 传入
+    func funcCaller(f:()->()) {
+        f()
+    }
+    /// 传出
+    func funcMaker() -> () -> () {
+        return { print("hello world") }
+    }
+    /// @escaping is about a function passed in and then passed out
+    /// but this is not legal, without @escaping, error: using non-escaping parameter 'f' in a context expecting an @escaping closure (在需要一个@escaping闭包的上下文中使用非转义参数'f')
+    func funcPasser(f:@escaping ()->()) -> () -> () {
+        return f
+    }
+
+    do {
+        class testSelf: UIViewController {
+
+            func test() {
+                func f() {
+                    print(presentingViewController)
+                }
+                funcCaller(f:f) // okay
+                let f2 = funcPasser(f:f) // okay, even though f doesn't say "self"
+                // I regard that as a bug (and I think so does Jordan Rose)
+                let f3 = funcPasser {
+                    print(self.presentingViewController) // self required
+                }
+
+                let _ = (f2,f3)
+            }
+        }
+    }
+}
+do {
+    func pass100 (_ f:(Int)->()) {
+        f(100)
+    }
+
+    var x = 0
+    print(x)
+    func setX(newX:Int) {
+        x = newX
+    }
+    pass100(setX)
+    print(x)
+}
+do {
+    func countAdder(_ f: @escaping ()->()) -> () -> () {
+        var ct = 0
+        return {
+            ct = ct + 1
+            print("count is \(ct)")
+            f()
+        }
+    }
+
+    func greet () {
+        print("howdy")
+    }
+    let countedGreet = countAdder(greet)
+    countedGreet() // 1
+    countedGreet() // 2
+    countedGreet() // 3
+
+    do {
+        let countedGreet = countAdder(greet)
+        let countedGreet2 = countAdder(greet)
+        countedGreet() // count is 1
+        countedGreet2() // count is 1
+    }
+
+    do { // showing that functions are reference types
+        let countedGreet = countAdder(greet)
+        let countedGreet2 = countedGreet
+        countedGreet()
+        countedGreet2()
+    }
+
 }
 
 
@@ -341,6 +421,156 @@ do {
  */
 do {
     var returnGpsInfo:((String)->Void)?
+}
+
+//* Example
+
+do {
+    func imageOfSize(_ size:CGSize, _ whatToDraw: () -> ()) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        whatToDraw()
+        let result = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return result
+    }
+
+    func makeRoundedRectangle(_ sz:CGSize) -> UIImage {
+        let image = imageOfSize(sz) {
+            let p = UIBezierPath(
+                roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                cornerRadius: 8)
+            p.stroke()
+        }
+        return image
+    }
+
+    func makeRoundedRectangleMakerPrelim(_ sz:CGSize) -> () -> UIImage {
+        func f () -> UIImage {
+            let im = imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: 8)
+                p.stroke()
+            }
+            return im
+        }
+        return f
+    }
+
+    func makeRoundedRectangleMakerPrelim2(_ sz:CGSize) -> () -> UIImage {
+        func f () -> UIImage {
+            return imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: 8)
+                p.stroke()
+            }
+        }
+        return f
+    }
+
+    func makeRoundedRectangleMakerPrelim3(_ sz:CGSize) -> () -> UIImage {
+        return {
+            return imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: 8)
+                p.stroke()
+            }
+        }
+    }
+
+    func makeRoundedRectangleMaker(_ sz:CGSize) -> () -> UIImage {
+        return {
+            imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: 8)
+                p.stroke()
+            }
+        }
+    }
+
+    // stop hard-coding the radius
+    func makeRoundedRectangleMaker2(_ sz:CGSize, _ r:CGFloat) -> () -> UIImage {
+        return {
+            imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: r)
+                p.stroke()
+            }
+        }
+    }
+
+    // explicit curry
+    func makeRoundedRectangleMaker3(_ sz:CGSize) -> (CGFloat) -> UIImage {
+        return {
+            r in
+            imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz),
+                    cornerRadius: r)
+                p.stroke()
+            }
+        }
+    }
+
+    do {
+
+        var myImageView = UIImageView()
+        weak var myImageView2 = UIImageView()
+
+        do {
+            func drawing() {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(x:0,y:0,width:45,height:20), cornerRadius: 8)
+                p.stroke()
+            }
+            let image = imageOfSize(CGSize(width:45,height:20), drawing)
+            _ = image
+        }
+
+        do {
+            let image = imageOfSize(CGSize(width:45,height:20)) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(x:0,y:0,width:45,height:20), cornerRadius: 8)
+                p.stroke()
+            }
+            _ = image
+        }
+
+        do {
+            let sz = CGSize(width:45,height:20)
+            let image = imageOfSize(sz) {
+                let p = UIBezierPath(
+                    roundedRect: CGRect(origin:CGPoint.zero, size:sz), cornerRadius: 8)
+                p.stroke()
+            }
+            _ = image
+        }
+
+
+        myImageView.image = makeRoundedRectangle(CGSize(width:45,height:20))
+
+        do {
+            let maker = makeRoundedRectangleMakerPrelim(CGSize(width:45,height:20))
+            _ = maker
+        }
+
+        let maker = makeRoundedRectangleMaker(CGSize(width:45,height:20))
+        myImageView2?.image = maker() //weak var 要 unwrapped ！or ?
+
+        let maker2 = makeRoundedRectangleMaker2(CGSize(width:45,height:20), 8)
+        _ = maker2
+
+        let maker3 = makeRoundedRectangleMaker3(CGSize(width:45,height:20))
+        myImageView.image = maker3(8)
+
+        let image1 = makeRoundedRectangleMaker3(CGSize(width:45,height:20))(8)
+        _ = image1
+    }
+
 }
 
 //: [Next](@next)
