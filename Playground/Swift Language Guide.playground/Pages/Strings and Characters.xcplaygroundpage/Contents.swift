@@ -190,6 +190,30 @@ do {
     // regionalIndicatorForUS is 🇺🇸
 }
 
+//: ## example
+do {
+    func flag(country: String) -> String {
+        let base : UInt32 = 127397
+        var s = ""
+        for v in country.unicodeScalars {
+            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+        }
+        return s
+    }
+
+    let s = "\u{BF}Qui\u{E9}n?"
+    for i in s.utf8 {
+        (i) // 194, 191, 81, 117, 105, 195, 169, 110, 63
+    }
+    for i in s.utf16 {
+        (i) // 191, 81, 117, 105, 233, 110, 63
+    }
+
+    do {
+        let s = flag(country: "DE")
+    }
+}
+
 /*:
  # Counting Characters
 
@@ -412,6 +436,9 @@ do {
     }
     print("\(mansionCount) mansion scenes; \(cellCount) cell scenes")
     // Prints "6 mansion scenes; 2 cell scenes"
+
+    print("hello".hasPrefix("he"))
+    print("hello".hasSuffix("lo"))
 }
 
 /*:
@@ -506,6 +533,8 @@ do {
     let leftTripleArrow = "\u{21DA}"
     let n = 5
     let s = "You have \(n) widgets."
+    let m = 4
+    let s1 = "You have \(m + n) widgets."
 }
 
 do {
@@ -553,6 +582,8 @@ do {
 do {
     let s = "1f"
     let i = Int(s, radix:16) // Optional(31)
+    let i1 = Int(0x10)
+    let i2 = 0x10
 }
 
 do {
@@ -564,29 +595,6 @@ do {
     let s = "hello"
     for c in s.characters {
         // get each Character
-    }
-}
-
-func flag(country: String) -> String {
-    let base : UInt32 = 127397
-    var s = ""
-    for v in country.unicodeScalars {
-        //s.append(UnicodeScalar(base + v.value)!)
-        //s.append(_: UnicodeScalar(base + v.value)!)
-    }
-    return s
-}
-do {
-    let s = "\u{BF}Qui\u{E9}n?"
-    for i in s.utf8 {
-        (i) // 194, 191, 81, 117, 105, 195, 169, 110, 63
-    }
-    for i in s.utf16 {
-        (i) // 191, 81, 117, 105, 233, 110, 63
-    }
-
-    do {
-        let s = flag(country: "CH")
     }
 }
 

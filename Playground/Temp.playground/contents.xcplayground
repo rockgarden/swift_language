@@ -28,7 +28,6 @@
         <page name='privacy'/>
         <page name='recursion'/>
         <page name='SequenceType'/>
-        <page name='singleton'/>
         <page name='Summary'/>
         <page name='Temp'/>
         <page name='typealias'/>

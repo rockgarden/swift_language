@@ -23,6 +23,98 @@ import MediaPlayer
  - String文本型数据
  - Array数组 Dictionary字典
  */
+/*:
+ ## Number - Int/Double/Float
+ */
+do {
+    let i = 10
+    _ = Double(i)
+
+    let y = 3.8
+    _ = Int(y)
+
+    let what = 0x10
+    _ = what
+
+    if 3e2 == 300 {
+        print("yep")
+    }
+
+    if 0x10p2 == 64 {
+        print("yep")
+    }
+
+}
+
+// no implicit coercion for variables
+do {
+    let d : Double = 10
+    // let d2 : Double = i // compile error; you need to say Double(i)
+    let n = 3.0
+    let nn = 10/3.0
+    // let x2 = i / n // compile error; you need to say Double(i)
+}
+do {
+    let cdub = CDouble(1.2)
+    let ti = TimeInterval(2.0)
+    _ = cdub
+    _ = ti
+}
+do {
+    if let mars = UIImage(named:"Mars") {
+        let marsCG = mars.cgImage!
+        let szCG = CGSize(
+            // CGImageGetWidth(marsCG),
+            // CGImageGetHeight(marsCG)
+            // legal because there is an Int initializer
+            width:marsCG.width,
+            height:marsCG.height
+        )
+        _ = szCG
+    }
+}
+
+do {
+    let s = UISlider()
+    let g = UIGestureRecognizer()
+
+    let pt = g.location(in:s)
+    let percentage = pt.x / s.bounds.size.width
+    // let delta = percentage * (s.maximumValue - s.minimumValue) // compile error
+    let delta = Float(percentage) * (s.maximumValue - s.minimumValue)
+
+    _ = delta
+}
+
+do {
+    var i = UInt8(1)
+    let j = Int8(2)
+    i = numericCast(j)
+    _ = i
+}
+
+do {
+    let i = Int.max - 2
+    // let j = i + 12/2 // crash
+    let (j, over) = Int.addWithOverflow(i,12/2)
+    (j)
+    (over)
+}
+
+do {
+    let i = -7
+    let j = 6
+    (abs(i)) // 7
+    (max(i,j)) // 6
+}
+
+do {
+    let sq = sqrt(2.0)
+    (sq)
+    let n = 10
+    let i = Int(arc4random())%n
+    (i)
+}
 
 /*: 
  # Constants and Variables

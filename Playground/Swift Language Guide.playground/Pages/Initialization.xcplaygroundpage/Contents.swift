@@ -1016,6 +1016,39 @@ do {
 }
 
 do {
+    var bti : UIBackgroundTaskIdentifier = 0
+    bti = UIApplication.shared.beginBackgroundTask {
+        UIApplication.shared.endBackgroundTask(bti)
+    }
+}
+
+do {
+    // wrapped in a function so that `val` is unknown to the compiler
+    func conditionalInitializationExample(val:Int) {
+        let timed : Bool
+        if val == 1 {
+            timed = true
+        } else {
+            timed = false
+        }
+        _ = timed
+    }
+
+    // but in that case I would rather use a computed initializer:
+    func computedInitializerExample(val:Int) {
+        let timed : Bool = {
+            if val == 1 {
+                return true
+            } else {
+                return false
+            }
+        }()
+        _ = timed
+    }
+}
+
+
+do {
     /// showing that Swift no longer warns when AnyObject is implicitly assigned
     let arr = [1 as AnyObject, "howdy" as AnyObject]
     let thing = arr[0]
@@ -1023,5 +1056,12 @@ do {
 
     // var opts = [.Autoreverse, .Repeat] // compile error
     let opts : UIViewAnimationOptions = [.autoreverse, .repeat]
+}
+
+do {
+    /// the universal type is now Any
+    let arr2 : [Any] = [1,"howdy"]
+    let thing2 = arr2[0] // no warning, it's okay
+    _ = thing2
 }
 

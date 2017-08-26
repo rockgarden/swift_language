@@ -84,6 +84,36 @@ do {
  Swift unifies these concepts into a single property declaration. A Swift property does not have a corresponding instance variable, and the backing store for a property is not accessed directly. This approach avoids confusion about how the value is accessed in different contexts and simplifies the property’s declaration into a single, definitive statement. All information about the property—including its name, type, and memory management characteristics—is defined in a single location as part of the type’s definition. Swift将这些概念统一为一个属性声明。 Swift属性没有相应的实例变量，并且不直接访问属性的后备存储。这种方法避免了在不同上下文中如何访问值的混淆，并将属性的声明简化为一个单一的定义语句。关于属性的所有信息（包括其名称，类型和内存管理特性）都在单个位置定义，作为类型定义的一部分。
  */
 /*:
+ ### example
+ */
+class MyView : UIView {
+    lazy var arrow : UIImage = self.arrowImage()
+    func arrowImage () -> UIImage {
+        // ... big image-generating code goes here ...
+        return UIImage() // stub
+    }
+}
+class ViewController: UIViewController {
+
+    lazy var prog : UIProgressView = {
+        let p = UIProgressView(progressViewStyle: .default)
+        p.alpha = 0.7
+        p.trackTintColor = UIColor.clear
+        p.progressTintColor = UIColor.black
+        p.frame = CGRect(x:0, y:0, width:self.view.bounds.size.width, height:20)
+        p.progress = 1.0
+        return p
+    }()
+
+    override func viewDidLoad() {
+        let layout = UICollectionViewLayout()
+        class MyDynamicAnimator : UIDynamicAnimator {}
+        let anim2 = MyDynamicAnimator(collectionViewLayout:layout)
+        _ = anim2
+    }
+}
+
+/*:
  # Computed Properties
  computed Variables
 
@@ -143,7 +173,7 @@ do {
 }
 do {
     /// typical "facade" structure
-    var _p : String = "" // 一般定义为 private, but at here make error: attribute 'private' can only be used in a non-local scope
+    var _p : String = "" /// 一般定义为 private, but at here make error: attribute 'private' can only be used in a non-local scope
     var p : String {
         get {
             return _p //在类里加self._p
@@ -176,6 +206,31 @@ var myBigData : NSData! {
             }
         }
         return myBigDataReal
+    }
+}
+do {
+    var _myBigData : Data! = nil
+    var myBigData : Data! {
+        set (newdata) {
+            _myBigData = newdata
+        }
+        get {
+            if _myBigData == nil {
+                let fm = FileManager.default
+                let f = fm.temporaryDirectory.appendingPathComponent("myBigData")
+                if let d = try? Data(contentsOf:f) {
+                    print("loaded big data from disk")
+                    _myBigData = d
+                    do {
+                        try fm.removeItem(at:f)
+                        print("deleted big data from disk")
+                    } catch {
+                        print("Couldn't remove temp file")
+                    }
+                }
+            }
+            return _myBigData
+        }
     }
 }
 

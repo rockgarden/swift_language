@@ -276,7 +276,22 @@ class DeathStarSuperlaser {
         // Private initialization to ensure just one instance is created.
     }
 }
+
+class TestObject {
+    private static let testObject = TestObject()
+    static var sharedInstance: TestObject {
+        return testObject
+    }
+    private init(){
+    }
+}
+
 /*:
  ### Usage:
  */
 let laser = DeathStarSuperlaser.sharedInstance
+
+
+
+
+
