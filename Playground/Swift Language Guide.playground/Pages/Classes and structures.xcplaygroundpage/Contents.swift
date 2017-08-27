@@ -255,6 +255,18 @@ do {
     th.rawValue
 }
 do {
+    /// 可以转换为关联原始值的类型。
+    /// 使用RawRepresentable类型，您可以在自定义类型和关联的RawValue类型之间来回切换，而不会丢失原始RawRepresentable类型的值。 使用符合类型的原始值可简化与Objective-C和传统API的互操作，并简化与其他协议（如Equatable，Comparable和Hashable）的一致性。
+    /// RawRepresentable协议主要分为两类类型：具有原始值类型和选项集的枚举。
+    struct Thing : RawRepresentable {
+        let rawValue : Int
+        static let one = Thing(rawValue:1)
+        static let two = Thing(rawValue:2)
+    }
+    let thing : Thing = .one // no need to say Thing.one here
+    print(thing)
+}
+do {
     struct DigitReplacer {
         var number = 42
         mutating func replace() {
@@ -266,6 +278,7 @@ do {
     d.replace()
     d.number
 }
+//: ## Value Types
 do {
     struct Digit {
         var number: Int
@@ -276,12 +289,6 @@ do {
             self.number = n
         }
         /// illegal without "mutating", cannot assign to property: 'self' is immutable
-
-        /*
-         func changeNumberTo2(n:Int) {
-         self.number = n // compile error
-         }
-         */
     }
 
     /// In swift 3 func parameter can't use var. the example exactly illustrates the reason: you probably _think_ you are changing the original Digit object... but you're just changing a copy
@@ -337,6 +344,7 @@ do {
         d.changeNumberTo(42) // compile error if d is `let`
     }
 }
+//: ## Reference Types
 do {
     class Dog {
         var name : String = "Fido"
@@ -355,6 +363,7 @@ do {
         }
     }
     rover2.name = "Rover" // nothing in console
+    rover2.name
 
     do {
         let fido = Dog()
@@ -371,7 +380,6 @@ do {
         dogChanger(fido)
         (fido.name) // "Rover"
     }
-
 }
 
 do {

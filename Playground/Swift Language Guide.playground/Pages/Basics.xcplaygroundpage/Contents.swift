@@ -789,24 +789,94 @@ func f (_ i1:Int, _ i2:Int) -> () {}
 func f2 (i1 i1:Int, i2:Int) -> () {}
 do {
     let tuple = (1,2)
-    //f(tuple)
 }
 do {
     let tuple = (i1:1, i2:2)
-    //f2(tuple)
 }
 do {
-    //            var tuple = (i1:1, i2:2)
-    //            f2(tuple) // compile error
+    let pair : (Int, String) = (1, "Two")
 }
+
+do {
+    let pair = (1, "Two")
+}
+
+do {
+    var ix: Int
+    var s: String
+    (ix, s) = (1, "Two")
+}
+
+do {
+    let (ix, s) = (1, "Two") // can use let or var here
+    _ = ix; _ = s
+}
+
+do {
+    var s1 = "Hello"
+    var s2 = "world"
+    (s1, s2) = (s2, s1) // now s1 is "world" and s2 is "Hello"
+}
+
+do {
+    let pair = (1, "Two")
+    let (_, s) = pair // now s is "Two"
+}
+
+do {
+    let s = "hello"
+    for (ix,c) in s.characters.enumerated() {
+        print("character \(ix) is \(c)")
+    }
+}
+
+do {
+    var pair = (1, "Two")
+    let ix = pair.0 // now ix is 1
+    pair.0 = 2 // now pair is (2, "Two")
+    print(pair)
+}
+
+do {
+    let pair : (first:Int, second:String) = (1, "Two")
+}
+
+do {
+    let pair = (first:1, second:"Two")
+}
+
+do {
+    var pair = (first:1, second:"Two")
+    let x = pair.first // 1
+    pair.first = 2
+    let y = pair.0 // 2
+}
+
+do {
+    let pair = (1, "Two")
+    let pairWithNames : (first:Int, second:String) = pair
+    let ix = pairWithNames.first // 1
+}
+
+
+do {
+    var pairWithoutNames = (1, "Two")
+    pairWithoutNames = (first:2, second:"Two")
+    print(pairWithoutNames)
+    //let ix = pairWithoutNames.first /// compile error: we stripped the names
+}
+
+do {
+    func tupleMaker() -> (first:Int, second:String) {
+        return (1, "Two") // no labels here
+    }
+    let ix = tupleMaker().first // 1
+    print(ix)
+}
+
 do { // examples from the dev forums
     var array: [(Int, Int)] = []
-    // Error - literals
-    // array.append(1, 1)
-    // Error - let integer
-    // let int_const = 1
-    // array.append(int_const, 1)
-    
+
     // OK - let tuple
     let const_tuple: (Int, Int) = (1, 1)
     array.append(const_tuple)
@@ -819,6 +889,7 @@ do { // examples from the dev forums
     var var_tuple: (Int, Int) = (1, 1)
     array.append(var_tuple)
 }
+
 do {
     var array: [(Int, Int)] = []
     // OK - literals
@@ -847,6 +918,20 @@ do {
  Optionals whether have a value or not.
  can be nil or the number they store, if any.
  */
+
+class test: UIViewController, UINavigationControllerDelegate {
+
+    override func viewDidLoad() {
+        // better example would be to start with a view controller:
+        let f = self.view.window?.rootViewController?.view.frame
+
+        self.navigationController?.hidesBarsOnTap = true
+        let ok : Void? = self.navigationController?.hidesBarsOnTap = true
+        if ok != nil {
+            // it worked
+        }
+    }
+}
 var optionalInteger: Int?
 optionalInteger = 42
 
@@ -903,12 +988,11 @@ stringMaybe5 = nil
 
 var crash : Bool {return false}
 if crash {
-    var stringMaybe6 : String?
-    optionalExpecter(stringMaybe6) // legal because of implicit initialization
-    let s = stringMaybe6! // crash!
-    _ = s
-    _ = stringMaybe6
-    stringMaybe6 = "howdy"
+    let c : UIColor! = nil
+    if c != .red { // crash at runtime
+        // and if you change it to == you'll crash the compiler!'
+        print("it is not red")
+    }
 }
 
 let stringMaybe7 : String?

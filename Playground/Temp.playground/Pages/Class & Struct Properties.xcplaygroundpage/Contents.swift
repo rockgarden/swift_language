@@ -70,53 +70,6 @@ do {
         }
     }
 }
-do {
-    class Moi {
-        let first = "Matt"
-        let last = "Neuburg"
-        // let whole = self.first + " " + self.last // compile error
-        // let whole = first + " " + last // different compiler error
-    }
-    class Moi2 {
-        let first = "Matt"
-        let last = "Neuburg"
-        var whole : String {
-            return self.first + " " + self.last
-        }
-    }
-    class Moi4 {
-        let first = "Matt"
-        let last = "Neuburg"
-        // var whole : String = self.wholeName() // compile error
-        func wholeName() -> String {
-            return self.first + " " + self.last
-        }
-    }
-    class Moi5 {
-        let first = "Matt"
-        let last = "Neuburg"
-        var whole : String { return self.wholeName() }
-        func wholeName() -> String {
-            return self.first + " " + self.last
-        }
-    }
-}
-//FIXME: can't add do{ } "use of unresolved identifier 'self'"
-class Moi3 {
-    let first = "Matt"
-    let last = "Neuburg"
-    lazy var whole : String = self.first + " " + self.last
-}
-class Moi7 {
-    let first = "Matt"
-    let last = "Neuburg"
-    lazy var whole : String = { // "lazy" or we won't compile
-        var s = self.first
-        s.appendContentsOf(" ")
-        s.appendContentsOf(self.last)
-        return s
-    }()
-}
 //: ## Example
 do {
     class Dog {

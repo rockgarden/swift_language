@@ -33,14 +33,6 @@ struct Dog2 {
     }
 }
 
-/// (Void) -> Void) == ()->()
-func doThis(_ f: ()->()) { // f : Void -> Void
-    f()
-}
-doThis { // no parentheses!
-    print("Howdy")
-}
-
 
 // There is a difference in what "capture" means
 // depending on whether the surrounding is a value type or a reference type

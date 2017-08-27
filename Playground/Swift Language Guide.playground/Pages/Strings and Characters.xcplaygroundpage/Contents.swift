@@ -617,6 +617,7 @@ do {
 do {
     let s = "hello"
     let ss = (s as NSString).substring(with: NSMakeRange(1,3))
+    let sss = (s as NSString).substring(with: NSRange(location: 1,length: 3))
 }
 
 do {
@@ -638,9 +639,17 @@ do {
 }
 
 do {
+    let s = "hello"
+    let firstL = s.characters.index(of:"l")
+    let lastL = String(s.characters.reversed()).characters.index(of:"l")
+}
+
+do {
     let s = "hello -> hello -> hello"
     let firstSmall = s.characters.index {$0 < "f"}
+    firstSmall
     let find = s.characters.index {$0 == ">"}
+    find
 }
 
 do {
@@ -680,6 +689,7 @@ do {
     let s = "hello world"
     let arra = s.characters.split{$0 == " "}
     print(arra)
+    print(type(of:arra[0]))
     let arr = s.characters.split{$0 == " "}.map{String($0)}
     print(arr)
 }
@@ -687,7 +697,10 @@ do {
 do {
     let s = "hello"
     let ix = s.startIndex
-    let c = s.index(after: ix) // "e" 相当于 s[++ix]
+    let c = s[s.index(after:ix)] // "e" 相当于 s[++ix]
+    let ix2 = s.index(ix, offsetBy:1)
+    // notion of "advance" now replaced by index after and index offset by
+    let c2 = s[ix2] // "e"
 }
 
 do {
@@ -725,18 +738,33 @@ do {
 do {
     let s = "hello : Hello :"
     let r = s.range(of:":") // a Swift Range (wrapped in an Optional)
+    print(r?.lowerBound) // no longer called startIndex for a Range
 }
 
 do {
-    let s = "hello"
+    var s = "hello"
+    let ix = s.startIndex
     let ix1 = s.index(s.startIndex, offsetBy: 1)
     let ix2 = s.index(ix1, offsetBy: 2)
     let s2 = s[ix1...ix2] // "ell"
+    let r = s.index(ix, offsetBy:1)...s.index(ix, offsetBy:3)
+    let r2 = ix1..<ix2
+    let r3 = Range(r2) // no problem
+    s.removeSubrange(r) // s is now "ho"
+    print(s)
 }
 
 do {
     let r = NSRange(2..<4)
     let r2 = r.toRange()
+}
+
+do {
+    var s = "hello"
+    let ix = s.startIndex
+    let r = s.index(ix, offsetBy:1)...s.index(ix, offsetBy:3)
+    s.replaceSubrange(r, with: "ipp") // s is now "hippo"
+    print(s)
 }
 
 //: [Next](@next)

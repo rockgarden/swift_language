@@ -277,13 +277,15 @@ do {
 
 
 //: # Example
+//: ## Initializers
+import MediaPlayer
 do {
     enum Filter : String {
-        case Albums = "Albums"
-        case Playlists = "Playlists"
-        case Podcasts = "Podcasts"
-        case Books = "Audiobooks"
-        static var cases : [Filter] = [Albums, Playlists, Podcasts, Books]
+        case albums = "Albums"
+        case playlists = "Playlists"
+        case podcasts = "Podcasts"
+        case books = "Audiobooks"
+        static var cases : [Filter] = [albums, playlists, podcasts, books]
         init!(_ ix: Int) {
             if !(0...3).contains(ix) {
                 return nil
@@ -303,9 +305,21 @@ do {
             ix = (ix + 1) % 4
             self = Filter.cases[ix]
         }
+        var query : MPMediaQuery {
+            switch self {
+            case .albums:
+                return .albums()
+            case .playlists:
+                return .playlists()
+            case .podcasts:
+                return .podcasts()
+            case .books:
+                return .audiobooks()
+            }
+        }
     }
 
-    let type1 = Filter.Albums
+    let type1 = Filter.albums
     /// init Filter 若 rawValue 存在 则 fatal error: unexpectedly found nil while unwrapping an Optional value
     let type2 = Filter(rawValue: "Playlists")!
     let type3 = Filter(2) // .Podcasts
@@ -317,7 +331,7 @@ do {
     var type6 = type5
     type6?.s = "test" //no set, so still type5
     (type6?.s)
-    var type7 = Filter.Books
+    var type7 = Filter.books
     type7.advance() // Filter.Albums, 返回0 = Albums
     (type7)
 }

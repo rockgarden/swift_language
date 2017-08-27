@@ -6,6 +6,7 @@ import UIKit
  Methods are functions that are associated with a particular type. Classes, structures, and enumerations can all define instance methods, which encapsulate specific tasks and functionality for working with an instance of a given type. Classes, structures, and enumerations can also define type methods, which are associated with the type itself. Type methods are similar to class methods in Objective-C.
  方法是与特定类型相关联的函数。 类，结构和枚举都可以定义实例方法，它封装了用于处理给定类型的实例的特定任务和功能。 类，结构和枚举也可以定义类型方法，它们与类型本身相关联。 类型方法类似于Objective-C中的类方法。
  The fact that structures and enumerations can define methods in Swift is a major difference from C and Objective-C. In Objective-C, classes are the only types that can define methods. In Swift, you can choose whether to define a class, structure, or enumeration, and still have the flexibility to define methods on the type you create.
+ 结构和枚举可以在Swift中定义方法的事实是与C和Objective-C的主要区别。 在Objective-C中，类是唯一可以定义方法的类型。 在Swift中，您可以选择是定义类，结构还是枚举，还可以灵活地定义创建类型的方法。
  */
 
 /*:
@@ -218,10 +219,6 @@ class ViewController: UIViewController {
     func increment() {
         count += 1
     }
-    //This is a class method.
-    class func someTypeMethod() {
-        print("Class Method")
-    }
 }
 
 class Dog {
@@ -239,7 +236,7 @@ class Dog {
         self.bark()
         print("I'm \(self.name)")
     }
-    func speak2() { // legal, but I never intentionally write code like this
+    func speak2() {
         bark()
         print("I'm \(name)")
     }
@@ -261,33 +258,29 @@ struct Greeting {
     }
 }
 
-class Dog3 {
-    static var whatDogsSay = "Woof"
-    func bark() {
-        print(Dog3.whatDogsSay)
+do {
+    class Dog {
+        static var whatDogsSay = "Woof"
+        func bark() {
+            print(Dog.whatDogsSay)
+        }
     }
 }
 
-let fido = Dog(name:"Fido", license:1234)
-fido.speak() // Woof I'm Fido
-fido.say("woof", times:3)
 
-Greeting.beFriendly() // hello there
-
-let fido3 = Dog3()
-fido3.bark() // Woof
-
-//: ### Example 2
-class MyClass {
-    var s = ""
-    func store(s: String) {
-        self.s = s
+//: ## Example : what just happened!?
+do {
+    class MyClass {
+        var s = ""
+        func store(s: String) {
+            self.s = s
+        }
     }
+    let m = MyClass()
+    let f = MyClass.store(m) //what just happened!?
+    print(m.s)
+    f("howdy")
+    (m.s) // howdy
 }
-let m = MyClass()
-let f = MyClass.store(m) // what just happened!?
-print(m.s)
-f("howdy")
-(m.s) // howdy
 
 //: [Next](@next)

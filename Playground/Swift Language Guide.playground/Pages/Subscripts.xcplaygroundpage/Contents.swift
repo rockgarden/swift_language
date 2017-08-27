@@ -2,7 +2,7 @@
 import UIKit
 /*: 
  # Subscripts
- Classes, structures, and enumerations can define subscripts, which are shortcuts for accessing the member elements of a collection, list, or sequence. You use subscripts to set and retrieve values by index without needing separate methods for setting and retrieval. For example, you access elements in an Array instance as someArray[index] and elements in a Dictionary instance as someDictionary[key].
+ Classes, structures, and enumerations can define subscripts, which are shortcuts for accessing the member elements of a collection, list, or sequence. You use subscripts to set and retrieve values by index without needing separate methods for setting and retrieval. For example, you access elements in an Array instance as someArray[index] and elements in a Dictionary instance as someDictionary[key]. 类，结构和枚举可以定义下标，它们是访问集合，列表或序列的成员元素的快捷方式。 您可以使用下标通过索引设置和检索值，而不需要单独的设置和检索方法。 例如，您将数组实例中的元素作为someArray [index]和Dictionary实例中的元素访问为someDictionary [key]。
 
  You can define multiple subscripts for a single type, and the appropriate subscript overload to use is selected based on the type of index value you pass to the subscript. Subscripts are not limited to a single dimension, and you can define subscripts with multiple input parameters to suit your custom type’s needs. 您可以为单个类型定义多个下标，并根据您传递给下标的索引值的类型选择要使用的适当下标重载。 下标不限于单个维度，您可以使用多个输入参数定义下标以适合您的自定义类型的需求。
 

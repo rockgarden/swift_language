@@ -262,6 +262,7 @@ do {
             self.size = size
         }
 
+        /// delegating initializer
         init(center: Point, size: Size) {
             let originX = center.x - (size.width / 2)
             let originY = center.y - (size.height / 2)
@@ -277,10 +278,26 @@ do {
                           size: Size(width: 3.0, height: 3.0))
     // centerRect's origin is (2.5, 2.5) and its size is (3.0, 3.0)
 }
+
 /*:
  - NOTE:
  For an alternative way to write this example without defining the init() and init(origin:size:) initializers yourself, see Extensions.
  */
+do {
+    struct Digit {
+        var number : Int
+        var meaningOfLife : Bool
+        // let meaningOfLife : Bool // would be legal but delegating initializer cannot set it
+        init(number:Int) {
+            self.number = number
+            self.meaningOfLife = false
+        }
+        init() { // delegating initializer
+            self.init(number:42)
+            self.meaningOfLife = true
+        }
+    }
+}
 
 /*:
  # Class Inheritance and Initialization
@@ -648,6 +665,24 @@ do {
  - NOTE:
  Checking for an empty string value (such as "" rather than "Giraffe") is not the same as checking for nil to indicate the absence of an optional String value. In the example above, an empty string ("") is a valid, nonoptional String. However, it is not appropriate for an animal to have an empty string as the value of its species property. To model this restriction, the failable initializer triggers an initialization failure if an empty string is found.
  */
+do {
+    class DogFailable {
+        let name : String
+        let license : Int
+        init?(name:String, license:Int) {
+            if name.isEmpty {
+                return nil // early exit is legal for a class in Swift 2.2
+            }
+            if license <= 0 {
+                return nil
+            }
+            self.name = name
+            self.license = license
+        }
+    }
+    let fido = DogFailable(name:"", license:0)
+    let name = fido?.name
+}
 
 /*:
  ## Failable Initializers for Enumerations
@@ -775,7 +810,6 @@ do {
         /// right
         type5?.s = "test"
     }
-
 
     var type6 = type2
     type6.s = "test"
@@ -1001,19 +1035,6 @@ do {
 //: # Example
 
 //: ## conditional Initialization
-do {
-    struct DigitFailable {
-        var number : Int
-        var meaningOfLife : Bool
-        init?(number:Int) {
-            if number != 42 {
-                return nil
-            }
-            self.number = number
-            self.meaningOfLife = false
-        }
-    }
-}
 
 do {
     var bti : UIBackgroundTaskIdentifier = 0
