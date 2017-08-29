@@ -275,7 +275,32 @@ do {
     print("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
     // Prints "the volume of fourByFiveByTwo is 40.0"
 }
-
+/*:
+ ## 获取属性方法
+ 获取属性的getter和setter方法：
+ - #selector(getter: keypath)
+ - #selector(setter: keypath)
+ */
+do {
+    class Person: NSObject {
+        dynamic var firstName: String
+        dynamic let lastName: String
+        dynamic var fullName: String {
+            return "\(firstName) \(lastName)"
+        }
+        
+        init(firstName: String, lastName: String) {
+            self.firstName = firstName
+            self.lastName = lastName
+        }
+    }
+    
+    let firstNameGetter = #selector(getter: Person.firstName)
+    let firstNameSetter = #selector(setter: Person.firstName)
+    
+    let btn = UIButton(type: UIButtonType.roundedRect)
+    btn.addTarget(nil, action: firstNameGetter, for: UIControlEvents.touchUpInside)
+}
 
 /*:
  # Property Observers
