@@ -126,10 +126,11 @@ do {
 }
 
 /*:
- You can also compare tuples that have the same number of values, as long as each of the values in the tuple can be compared. For example, both Int and String can be compared, which means tuples of the type (Int, String) can be compared. In contrast, Bool can’t be compared, which means tuples that contain a Boolean value can’t be compared.
- Tuples are compared from left to right, one value at a time, until the comparison finds two values that aren’t equal. Those two values are compared, and the result of that comparison determines the overall result of the tuple comparison. If all the elements are equal, then the tuples themselves are equal.
+ ## tuple comparison
+ You can also compare tuples that have the same number of values, as long as each of the values in the tuple can be compared. For example, both Int and String can be compared, which means tuples of the type (Int, String) can be compared. In contrast, Bool can’t be compared, which means tuples that contain a Boolean value can’t be compared. 您还可以比较具有相同数量值的元组，只要可以比较元组中的每个值即可。例如，可以比较Int和String，这意味着可以比较类型（Int，String）的元组。 相反，Bool无法比较，这意味着不能比较包含布尔值的元组。
+ Tuples are compared from left to right, one value at a time, until the comparison finds two values that aren’t equal. Those two values are compared, and the result of that comparison determines the overall result of the tuple comparison. If all the elements are equal, then the tuples themselves are equal. 元组从左到右进行比较，一次一个值，直到比较发现两个不相等的值。比较这两个值，比较结果确定元组比较的总体结果。如果所有元素都相等，那么元组本身是相等的。
  - NOTE
- The Swift standard library includes tuple comparison operators for tuples with fewer than seven elements. To compare tuples with seven or more elements, you must implement the comparison operators yourself.
+ The Swift standard library includes tuple comparison operators for tuples with fewer than seven elements. To compare tuples with seven or more elements, you must implement the comparison operators yourself. Swift标准库包括具有少于七个元素的元组的元组比较运算符。 要将元组与七个或更多元素进行比较，您必须自己实现比较运算符。
  */
 do {
     (1, "zebra") < (2, "apple")   // true because 1 is less than 2; "zebra" and "apple" are not compared
@@ -396,5 +397,5 @@ func * (lhs: String, rhs: Int) -> String {
 }
 let u = "abc"
 let v = u * 5
-
+*/
 //: [Next](@next)

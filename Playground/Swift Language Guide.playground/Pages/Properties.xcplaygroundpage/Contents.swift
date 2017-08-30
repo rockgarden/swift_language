@@ -398,6 +398,8 @@ do {
  In C and Objective-C, you define static constants and variables associated with a type as global static variables. In Swift, however, type properties are written as part of the type’s definition, within the type’s outer curly braces, and each type property is explicitly scoped to the type it supports. 在C和Objective-C中，将与类型关联的静态常量和变量定义为全局静态变量。 然而，在Swift中，类型属性将作为类型定义的一部分写入类型的外部花括号中，并且每个类型属性都明确地定义为其支持的类型。
 
  You define type properties with the static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. 您使用static关键字定义类型属性。 对于类类型的计算类型属性，可以使用class关键字来允许子类覆盖超类的实现。
+ 
+ static 自带lazy?!
  */
 struct SomeStructure {
     static var storedTypeProperty = "Some value."

@@ -308,7 +308,7 @@ do {
 }
 /*:
  ## Tuples
-
+ 使用元组做模式匹配
  You can use tuples to test multiple values in the same switch statement. Each element of the tuple can be tested against a different value or interval of values. Alternatively, use the underscore character (_), also known as the wildcard pattern, to match any possible value. 您可以使用元组在同一个switch语句中测试多个值。 可以针对不同的值或间隔值测试元组的每个元素。 或者，使用下划线字符（_）（也称为通配符模式）来匹配任何可能的值。
  */
 /// https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/coordinateGraphSimple_2x.png
@@ -327,6 +327,19 @@ do {
         print("\(somePoint) is outside of the box")
     }
     // Prints "(1, 1) is inside the box"
+}
+do {
+    // 特意造出来的例子
+    // 这些是多个方法的返回值
+    let age = 23
+    let job: String? = "Operator"
+    let payload: AnyObject = NSDictionary()
+    // 在上面的代码中，我们想要找一个 30 岁以下的工作者和一个字典 payload。假设这个 payload 是 Objective-C 世界中的一些东西，它可能是字典、数组或者数字。现在你不得不和下面这段别人很多年前写的烂代码打交道：
+    switch (age, job, payload) {
+    case (let age, _?, _ as NSDictionary) where age < 30:
+        print(age, job)
+    default: ()
+    }
 }
 /*:
  ## Value Bindings 价值绑定

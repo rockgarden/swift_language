@@ -1,10 +1,10 @@
 import UIKit
 
-private let calendar = NSCalendar.currentCalendar()
+private let calendar = NSCalendar.current
 
-private var dateFormatter: NSDateFormatter?
+private var dateFormatter: DateFormatter?
 
-private struct DateIndex: CustomDebugStringConvertible, Hashable, RandomAccessIndexType {
+private struct DateIndex: CustomDebugStringConvertible, Hashable, Strideable {
     typealias Distance = Int
     let date: NSDate
     
@@ -14,10 +14,10 @@ private struct DateIndex: CustomDebugStringConvertible, Hashable, RandomAccessIn
     
     var debugDescription: String {
         if dateFormatter == nil {
-            dateFormatter = NSDateFormatter()
+            dateFormatter = DateFormatter()
             dateFormatter!.dateFormat = "MMMM d"
         }
-        return dateFormatter!.stringFromDate(date)
+        return dateFormatter!.string(from: date as Date)
     }
     
     var hashValue: Int {

@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 import Foundation
 import MediaPlayer
+
 /*: 
  # THE BASICS
  Swift is a new programming language for iOS, macOS, watchOS, and tvOS app development. Nonetheless, many parts of Swift will be familiar from your experience of developing in C and Objective-C.
@@ -363,6 +364,46 @@ do {
     var maxAmplitudeFound = AudioSample.min
     // maxAmplitudeFound is now 0
 }
+do {
+    // 别名添加泛型
+    typealias IntFunction<T> = (T) -> Int
+    
+    //一个key为String，value为T的字典
+    typealias StringDictionary<T> = Dictionary<String, T>
+    
+    //一个value为String的字典
+    typealias DictionaryOfStrings<T : Hashable> = Dictionary<T, String>
+    
+    let keyIsStringDict: StringDictionary<Int> = ["key":6]
+    let valueIsStringDict: DictionaryOfStrings<Int> = [5:"value"]
+    
+    //当然也可以使用在函数参数里
+    func joinKey<T: Equatable>(dict: StringDictionary<T>) -> String {
+        return dict.map {
+            return $0.key
+            }.reduce("")
+            { (result, key) -> String in
+                print("\(result) \(key)")
+                return "\(result) \(key)"
+        }
+    }
+    
+    let testDict = ["first":6, "second":6, "third":6]
+    let joinedKey = joinKey(dict: testDict)
+    
+    //结果为" second third first"
+    
+    typealias Vec3<T> = (T, T, T)
+    
+    func perimeter(data: Vec3<Int>) -> Int {
+        return data.0 + data.1 + data.2
+    }
+    
+    let triangle = (1,2,3)
+    let result = perimeter(data: triangle)
+    
+    //result 为 6
+}
 
 /*:
  # Booleans
@@ -389,6 +430,9 @@ do {
  # Tuples
 
  Tuples group multiple values into a single compound value. The values within a tuple can be of any type and do not have to be of the same type as each other. 元组将多个值组合成单个复合值。 元组中的值可以是任何类型的，并且不必彼此具有相同的类型。
+ 
+ 元组相当于匿名结构体: 元组与结构体这两个类型很像，只是结构体通过结构体描述声明，声明之后就可以用这个结构体来定义实例，而元组仅仅是一个实例。如果需要在一个方法或者函数中定义临时结构体，就可以利用这种相似性。就像 Swift 文档中所说：
+ “需要临时组合一些相关值的时候，元组非常有用。（…）如果数据结构需要在临时范围之外仍然存在。那就把它抽象成类或者结构体（…）”
  */
 do {
     let http404Error = (404, "Not Found")
@@ -423,6 +467,107 @@ do {
  Tuples are useful for temporary groups of related values. They are not suited to the creation of complex data structures. If your data structure is likely to persist beyond a temporary scope, model it as a class or structure, rather than as a tuple. 元组对于相关值的临时组是有用的。 它们不适合创建复杂的数据结构。 如果您的数据结构可能持续超出临时范围，则将其建模为类或结构，而不是作为元组。
  */
 
+/*:
+ ## 元组解构
+ */
+do {
+    func abc() -> (Int, Int, String) {
+        return (3, 5, "Carl")
+    }
+    /// 之前的例子大多只展示了如何把东西塞到元组中，解构则是一种迅速把东西从元组中取出的方式，结合上面的 abc 例子，我们写出如下代码：
+    let (a, b, c) = abc()
+    //print(a)
+    // 另外一个例子是把多个方法调用写在一行代码中
+    // let (d, e, f) = (a1(), b1(), c1())
+    // 简单的交换两个值
+    var a1 = 5
+    var b1 = 4
+    (b1, a1) = (a1, b1)
+}
+
+do {
+    /// 元组做为匿名结构体
+    struct User {
+        let name: String
+        let age: Int
+    }
+    // vs.
+    let user = (name: "Carl", age: 40)
+    
+    // 下面来看一个例子：需要收集多个方法的返回值，去重并插入到数据集中：
+    func zipForUser(userid: String) -> String { return "12124" }
+    func streetForUser(userid: String) -> String { return "Charles Street" }
+    // 从数据集中找出所有不重复的街道
+    var streets: [String: (zip: String, street: String, count: Int)] = [:]
+//    for userid in users {
+//        let zip = zipForUser(userid)
+//        let street = streetForUser(userid)
+//        let key = "\(zip)-\(street)"
+//        if let (_, _, count) = streets[key] {
+//            streets[key] = (zip, street, count + 1)
+//        } else {
+//            streets[key] = (zip, street, 1)
+//        }
+//    }
+//    drawStreetsOnMap(streets.values)
+    
+    // 在处理算法数据的类中，你需要把某个方法返回的临时结果传入到另外一个方法中。定义一个只有两三个方法会用的结构体显然是不必要的。
+    // 编造算法
+    //func calculateInterim(values: [Int]) -> (r: Int, alpha: CGFloat, chi: (CGFloat, CGFloat)) {}
+    //func expandInterim(interim: (r: Int, alpha: CGFloat, chi: (CGFloat, CGFloat))) -> CGFloat {}
+}
+
+//: 私有状态
+do {
+    // 元组只在当前的实现方法中有效。使用元组可以很好的存储内部状态。
+    let tableViewValues = [(title: "Age", value: "user.age", editable: true),
+                           (title: "Name", value: "user.name.combinedName", editable: true),
+                           (title: "Username", value: "user.name.username", editable: false),
+                           (title: "ProfilePicture", value: "user.pictures.thumbnail", editable: false)]
+}
+
+do {
+    // 你定义了一个对象，并且想给这个对象添加多个变化监听器，每个监听器都包含它的名字以及发生变化时被调用的闭包：
+//    func addListener(name: String, action: (change: AnyObject?) -> ())
+//    func removeListener(name: String)
+    // 你会如何在对象中保存这些监听器呢？显而易见的解决方案是定义一个结构体，但是这些监听器只能在三种情况下用，也就是说它们使用范围极其有限，而结构体只能定义为 internal ，所以，使用元组可能会是更好的解决方案，因为它的解构能力会让事情变得很简单：
+    var listeners: [(String, (AnyObject?) -> ())]
+//    func addListener(name: String, @escaping action: (_ change: AnyObject?) -> ()) {
+//        listeners.append((name, action))
+//    }
+    func removeListener(name: String) {
+        if let idx = listeners.index(where: { e in return e.0 == name }) {
+            listeners.remove(at:idx)
+        }
+    }
+    func execute(change: Int) {
+        for (_, listener) in listeners {
+            listener(change as AnyObject)
+        }
+    }
+}
+
+do {
+    /// 元组当做复杂的可变参数类型
+    // 可变参数（比如可变函数参数）是在函数参数的个数不定的情况下非常有用的一种技术。
+    // 传统例子
+    func sumOf(_ numbers: Int...) -> Int {
+        // 使用 + 操作符把所有数字加起来
+        return numbers.reduce(0,+)
+    }
+    sumOf(1, 2, 5, 7, 9) // 24
+    // 如果你的需求不单单是 integer，元组就会变的很有用。下面这个函数做的事情就是批量更新数据库中的 n 个实体：
+    var db: [(String, Int)]
+    func batchUpdate(_ updates: (String, Int)...) -> Bool {
+        //db.begin()
+        for (key, value) in updates {
+            db.append((key, value))
+        }
+        //db.end()
+    }
+    // 我们假想数据库是很复杂的
+    batchUpdate(("tk1", 5), ("tk7", 9), ("tk21", 44), ("tk88", 12))
+}
 /*:
  # Optionals
 

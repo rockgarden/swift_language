@@ -14,5 +14,6 @@
         <page name='Revision History'/>
         <page name='License'/>
         <page name='foundation Classes'/>
+        <page name='Dispatch'/>
     </pages>
 </playground>
