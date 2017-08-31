@@ -558,15 +558,60 @@ do {
     sumOf(1, 2, 5, 7, 9) // 24
     // 如果你的需求不单单是 integer，元组就会变的很有用。下面这个函数做的事情就是批量更新数据库中的 n 个实体：
     var db: [(String, Int)]
-    func batchUpdate(_ updates: (String, Int)...) -> Bool {
-        //db.begin()
-        for (key, value) in updates {
-            db.append((key, value))
-        }
-        //db.end()
-    }
+//    func batchUpdate(_ updates: (String, Int)...) -> Bool {
+//        //db.begin()
+//        for (key, value) in updates {
+//            db.append((key, value))
+//        }
+//        //db.end()
+//    }
     // 我们假想数据库是很复杂的
-    batchUpdate(("tk1", 5), ("tk7", 9), ("tk21", 44), ("tk88", 12))
+//    batchUpdate(("tk1", 5), ("tk7", 9), ("tk21", 44), ("tk88", 12))
+}
+
+/*:
+ ## 元组迭代
+ Swift 提供了有限的反射能力，这就允许我们检查元组的内容然后对它进行遍历。不好的地方就是类型检查器不知道如何确定遍历元素的类型，所以所有内容的类型都是 Any。你需要自己转换和匹配那些可能有用的类型并决定要对它们做什么。
+ */
+do {
+    let t = (a: 5, b: "String", c: NSDate())
+    /// Mirror: 表示任何主体实例的子结构和可选的“显示样式”。
+    /// 描述构成特定实例的部分（如存储属性，集合元素，元组元素或活动枚举情况）。 也可以提供一个“显示风格”属性，表明如何呈现此结构。
+    /// 镜子由操场和调试器使用。
+    let mirror = Mirror(reflecting: t)
+    for (label, value) in mirror.children {
+        switch value {
+        case is Int:
+            print("int")
+        case is String:
+            print("string")
+        case is NSDate:
+            print("nsdate")
+        default: ()
+        }
+    }
+}
+/*:
+ ## 元组和泛型
+ Swift 中并没有 Tuple 这个类型。如果你不知道为什么，可以这样想：每个元组都是完全不同的类型，它的类型取决于它包含元素的类型。
+ */
+do {
+    func wantsTuple<T1, T2>(_ tuple: (T1, T2)) -> T1 {
+        return tuple.0
+    }
+    wantsTuple(("a", "b")) //"a"
+    wantsTuple((1, 2)) //1
+    /// 你也可以通过 typealiases 使用元组，从而允许子类指定具体的类型。这看起来相当复杂而且无用，但是我已经碰到了需要特意这样做的使用场景。
+    class BaseClass<A,B> {
+        typealias Element = (A, B)
+        func addElement(_ elm: Element) {
+            print(elm)
+        }
+    }
+    class IntegerClass<B> : BaseClass<Int, B> {}
+    let example = IntegerClass<String>()
+    example.addElement((5, ""))
+    // Prints (5, "")
 }
 /*:
  # Optionals

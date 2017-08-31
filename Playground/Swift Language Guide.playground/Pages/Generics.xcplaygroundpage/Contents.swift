@@ -255,16 +255,25 @@ do {
     // stringIndex is an optional Int containing a value of 2
 }
 
+
 /*:
  # Associated Types
 
  When defining a protocol, it is sometimes useful to declare one or more associated types as part of the protocol’s definition. An associated type gives a placeholder name to a type that is used as part of the protocol. The actual type to use for that associated type isn’t specified until the protocol is adopted. Associated types are specified with the associatedtype keyword. 在定义协议时，有时将一个或多个关联类型声明为协议定义的一部分是有用的。 关联类型为作为协议一部分使用的类型提供占位符名称。 在采用协议之前，不会指定用于该关联类型的实际类型。 关联类型使用associatedtype关键字指定。
 
+ 协议中的关联类型表示：“我不知道具体类型是什么，一些服从我的类、结构体、枚举会帮我实现这个细节”。
+ “这和类型参数（泛型）有什么不同呢？”：类型参数强迫每个人知道相关的类型以及需要反复的指明该类型（当你在构建他们的时候，这会让你写很多的类型参数）。他们是公共接口的一部分。这些代码使用多种结构（类、结构体、枚举）的代码会确定具体选择什么类型。
+ 
+ 通过对比关联类型实现细节的部分。它被隐藏了，就像是一个类可以隐藏内部的实例变量。使用抽象的类型成员的目的是推迟指明具体类型的时机。和泛型不同，它不是在实例化一个类或者结构体时指明具体类型，而且在服从该协议时，指明其具体类型。
+ 
+ The Container protocol needs a way to refer to the type of the elements that a container will hold, without knowing what that type is for a specific container.
+ 容器协议需要一种方法来引用某个容器将要保持的元素的类型，而不知道该类型是什么特定的容器的类型。
+ 
  带范型的协议 == No Support
  protocol 不支持范型类型参数。在 Swift 用 关联类型，代替支持抽象类型成员。
 
  ## Associated Types in Action
- 
+
 */
 protocol Container {
     associatedtype Item
@@ -275,19 +284,20 @@ protocol Container {
 /*:
  The Container protocol defines three required capabilities that any container must provide:
 
- - It must be possible to add a new item to the container with an append(_:) method.
- - It must be possible to access a count of the items in the container through a count property that returns an Int value.
- - It must be possible to retrieve each item in the container with a subscript that takes an Int index value.
+ - It must be possible to add a new item to the container with an append(_:) method.它必须能够将新项添加到一个附加的容器（_：）方法。
+ - It must be possible to access a count of the items in the container through a count property that returns an Int value.必须通过返回int值的计数属性访问容器中的项计数。
+ - It must be possible to retrieve each item in the container with a subscript that takes an Int index value.必须检索容器中的每一项，其中的下标取一个int索引值。
  
  This protocol doesn’t specify how the items in the container should be stored or what type they are allowed to be. The protocol only specifies the three bits of functionality that any type must provide in order to be considered a Container. A conforming type can provide additional functionality, as long as it satisfies these three requirements. 该协议不指定应该如何存储容器中的项目或者允许的类型。该协议仅指定任何类型必须提供的功能的三位，以便被视为容器。只要满足这三个要求，一致的类型可以提供附加的功能。
 
- Any type that conforms to the Container protocol must be able to specify the type of values it stores. Specifically, it must ensure that only items of the right type are added to the container, and it must be clear about the type of the items returned by its subscript.
+ Any type that conforms to the Container protocol must be able to specify the type of values it stores. Specifically, it must ensure that only items of the right type are added to the container, and it must be clear about the type of the items returned by its subscript. 任何符合容器协议的类型都必须能够指定它存储的值的类型。具体来说，它必须确保只将正确类型的项添加到容器中，并且必须清楚其下标返回的项的类型。
 
  To define these requirements, the Container protocol needs a way to refer to the type of the elements that a container will hold, without knowing what that type is for a specific container. The Container protocol needs to specify that any value passed to the append(_:) method must have the same type as the container’s element type, and that the value returned by the container’s subscript will be of the same type as the container’s element type. 要定义这些要求，容器协议需要一种方法来引用容器将要容纳的元素的类型，而不需要知道特定容器的类型。 Container协议需要指定传递给append（_ :)方法的任何值必须与容器的元素类型具有相同的类型，容器下标返回的值与容器的元素类型的类型相同。
 
  To achieve this, the Container protocol declares an associated type called Item, written as associatedtype Item. The protocol doesn’t define what Item is—that information is left for any conforming type to provide. Nonetheless, the Item alias provides a way to refer to the type of the items in a Container, and to define a type for use with the append(_:) method and subscript, to ensure that the expected behavior of any Container is enforced. 为了实现这一点，Container协议声明一个名为Item的关联类型，写成关联类型项。该协议没有定义什么项目 - 该信息留给任何符合类型的提供。尽管如此，Item别名提供了一种方法来引用Container中的项目类型，并定义了一个用于附加（_ :)方法和下标的类型，以确保强制执行任何Container的预期行为。
  */
 do {
+    /// Int version
     struct IntStack: Container {
         /// original IntStack implementation
         var items = [Int]()
@@ -299,7 +309,13 @@ do {
         }
 
         /// conformance to the Container protocol
-        typealias Item = Int
+        
+        /// Thanks to Swift’s type inference, you don’t actually need to declare a concrete ItemType of Int as part of the definition of IntStack. 由于Swift的类型推断，其实你不需要声明一个类型为int的具体的intstack定义的一部分。
+        
+        /// Because IntStack conforms to all of the requirements of the Container protocol, Swift can infer the appropriate ItemType to use, simply by looking at the type of the append(_:) method’s item parameter and the return type of the subscript. 因为intstack符合所有容器的协议要求，迅速可以推断出适当的类型使用，只看的附加型（_：）方法的项目参数和返回类型的下标。
+        
+        /// Indeed, if you delete the typealias ItemType = Int line from the code above, everything still works, because it is clear what type should be used for ItemType. 事实上，如果你删除typealias ItemType = int线从上面的代码，一切都仍然有效，因为它是明确哪些类型应该用于排列。
+        typealias Item = Int //The definition of typealias ItemType = Int turns the abstract type of Item into a concrete type of Int for this implementation of the Container protocol.
         mutating func append(_ item: Int) {
             self.push(item)
         }
@@ -312,6 +328,7 @@ do {
     }
 }
 
+// MARK: - Make the generic Stack type conform to the Container protocol
 extension Stack: Container {
     /// conformance to the Container protocol
     mutating func append(_ item: Element) {
@@ -328,12 +345,45 @@ extension Stack: Container {
 /*:
  ## Extending an Existing Type to Specify an Associated Type
 
- You can extend an existing type to add conformance to a protocol, as described in Adding Protocol Conformance with an Extension. This includes a protocol with an associated type.
+ You can extend an existing type to add conformance to a protocol, as described in Adding Protocol Conformance with an Extension. This includes a protocol with an associated type. 您可以扩展现有的类型来添加对协议的一致性，如在添加扩展协议一致性中所描述的那样。这包括具有关联类型的协议。
 
- Swift’s Array type already provides an append(_:) method, a count property, and a subscript with an Int index to retrieve its elements. These three capabilities match the requirements of the Container protocol. This means that you can extend Array to conform to the Container protocol simply by declaring that Array adopts the protocol. You do this with an empty extension, as described in Declaring Protocol Adoption with an Extension:
+ Swift’s Array type already provides an append(_:) method, a count property, and a subscript with an Int index to retrieve its elements. These three capabilities match the requirements of the Container protocol. This means that you can extend Array to conform to the Container protocol simply by declaring that Array adopts the protocol. You do this with an empty extension, as described in Declaring Protocol Adoption with an Extension: 数组类型已经提供了一个附加（_：）方法，一个属性，和一个下标的数组索引来检索它的元素。这三种功能符合容器协议的要求。这意味着只要声明数组采用了协议，就可以扩展数组以符合容器协议。您使用一个空扩展来完成此操作，如在声明中使用扩展协议时所描述的那样：
  */
 
 extension Array: Container {}
+
+//: ## Bad Example
+protocol Food { }
+protocol Store {
+    associatedtype FoodType
+}
+protocol Animal {
+    associatedtype EdibleFood
+    associatedtype SupplementKind
+    func eat(_ f: EdibleFood)
+    func supplement(_ s: SupplementKind)
+}
+
+do {
+    class Grass : Food { }
+    class Salt {}
+    class Cow : Animal {
+        typealias EdibleFood = Grass
+        typealias SupplementKind = Salt
+        func eat(_ f: Grass) {
+            print(type(of: f))
+        }
+        func supplement(_ s: Salt) {}
+    }
+    class Holstein : Cow {}
+    
+    func buyFoodAndFeed<T: Animal, S: Store where T.EdibleFood == S.FoodType>(a:T, s:S){}
+    
+    let cow = Cow()
+    let grass = Grass()
+    cow.eat(grass)
+}
+
 
 /*:
  # Generic Where Clauses
@@ -356,7 +406,7 @@ do {
                 return false
             }
 
-            // Check each pair of items to see if they are equivalent.
+            // Check each pair of items to see if they are equivalent相等的.
             for i in 0..<someContainer.count {
                 if someContainer[i] != anotherContainer[i] {
                     return false
@@ -407,7 +457,7 @@ do {
     var notEquatableStack = Stack<NotEquatable>()
     let notEquatableValue = NotEquatable()
     notEquatableStack.push(notEquatableValue)
-    //notEquatableStack.isTop(notEquatableValue)  
+    //notEquatableStack.isTop(notEquatableValue)
     /// Error: type 'NotEquatable' does not conform to protocol 'Equatable'
 }
 
