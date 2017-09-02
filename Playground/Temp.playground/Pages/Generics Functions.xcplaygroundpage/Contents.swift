@@ -5,22 +5,6 @@ import UIKit
 
 let s: Optional<String> = "howdy"
 
-protocol Flier {
-    func flockTogetherWith(f: Self)
-}
-struct Bird: Flier {
-    func flockTogetherWith(f: Bird) { }
-}
-protocol Flier2 {
-    associatedtype Other
-    func flockTogetherWith(f: Self.Other) // just showing that this is legal
-    func mateWith(f: Other)
-}
-struct Bird2: Flier2 {
-    func flockTogetherWith(f: Bird2) { }
-    func mateWith(f: Bird2) { }
-}
-
 func takeAndReturnSameThing<T> (t: T) -> T {
     return t
 }
@@ -39,25 +23,6 @@ let holder = HolderOfTwoSameThings(thingOne: "howdy", thingTwo: "getLost")
 func flockTwoTogether<T, U>(f1: T, _ f2: U) { }
 let vd: Void = flockTwoTogether("hey", 1)
 
-protocol Superflier3 { }
-//: 协议在Swift中有两个目的，第一个目的是用来实现多继承(swift语言被设计为单继承的），第二个目的是强制实现者必须准守自己所指定的泛型约束。关键字associatedtype是用来实现第二个目的的。在Generator Type中由associatedtype指定的Element，是用来控制next()方法的返回类型的。而不是用来指定GeneratorType的类型的。
-protocol Flier3: Superflier3 {
-    associatedtype Other: Superflier3 //声明一个类型的占位符
-    func flockTogetherWith(f: Other)
-}
-struct Bird3: Flier3 {
-    func flockTogetherWith(f: Insect3) { }
-}
-struct Insect3: Flier3 {
-    func flockTogetherWith(f: Insect3) { }
-}
-
-//*/
-
-func flockTwoTogether2<T: Flier3>(f1: T, _ f2: T) { }
-let vd2: Void = flockTwoTogether2(Bird3(), Bird3())
-// let vd3 : Void = flockTwoTogether2(Bird3(), Insect3())
-// let vd4 : Void = flockTwoTogether2("hey", "ho")
 
 func myMin<T: Comparable>(things: T...) -> T {
     var minimum = things[0]
@@ -68,10 +33,6 @@ func myMin<T: Comparable>(things: T...) -> T {
     }
     return minimum
 }
-
-// a generic protocol like Flier3 cannot be used as a type
-// func flockTwoTogether3(f1:Flier3, f2:Flier3) {}
-// it can _only_ be used as a type constraint, as in flockTwoTogether2
 
 protocol Flier4 {
     associatedtype Other

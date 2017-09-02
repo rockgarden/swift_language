@@ -3,6 +3,10 @@ import UIKit
 /*: 
  # Protocol
  灵活的提供Func或Var
+ 
+ 协议在Swift中有两个主要目的：
+ - 第一个目的是用来实现多继承(swift语言被设计为单继承的）
+ - 第二个目的是强制实现者必须准守自己所指定的泛型约束。
  */
 //: # Protocol Syntax
 protocol SomeProtocol {
@@ -629,9 +633,11 @@ do {
 
 //: # Example
 
-// just showing the notation
-func f(f:protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
-
+/// protocol为参数
+do {
+    func f(f: protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
+    func f(f: CustomStringConvertible & CustomDebugStringConvertible) {}
+}
 
 // system protocol
 struct Nest : ExpressibleByIntegerLiteral {

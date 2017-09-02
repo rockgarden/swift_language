@@ -186,18 +186,20 @@ struct LevelTracker {
         }
     }
 }
-class Player {
-    var tracker = LevelTracker()
-    let playerName: String
-    func complete(level: Int) {
-        LevelTracker.unlock(level + 1)
-        tracker.advance(to: level + 1)
-    }
-    init(name: String) {
-        playerName = name
-    }
-}
+
 do {
+    class Player {
+        var tracker = LevelTracker()
+        let playerName: String
+        func complete(level: Int) {
+            LevelTracker.unlock(level + 1)
+            tracker.advance(to: level + 1)
+        }
+        init(name: String) {
+            playerName = name
+        }
+    }
+
     var player = Player(name: "Argyrios")
     player.complete(level: 1)
     print("highest unlocked level is now \(LevelTracker.highestUnlockedLevel)")

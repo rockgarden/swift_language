@@ -604,7 +604,7 @@ do {
 
 /*:
  # Failable Initializers
-
+ 可用初始化器
  It is sometimes useful to define a class, structure, or enumeration for which initialization can fail. This failure might be triggered by invalid initialization parameter values, the absence of a required external resource, or some other condition that prevents initialization from succeeding.
 
  To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, structure, or enumeration definition. You write a failable initializer by placing a question mark after the init keyword (init?).
@@ -684,9 +684,21 @@ do {
     let name = fido?.name
 }
 
+do {/// Example
+    class A: NSObject {
+        init?(ok:Bool) {
+            super.init()
+        }
+    }
+    class B: A {
+        override init(ok:Bool) {
+            super.init(ok:ok)!
+        }
+    }
+}
 /*:
  ## Failable Initializers for Enumerations
-
+ 可用的枚举初始化器
  You can use a failable initializer to select an appropriate enumeration case based on one or more parameters. The initializer can then fail if the provided parameters do not match an appropriate enumeration case.
  */
 do {
@@ -717,12 +729,11 @@ do {
         print("This is not a defined temperature unit, so initialization failed.")
     }
     // Prints "This is not a defined temperature unit, so initialization failed."
-
 }
 
 /*:
  ## Failable Initializers for Enumerations with Raw Values
-
+ 具有原始值的枚举初始化器
  Enumerations with raw values automatically receive a failable initializer, init?(rawValue:), that takes a parameter called rawValue of the appropriate raw-value type and selects a matching enumeration case if one is found, or triggers an initialization failure if no matching value exists. 具有原始值的枚举会自动接收一个可用的初始化程序init？（rawValue :)，它可以使用一个名为rawValue的参数作为相应的原始值类型，如果没有匹配的值则触发初始化失败
  */
 do {
@@ -820,7 +831,7 @@ do {
 
 /*:
  ## Propagation of Initialization Failure
-
+ 初始化失败的传播
  A failable initializer of a class, structure, or enumeration can delegate across to another failable initializer from the same class, structure, or enumeration. Similarly, a subclass failable initializer can delegate up to a superclass failable initializer.
 
  In either case, if you delegate to another initializer that causes initialization to fail, the entire initialization process fails immediately, and no further initialization code is executed.

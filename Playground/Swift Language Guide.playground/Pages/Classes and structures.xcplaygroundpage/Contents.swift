@@ -743,6 +743,210 @@ do {
     //let strPri: NSString = objPri as! NSString
 }
 
+//: ## polymorphism 多态性
+do {
+    class Dog {
+        func bark() {
+            print("woof")
+        }
+        func speak() {
+            self.bark()
+        }
+    }
+    class NoisyDog : Dog {
+        override func bark() {
+            super.bark(); super.bark()
+        }
+        func beQuiet() {
+            self.bark()
+        }
+    }
+    do {
+        func tellToBark(_ d:Dog) {
+            d.bark()
+        }
+        var d : Dog
+        d = NoisyDog()
+        tellToBark(d) // woof woof
+        let nd : NoisyDog = NoisyDog()
+        tellToBark(nd) // woof woof
+    }
+
+    do {
+        let nd : NoisyDog = NoisyDog()
+        nd.speak() // woof woof
+        let d : Dog = NoisyDog()
+        d.speak() // woof woof
+    }
+
+    do {
+        func tellToHush(_ d:Dog) {
+            // d.beQuiet() // compile error
+            (d as! NoisyDog).beQuiet()
+            // or:
+            let d2 = d as! NoisyDog
+            d2.beQuiet()
+            d2.beQuiet()
+        }
+        let nd: NoisyDog = NoisyDog()
+        tellToHush(nd)
+    }
+
+    do {
+        func tellToHush(_ d:Dog) {
+            // (d as! NoisyDog).beQuiet() // compiles, but prepare to crash...!
+            if d is NoisyDog {
+                let d2 = d as! NoisyDog
+                d2.beQuiet()
+            }
+            let noisyMaybe = d as? NoisyDog // an Optional wrapping a NoisyDog
+            if noisyMaybe != nil {
+                noisyMaybe!.beQuiet()
+            }
+            (d as? NoisyDog)?.beQuiet()
+
+        }
+        let d: Dog = Dog()
+        tellToHush(d)
+    }
+
+    do {
+        func tellToHush(_ d:Dog) {
+            (d as! NoisyDog).beQuiet()
+            if d is NoisyDog {
+                let d2 = d as! NoisyDog
+                d2.beQuiet()
+            }
+            let noisyMaybe = d as? NoisyDog // an Optional wrapping a NoisyDog
+            if noisyMaybe != nil {
+                noisyMaybe!.beQuiet()
+            }
+            (d as? NoisyDog)?.beQuiet()
+
+        }
+        let d: Dog = NoisyDog()
+        tellToHush(d)
+    }
+
+
+    do {
+        let d : Dog? = NoisyDog()
+        if d is NoisyDog { print("yep") }
+    }
+
+    do {
+        let d : Dog? = NoisyDog()
+        let d2 = d as! NoisyDog
+        d2.beQuiet()
+    }
+
+    do {
+        let d : Dog? = NoisyDog()
+        let d2 = d as? NoisyDog
+        d2?.beQuiet()
+    }
+}
+
+//: ## type reference
+do {
+    class Dog {
+        class var whatDogsSay : String {
+            return "Woof"
+        }
+        func bark() {
+            print(type(of:self).whatDogsSay)
+        }
+    }
+    class NoisyDog : Dog {
+        override class var whatDogsSay : String {
+            return "Woof woof woof"
+        }
+    }
+    
+    func dogTypeExpecter(_ whattype:Dog.Type) {
+    }
+
+    let d = Dog()
+    d.bark()
+    let nd = NoisyDog()
+    nd.bark() // Woof woof woof
+    print(type(of:nd))
+
+    dogTypeExpecter(Dog) // oooh, compiler now warns
+    dogTypeExpecter(Dog.self)
+    dogTypeExpecter(NoisyDog) // ditto
+    dogTypeExpecter(NoisyDog.self)
+    dogTypeExpecter(type(of:d))
+    dogTypeExpecter(type(of:d).self)
+    dogTypeExpecter(type(of:nd))
+    dogTypeExpecter(type(of:nd).self)
+
+    let ddd = Dog.self
+    let dddd = type(of:ddd)
+    print(ddd == Dog.self)
+    print(dddd == type(of:Dog.self)) // oooookay...
+}
+
+do {
+    class Dog {
+        var name : String
+        required init(name:String) {
+            self.name = name
+        }
+        class func makeAndName() -> Dog {
+            let d = self.init(name:"Fido")
+            return d
+        }
+        class func makeAndName2() -> Self {
+            let d = self.init(name:"Fido")
+            return d
+        }
+        func havePuppy(name:String) -> Self {
+            return type(of:self).init(name:name)
+        }
+    }
+
+    class NoisyDog : Dog {}
+
+    func dogMakerAndNamer(_ whattype:Dog.Type) -> Dog {
+        let d = whattype.init(name:"Fido")
+        /// compile error, unless Dog `init(name:)` is `required`
+        return d
+    }
+
+    func typeTester(_ d:Dog, _ whattype:Dog.Type) {
+        // if type(of:d) is whattype {} 
+        /// compile error, undeclared type
+
+        if type(of:d) === whattype {
+            print("yep")
+        } else {
+            print("nope")
+        }
+    }
+
+    let d = dogMakerAndNamer(Dog.self) // d is a Dog named Fido
+    let d2 = dogMakerAndNamer(NoisyDog.self) // d2 is a NoisyDog named Fido
+
+    let dd = Dog.makeAndName() // d is a Dog named Fido
+    let dd2 = NoisyDog.makeAndName() // d2 is a NoisyDog named Fido - but typed as Dog
+
+    let ddd = Dog.makeAndName2() // d is a Dog named Fido
+    let ddd2 = NoisyDog.makeAndName2() // d2 is a NoisyDog named Fido, typed as NoisyDog
+
+    typeTester(Dog(name:"fido"), NoisyDog.self)
+    typeTester(Dog(name:"fido"), Dog.self)
+    typeTester(NoisyDog(name:"fido"), NoisyDog.self)
+    typeTester(NoisyDog(name:"fido"), Dog.self)
+
+    do {
+        let d = Dog(name:"Fido")
+        let d2 = d.havePuppy(name:"Fido Junior")
+        let nd = NoisyDog(name:"Rover")
+        let nd2 = nd.havePuppy(name:"Rover Junior")
+    }
+}
+
 //: final关键字防止重写
 
 //: ## Example

@@ -195,6 +195,8 @@ do {
 }
 
 
+
+
 //: # Function Argument Labels and Parameter Names
 func someFunction(firstParameterName: Int, secondParameterName: Int) {
     // In the function body, firstParameterName and secondParameterName
@@ -621,27 +623,14 @@ do {
             let barkFunction6 = type(of:self).bark(_:)
             let barkFunction7 = Dog.bark(_:)
 
-            _ = barkFunction1
-            _ = barkFunction2
-            _ = barkFunction3
-            _ = barkFunction4
-            _ = barkFunction5
-            _ = barkFunction6
-            _ = barkFunction7
-
             let f = {
                 // return bark(_:) // error
                 return self.bark(_:)
             }
-            _ = f
 
             let purrFunction1 = cat.purr
             let purrFunction2 = self.cat.purr
             let purrFunction3 = Cat.purr
-
-            _ = purrFunction1
-            _ = purrFunction2
-            _ = purrFunction3
         }
     }
     class NoisyDog : Dog {
@@ -649,10 +638,6 @@ do {
             let barkFunction1 = bark(_:)
             let barkFunction2 = self.bark(_:)
             let barkFunction3 = super.bark(_:)
-
-            _ = barkFunction1
-            _ = barkFunction2
-            _ = barkFunction3
         }
     }
 
@@ -664,7 +649,6 @@ do {
             // let barkFunction1 = bark // ambiguous
             // let barkFunction2 = bark(_:) // still ambiguous
             let barkFunction = bark as (Int) -> Void
-            _ = barkFunction
         }
     }
 
@@ -757,7 +741,6 @@ do {
     var mathFunc2=getMathFunc(type: "other")
     (mathFunc2(4))
 }
-
 
 
 //: # Other

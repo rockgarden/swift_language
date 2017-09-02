@@ -1,9 +1,9 @@
 //: [Previous](@previous)
 /*:
  # 范型 Generics
- Generic code enables you to write flexible, reusable functions and types that can work with any type, subject to requirements that you define. You can write code that avoids duplication and expresses its intent in a clear, abstracted manner.
+ Generic code enables you to write flexible, reusable functions and types that can work with any type, subject to requirements that you define. You can write code that avoids duplication and expresses its intent in a clear, abstracted manner. 通用代码使您能够编写灵活，可重用的函数和类型，可以使用任何类型，符合您定义的要求。 您可以编写避免重复的代码，并以清晰，抽象的方式表达其意图。
 
- Generics are one of the most powerful features of Swift, and much of the Swift standard library is built with generic code. In fact, you’ve been using generics throughout the Language Guide, even if you didn’t realize it. For example, Swift’s Array and Dictionary types are both generic collections. You can create an array that holds Int values, or an array that holds String values, or indeed an array for any other type that can be created in Swift. Similarly, you can create a dictionary to store values of any specified type, and there are no limitations on what that type can be.
+ Generics are one of the most powerful features of Swift, and much of the Swift standard library is built with generic code. In fact, you’ve been using generics throughout the Language Guide, even if you didn’t realize it. For example, Swift’s Array and Dictionary types are both generic collections. You can create an array that holds Int values, or an array that holds String values, or indeed an array for any other type that can be created in Swift. Similarly, you can create a dictionary to store values of any specified type, and there are no limitations on what that type can be. 泛型是Swift最强大的功能之一，Swift标准库的大部分都是用通用代码构建的。 事实上，你一直在使用泛型，整个语言指南，即使你没有意识到。 例如，Swift的数组和字典类型都是通用集合。 您可以创建一个包含Int值的数组，或者包含String值的数组，或者可以在Swift中创建的任何其他类型的数组。 类似地，您可以创建一个字典来存储任何指定类型的值，并且对该类型可以是没有限制的。
  */
 do {
     /// 带范型的类
@@ -271,6 +271,8 @@ do {
  
  带范型的协议 == No Support
  protocol 不支持范型类型参数。在 Swift 用 关联类型，代替支持抽象类型成员。
+ 
+ 协议中的关键字associatedtype是用来强制实现者必须准守自己所指定的泛型约束。在Generator Type中由associatedtype指定的Element，是用来控制next()方法的返回类型的。而不是用来指定GeneratorType的类型的。
 
  ## Associated Types in Action
 
@@ -490,7 +492,7 @@ do {
 }
 
 /*:
- # 
+ # Example
  */
 
 let s : Optional<String> = "howdy"
@@ -533,41 +535,6 @@ let holder = HolderOfTwoSameThings(thingOne:"howdy", thingTwo:"getLost")
 func flockTwoTogether<T, U>(_ f1:T, _ f2:U) {}
 let vd : Void = flockTwoTogether("hey", 1)
 
-// illegal
-/*
- protocol Flier3a {
- associatedtype Other : Flier3a
- func flockTogetherWith(f:Other)
- }
- struct Bird3a : Flier3a {
- func flockTogetherWith(f:Insect3a) {}
- }
- struct Insect3a : Flier3a {
- func flockTogetherWith(f:Insect3a) {}
- }
- */
-
-// workaround:
-
-protocol Superflier3 {}
-protocol Flier3 : Superflier3 {
-    associatedtype Other : Superflier3
-    func flockTogetherWith(f:Other)
-}
-struct Bird3 : Flier3 {
-    func flockTogetherWith(f:Insect3) {}
-}
-struct Insect3 : Flier3 {
-    func flockTogetherWith(f:Insect3) {}
-}
-
-//*/
-
-func flockTwoTogether2<T:Flier3>(_ f1:T, _ f2:T) {}
-let vd2 : Void = flockTwoTogether2(Bird3(), Bird3())
-//let vd3 : Void = flockTwoTogether2(Bird3(), Insect3())
-//let vd4 : Void = flockTwoTogether2("hey", "ho")
-
 func myMin<T:Comparable>(_ things:T...) -> T {
     var minimum = things[0]
     for ix in 1..<things.count {
@@ -577,10 +544,6 @@ func myMin<T:Comparable>(_ things:T...) -> T {
     }
     return minimum
 }
-
-// a generic protocol like Flier3 cannot be used as a type
-// func flockTwoTogether3(f1:Flier3, f2:Flier3) {}
-// it can _only_ be used as a type constraint, as in flockTwoTogether2
 
 protocol Flier4 {
     associatedtype Other
