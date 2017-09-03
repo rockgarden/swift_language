@@ -435,6 +435,122 @@ do {
 }
 
 /*:
+ ## example
+ */
+class Dog_WC {}
+class FlyingDog : Dog_WC, Flier_WC {}
+protocol Flier_WC {}
+protocol Walker_WC {}
+protocol Generic {
+    /// T must adopt Flier and Walker
+    associatedtype T : Flier_WC, Walker_WC
+
+    /// error: 'where' clause cannot be attached to an associated type declaration
+    //associatedtype U where U:Flier
+
+    /// legal: this is basically an inheritance declaration!
+    associatedtype U : Dog_WC, Flier_WC
+}
+
+do {
+    func flyAndWalk<T> (_ f:T) where T:Walker_WC, T:Flier_WC {}
+    func flyAndWalkBis<T> (_ f:T) where T:Walker_WC & Flier_WC {}
+    func flyAndWalk2<T : Walker_WC & Flier_WC> (_ f:T) {}
+    func flyAndWalk3<T> (_ f:T) where T:Flier_WC, T:Dog_WC {}
+    // func flyAndWalk3Bis<T> (_ f:T) where T:Flier & Dog {} // no, not two protocols
+    // func flyAndWalk4<T where T == Dog> (f:T) {}
+
+    struct Bird : Flier_WC, Walker_WC {}
+    struct Kiwi : Walker_WC {}
+    struct S : Generic {
+        typealias T = Bird
+        typealias U = FlyingDog
+    }
+
+    flyAndWalk(Bird())
+    flyAndWalk2(Bird())
+    flyAndWalk3(FlyingDog())
+}
+
+/*:
+ ## exploring types of where clause expression
+ */
+
+protocol Flier_ec1 {
+    associatedtype Other
+}
+protocol Walker_ec1 {}
+do {
+    // ==== colon and protocol
+    struct Bird : Flier_ec1 {
+        typealias Other = String
+    }
+    struct Insect : Flier_ec1 {
+        typealias Other = Bird
+    }
+    func flockTogether<T:Flier_ec1> (_ f:T) where T.Other:Equatable {}
+
+    // ==== colon and class
+
+    class Dog {
+    }
+    class NoisyDog : Dog {
+    }
+    struct Pig1 : Flier_ec1 {
+        typealias Other = Dog
+    }
+    struct Pig2 : Flier_ec1 {
+        typealias Other = NoisyDog
+    }
+    func flockTogether2<T:Flier_ec1> (_ f:T) where T.Other:Dog {}
+
+    // ==== equality and protocol
+    struct Kiwi_ec1 : Walker_ec1 {
+    }
+    struct Bird3 : Flier_ec1 {
+        typealias Other = Kiwi_ec1
+    }
+    struct Insect3 : Flier_ec1 {
+        typealias Other = Walker_ec1
+    }
+    func flockTogether3<T:Flier_ec1> (_ f:T) where T.Other == Walker_ec1 {}
+
+    // ==== equality and class
+    func flockTogether4<T:Flier_ec1> (_ f:T) where T.Other == Dog {}
+
+    // ==== equality and two associated type chains
+    struct Bird4 : Flier_ec1 {
+        typealias Other = String
+    }
+    struct Insect4 : Flier_ec1 {
+        typealias Other = Int
+    }
+    func flockTwoTogether<T:Flier_ec1, U:Flier_ec1> (_ f1:T, _ f2:U)
+        where T.Other == U.Other {}
+
+    // ==== with a struct (just testing the outside-the-angle-brackets syntax)
+    struct G<T> where T:Flier_ec1 {}
+
+    do {
+        flockTogether(Bird()) // okay
+        // flockTogether(Insect()) // nope
+
+        flockTogether2(Pig1()) // okay
+        flockTogether2(Pig2()) // okay
+
+        // flockTogether3(Bird3()) // nope
+        flockTogether3(Insect3()) // okay
+
+        flockTogether4(Pig1()) // okay
+        // flockTogether4(Pig2()) // nope
+
+        flockTwoTogether(Bird4(), Bird4())
+        flockTwoTogether(Insect4(), Insect4())
+        // flockTwoTogether(Bird4(), Insect4()) // nope
+    }
+}
+
+/*:
  # Extensions with a Generic Where Clause
  */
 extension Stack where Element: Equatable {
@@ -497,11 +613,11 @@ do {
 
 let s : Optional<String> = "howdy"
 
-protocol Flier {
+protocol Flier1 {
     func flockTogetherWith(_ f:Self)
 }
 
-struct Bird : Flier {
+struct Bird : Flier1 {
     func flockTogetherWith(_ f:Bird) {}
 }
 
@@ -545,13 +661,6 @@ func myMin<T:Comparable>(_ things:T...) -> T {
     return minimum
 }
 
-protocol Flier4 {
-    associatedtype Other
-}
-struct Bird4 : Flier4 {
-    typealias Other = String
-}
-
 class Dog<T> {
     var name : T?
 }
@@ -587,7 +696,6 @@ class Cat {
 }
 class CalicoCat : Cat {
 }
-
 protocol Walker {}
 struct Quadruped : Walker {}
 

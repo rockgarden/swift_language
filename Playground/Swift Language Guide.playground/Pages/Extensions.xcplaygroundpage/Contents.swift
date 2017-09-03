@@ -366,12 +366,42 @@ extension Array {
     }
 }
 
-
 extension Array {
     mutating func removeAtIndexes (ixs: [Int]) -> () {
         for i in ixs.sorted(by: >) {
             self.remove(at: i)
         }
+    }
+}
+
+enum Archive : String {
+    case color = "itsColor"
+    case number = "itsNumber"
+    case shape = "itsShape"
+    case fill = "itsFill"
+}
+
+extension NSCoder {
+    func encode(_ objv: Any?, forKey key: Archive) {
+        self.encode(objv, forKey:key.rawValue)
+    }
+}
+
+extension Array where Element: Comparable {
+    func myMin() -> Element {
+        var minimum = self[0]
+        for ix in 1..<self.count {
+            if self[ix] < minimum {
+                minimum = self[ix]
+            }
+        }
+        return minimum
+    }
+}
+
+extension Sequence where Iterator.Element == Int {
+    func sum() -> Int {
+        return self.reduce(0, +)
     }
 }
 

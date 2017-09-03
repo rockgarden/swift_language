@@ -23,7 +23,6 @@
         <page name='Higher Order Functions'/>
         <page name='Instance'/>
         <page name='lazy'/>
-        <page name='loops'/>
         <page name='operator'/>
         <page name='privacy'/>
         <page name='recursion'/>

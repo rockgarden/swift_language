@@ -209,5 +209,122 @@ do {
  You can use a defer statement even when no error handling code is involved. 即使不涉及错误处理代码，也可以使用延迟语句。
  */
 
+/// defer - guard+throw 语法代替嵌套 if 的处理方式, 可尽早返回错误, 但是已经被初始化（可能也正在被使用）的资源必须在返回前被处理干净, 关键字 defer 为此提供了安全又简单的处理方式: 声明一个 block，当前代码执行的闭包退出时会执行该 block.
+do {
+    let which = 0
+
+    func testDefer() {
+        print("starting")
+        defer {
+            print("ending")
+        }
+        if which == 1 {
+            print("returning")
+            return
+        }
+        print("last line")
+    }
+
+    // okay, but let's also try other ways of escaping
+    // what if we throw?
+
+    func testDeferWithThrow() throws {
+        print("starting2")
+        defer {
+            print("ending2")
+        }
+        throw NSError(domain: "Ouch", code: 1, userInfo: nil)
+    }
+
+    func testDeferWithThrow2() {
+        print("starting2")
+        do {
+            defer {
+                print("ending2")
+            }
+            print("throwing")
+            throw NSError(domain: "Ouch", code: 1, userInfo: nil)
+        } catch {
+            print("caught: \(error)")
+        }
+    }
+
+    // finally, let's also try other kinds of block
+
+    func testDeferWithOtherBlocks() {
+        print("entering func")
+        defer {
+            print ("exiting func")
+        }
+        test: while true {
+            print ("entering while")
+            defer {
+                print ("exiting while")
+            }
+            if which == 1 {
+                print ("entering if")
+                defer {
+                    print ("exiting if")
+                }
+                print ("breaking from if")
+                break test
+            }
+            print ("breaking from while")
+            break test
+        }
+    }
+    
+    func doSomethingTimeConsuming3() {
+        defer {
+            UIApplication.shared.endIgnoringInteractionEvents()
+        }
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        // ... do stuff ...
+        if somethingHappened {
+            return
+        }
+        // ... do more stuff ...
+    }
+}
+
+/// defer译为延缓、推迟之意。那么在Swift2.0中它将被应用于什么位置呢？比如，读取某目录下的文件内容并处理数据，你需要首先定位到文件目录，打开文件夹，读取文件内容以及处理数据，关闭文件以及文件夹。倘若一切顺利，只需按照设定好的程序流程走一轮即可；不过考虑事情要面面俱到，倘若中间某个环节失败，比如读取文件内容失败、处理数据失败等等，还需要进行一些后续收尾工作，即关闭文件或关闭文件夹(当然就算顺利执行，也是要关闭的)。
+
+/// defer的作用域: 函数结束时开始执行defer栈推出操作，而是每当一个作用域结束就进行该作用域defer执行。调用顺序——即一个作用域结束，该作用域中的defer语句自下而上调用。
+do {
+    func lookforSomething(_ name: String) throws{
+        //这里是作用域1 整个函数作用域
+        print("1-1")
+        if name == ""{
+            //这里是作用域2 if的作用域
+            print("2-1")
+            defer{
+                print("2-2")
+            }
+            print("2-3")
+        }
+        print("1-2")
+        defer{
+            print("1-3")
+        }
+        print("1-4")
+
+        if name == "hello"{
+            //作用域3
+            print("3-1")
+            defer{
+                print("3-2")
+            }
+            print("3-3")
+            defer{
+                print("3-4")
+            }
+        }
+    }
+    //有兴趣的看看依次输出什么
+    //try! lookforSomething("")
+    //调出 debug Area 快捷键 shift+ command + y
+    try! lookforSomething("hello")
+}
+
 
 //: [Next](@next)

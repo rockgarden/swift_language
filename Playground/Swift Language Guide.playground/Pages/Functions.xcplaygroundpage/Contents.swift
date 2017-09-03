@@ -2,7 +2,11 @@
 
 import UIKit
 
-//: # Functions
+/*:
+ # Functions
+
+ functions are covariant协  with their return type and contravariant逆变 with their parameter types"
+ */
 /*: 
  # Defining and Calling Functions
  these DO just illustrates some declaration syntax

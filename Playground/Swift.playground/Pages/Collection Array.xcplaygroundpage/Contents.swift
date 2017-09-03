@@ -53,6 +53,15 @@ do {
     let naturalNumbers = 1...Int.max
     let zipped = Array(zip(words, naturalNumbers))
 }
+
+/// use sequence to generate the alternating positive-negative.用序列来产生正负交替。
+do {
+    let directions = sequence(first:1) {$0 * -1}
+    let bases = stride(from: 20, to: 60, by: 5)
+    let values = zip(bases, directions).map {Double($1) * .pi / Double($0)}
+    print(values) // same as previous but without the initial 0.0
+}
+
 //: Array filter
 do {
     let names = ["Sofia", "Camilla", "Martina", "Mateo", "Nicolás"]

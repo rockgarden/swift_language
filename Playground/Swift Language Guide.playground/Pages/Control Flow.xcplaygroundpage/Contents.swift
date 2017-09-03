@@ -75,6 +75,57 @@ do {
     for char in "Yes".characters { //char != char
         print("\(char)")
     }
+}
+
+do {
+    do {
+        for var i in 1...5 {
+            i = i + 1
+            print(i)
+        }
+    }
+
+    do {
+        for i in 0...10 where i % 2 == 0 {
+            print(i)
+        }
+    }
+
+    do {
+        for i in stride(from:10, through: 0, by: -2) {
+            print(i) // 10, 8, 6, 4, 2, 0
+        }
+    }
+
+    do {
+        let range = (0...10).reversed().filter{$0 % 2 == 0}
+        for i in range {
+            print(i) // 10, 8, 6, 4, 2, 0
+        }
+    }
+
+    do {
+        enum Error {
+            case number(Int)
+            case message(String)
+            case fatal
+        }
+
+        let arr : [Error] = [
+            .message("ouch"), .message("yipes"), .number(10),
+            .number(-1), .fatal
+        ]
+        for case let .number(i) in arr {
+            print(i) // 10, -1
+        }
+
+        do {
+            let arr : [Any] = ["hey", 1, "ho"]
+            for case let s as String in arr {
+                print(s)
+            }
+        }
+    }
 
     /// break标签: 仅用于for或swith
     outer: for i in 0 ..< 5  {
@@ -86,6 +137,72 @@ do {
             }
         }
     }
+
+    do {
+        for i in 1...5 {
+            for j in 1...5 {
+                print("\(i), \(j);")
+                break
+            }
+        }
+
+        outer: for i in 1...5 {
+            for j in 1...5 {
+                print("\(i), \(j);")
+                break outer
+            }
+        }
+    }
+
+    do {
+        test: if true {
+            for i in 1...5 {
+                for j in 1...5 {
+                    print("\(i), \(j);")
+                    break test
+                }
+            }
+        }
+    }
+
+    test2: do {
+        var ok : Bool { return true }
+        if ok {
+            print("step one")
+            break test2
+        }
+        print("step two")
+    }
+
+    do {
+        var values = [0.0]
+        /// stride: Returns the sequence of values (self, self + stride, self + 2 * stride, … last) where last is the last value in the progression that is less than end.
+        for (ix,i) in stride(from: 20, to: 60, by: 5).enumerated() {
+            values.append((ix % 2 == 1 ? -1.0 : 1.0) * .pi / Double(i))
+        }
+        print(values)
+    }
+
+    do {
+        var values = [0.0]
+        var direction = 1.0
+        for i in stride(from: 20, to: 60, by: 5) {
+            values.append(direction * .pi / Double(i))
+            direction *= -1
+        }
+        print(values)
+    }
+
+    do {
+        let arr1 = ["CA", "MD", "NY", "AZ"]
+        let arr2 = ["California", "Maryland", "New York"]
+        var d = [String:String]()
+        for (s1,s2) in zip(arr1,arr2) {
+            d[s1] = s2
+        } // now d is ["MD": "Maryland", "NY": "New York", "CA": "California"]
+        print(d)
+    }
+
 }
 
 /*:
@@ -130,6 +247,67 @@ do {
     print("Game over!")
 }
 
+do {
+    do {
+        var g = (1...5).makeIterator()
+        while let i = g.next() {
+            print(i)
+        }
+    }
+    
+    do {
+        var movenda = [1,2,3]
+        while movenda.count > 0 {
+            let p = movenda.removeLast()
+            print(p)
+        }
+
+        movenda = [1,2,3]
+        while let p = movenda.popLast() {
+            print(p)
+        }
+    }
+
+    do {
+        let tvc = UITableViewCell()
+        let subview1 = UIView()
+        let subview2 = UITextField()
+        tvc.addSubview(subview1)
+        subview1.addSubview(subview2)
+        let textField = subview2
+        var v : UIView = textField
+        // v = tvc // try this to prove that we can cycle up to the top safely
+        while let vv = v.superview, !(vv is UITableViewCell) {v = vv}
+        if let c = v.superview as? UITableViewCell {
+            print("got it \(c)")
+        } else {
+            print("nope, but at least we didn't crash")
+        }
+    }
+
+    do {
+        enum Error {
+            case number(Int)
+            case message(String)
+            case fatal
+        }
+
+        let arr : [Error] = [
+            .message("ouch"), .message("yipes"), .number(10),
+            .number(-1), .fatal
+        ]
+        var i = 0
+        // removed use of i++, deprecated in Swift 2.2, to be removed in Swift 3
+        while case let .message(message) = arr[i]  {
+            print(message)
+            i += 1
+        }
+        print(arr)
+
+    }
+
+}
+
 /*:
  ## Repeat-While
 
@@ -164,6 +342,41 @@ do {
         square += diceRoll
     } while square < finalSquare
     print("Game over!")
+}
+
+do {
+    do {
+        let tvc = UITableViewCell()
+        let subview1 = UIView()
+        let subview2 = UITextField()
+        tvc.addSubview(subview1)
+        subview1.addSubview(subview2)
+        let textField = subview2
+
+        var v : UIView = textField
+        repeat { v = v.superview! } while !(v is UITableViewCell)
+        if let c = v as? UITableViewCell {
+            print("got it \(c)")
+        } else {
+            print("nope")
+        }
+    }
+
+    do {
+        let tvc = UITableViewCell()
+        let subview1 = UIView()
+        let subview2 = UITextField()
+        tvc.addSubview(subview1)
+        subview1.addSubview(subview2)
+        let textField = subview2
+        var v : UIView? = textField
+        repeat {v = v?.superview} while !(v is UITableViewCell || v == nil)
+        if let c = v as? UITableViewCell {
+            print("got it \(c)")
+        } else {
+            print("nope")
+        }
+    }
 }
 
 /*:
@@ -778,16 +991,6 @@ do {
     }
 }
 
-
-do {
-//    let d : [NSObject:AnyObject] = [:]
-//    switch (d["size"], d["desc"]) {
-//    case let (size as Int, desc as String):
-//        print("You have size \(size) and it is \(desc)")
-//    default:break
-//    }
-}
-
 switch type {
 case .Albums:
     print("Albums")
@@ -960,11 +1163,6 @@ case (-2...2, -3...3):
 default:
     ("out of bounds")
 }
-
-
-
-
-
 
 let num1 = 5
 var desc = "\(num1)是"

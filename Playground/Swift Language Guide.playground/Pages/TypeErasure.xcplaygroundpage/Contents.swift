@@ -189,4 +189,44 @@ do {
     fI.flockTogetherWith(other:Bird(noise:"flap flap flap"))
 }
 
+protocol Wieldable {}
+protocol Superfighter {
+    associatedtype Weapon : Wieldable
+}
+protocol Fighter : Superfighter {
+    associatedtype Enemy : Superfighter
+    func steal(weapon:Self.Enemy.Weapon, from:Self.Enemy)
+}
+do {
+    struct Sword : Wieldable {}
+    struct Bow : Wieldable {}
+
+    /// 士兵
+    struct Soldier : Fighter {
+        typealias Weapon = Sword
+        typealias Enemy = Archer
+        func steal(weapon:Bow, from:Archer) {
+        }
+    }
+    /// 射手
+    struct Archer : Fighter {
+        typealias Weapon = Bow
+        typealias Enemy = Soldier
+        func steal(weapon:Sword, from:Soldier) {
+        }
+    }
+    struct Camp<T:Fighter> {
+        var spy : T.Enemy?
+    }
+
+    var c = Camp<Soldier>()
+    c.spy = Archer()
+    
+    /// error: cannot assign value of type 'Soldier' to type 'Soldier.Enemy?'
+    //c.spy = Soldier()
+
+    var c2 = Camp<Archer>()
+    c2.spy = Soldier()
+}
+
 //: [Next](@next)

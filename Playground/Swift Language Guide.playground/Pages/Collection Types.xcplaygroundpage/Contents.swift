@@ -831,8 +831,6 @@ do {
     print(arr)
 }
 
-
-
 do {
     var d1 = ["NY":"New York", "CA":"California"]
     let d2 = ["MD":"Maryland"]
@@ -903,6 +901,48 @@ do {
                 self.progress = prog
             }
         }
+    }
+}
+
+/*:
+ # Example
+ 
+ ## sequence
+ 返回由第一个重复的懒惰应用程序生成的序列。
+ 序列中的第一个元素总是第一个，而每个连续元素都是前面元素调用下一个元素的结果。当下一个返回时，序列结束。如果下一个从不返回0，则序列是无限的。
+ 这个函数可以用来取代许多案例已经解决了使用C风格的for循环。
+ */
+do {
+    do {
+        let seq = sequence(first:1) {$0 >= 10 ? nil : $0 + 1}
+        for i in seq {
+            print(i) // 1,2,3,4,5,6,7,8,9,10
+        }
+        let seq2 = sequence(first:1) {$0 + 1}
+        for i in seq2.prefix(5) {
+            print(i) // 1,2,3,4,5
+        }
+    }
+
+    do {
+        // form 1
+        let directions = sequence(first:1) {$0 * -1}
+        print(Array(directions.prefix(10)))
+        // [1, -1, 1, -1, 1, -1, 1, -1, 1, -1]
+        // i.e. first 10 elements of an infinite series alternating between 1 and -1
+
+        // form 2; the state is an inout param to the function
+        // in this example we use it as a scratchpad to maintain the most recent pair
+        let fib = sequence(state:(0,1)) {
+            (pair: inout (Int,Int)) -> Int in
+            let n = pair.0 + pair.1
+            pair = (pair.1,n)
+            return n
+        }
+        for i in fib.prefix(10) {
+            print(i)
+        }
+        // i.e. the first 10 elements of the fibonacci sequence
     }
 }
 
