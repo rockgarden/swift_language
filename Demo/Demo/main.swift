@@ -3,7 +3,7 @@ import Foundation
 // 可选类型:处理值可能缺失的情况
 let Str = "1234"
 let convertNumber = Int(Str)
-print(convertNumber) //convertNumber 是 optional Int 或者 Int?
+print(convertNumber as Any) //convertNumber 是 optional Int 或者 Int?
 if convertNumber != nil{
     print(convertNumber!)//可选值的强制解析 可去除optional
 }

@@ -18,8 +18,8 @@ extension Message: CustomDebugStringConvertible {
     }
 }
 
-private var dateFormatter: NSDateFormatter = {
-    let formatter = NSDateFormatter()
+private var dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
     formatter.doesRelativeDateFormatting = true
     formatter.dateStyle = .ShortStyle
     formatter.timeStyle = .ShortStyle

@@ -209,6 +209,28 @@ do {
     rockgarden = nil
 }
 
+do {
+    print(3)
+    func testRetainCycle() {
+        class Dog {
+            weak var cat : Cat?
+            deinit {
+                print("testRetainCycle: farewell from Dog")
+            }
+        }
+        class Cat {
+            weak var dog : Dog?
+            deinit {
+                print("testRetainCycle: farewell from Cat")
+            }
+        }
+        let d = Dog()
+        let c = Cat()
+        d.cat = c
+        c.dog = d
+    }
+    testRetainCycle() // farewell from Cat, farewell from Dog
+}
 
 /*:
  # Unowned References
@@ -352,7 +374,58 @@ do {
  Swift requires you to write self.someProperty or self.someMethod() (rather than just someProperty or someMethod()) whenever you refer to a member of self within a closure. This helps you remember that it’s possible to capture self by accident.
  */
 
-/*: 
+do {
+    class FunctionHolder {
+        var function : ((Void) -> Void)?
+        deinit {
+            print("FunctionHolder: farewell from FunctionHolder")
+        }
+    }
+    func testFunctionHolder() {
+        let fh = FunctionHolder()
+        fh.function = {
+            print(fh)
+        }
+    }
+    testFunctionHolder() // nothing in console
+}
+do {
+    class FunctionHolder {
+        var function : ((Void) -> Void)?
+        deinit {
+            print("FunctionHolder: farewell from FunctionHolder")
+        }
+    }
+    func testFunctionHolder() {
+        let fh = FunctionHolder()
+        fh.function = {
+            [weak fh] in
+            print(fh)
+        }
+        fh.function!() // proving that what's printed is Optional
+    }
+    testFunctionHolder() // farewell from FunctionHolder
+}
+do {
+    class FunctionHolder {
+        var function : ((Void) -> Void)?
+        deinit {
+            print("FunctionHolder: farewell from FunctionHolder")
+        }
+    }
+    func testFunctionHolder() {
+        let fh = FunctionHolder()
+        fh.function = {      // here comes the weak–strong dance
+            [weak fh] in     // weak
+            guard let fh = fh else { return }
+            print(fh)        // strong
+        }
+        fh.function!() // proving that what's printed is non-Optional
+    }
+    testFunctionHolder() // farewell from FunctionHolder
+}
+
+/*:
  ## Defining a Capture List
  */
 //: Each item in a capture list is a pairing of the weak or unowned keyword with a reference to a class instance (such as self) or a variable initialized with some value (such as delegate = self.delegate!). These pairings are written within a pair of square braces, separated by commas.
@@ -400,22 +473,51 @@ do {
     paragraph = nil
 }
 
+do {
+    func testUnowned() {
+        class Boy {
+            var dog : Dog?
+            deinit {
+                print("testUnowned: farewell from Boy")
+            }
+        }
+        class Dog {
+            unowned let boy : Boy
+            init(boy:Boy) { self.boy = boy }
+            deinit {
+                print("testUnowned: farewell from Dog")
+            }
+        }
+        let b = Boy()
+        let d = Dog(boy: b)
+        b.dog = d
+
+        return //uncomment me to test crashing
+        var b2 = Optional(Boy())
+        let d2 = Dog(boy: b2!)
+        b2 = nil // destroy the Boy behind the Dog's back
+        print(d2.boy) // crash
+    }
+    testUnowned() // farewell from Boy, farewell from Dog
+}
+
 
 //: ## Example
-class RetainCycleStrong {
-    var closure: (() -> Void)!
-    var string = "Hello"
-    init() {
-        closure = { _ in
-            self.string = "closure retain cycle!"
-            _ = self.string
+do {
+    class RetainCycleStrong {
+        var closure: (() -> Void)!
+        var string = "Hello"
+        init() {
+            closure = { _ in
+                self.string = "closure retain cycle!"
+                _ = self.string
+            }
+        }
+        deinit {
+            print("RetainCycleStrong deinit \(string)")
         }
     }
-    deinit {
-        _  = ("RetainCycleStrong deinit \(string)")
-    }
-}
-do {
+
     var rockgarden: RetainCycleStrong? = RetainCycleStrong()
     rockgarden!.closure()
     rockgarden = nil

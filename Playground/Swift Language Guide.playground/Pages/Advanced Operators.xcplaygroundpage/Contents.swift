@@ -219,6 +219,37 @@ do {
     // https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Art/vectorAddition_2x.png
 }
 
+struct Vial {
+    var numberOfBacteria : Int
+    init(_ n:Int) {
+        self.numberOfBacteria = n
+    }
+}
+extension Vial : Equatable {
+    static func +(lhs:Vial, rhs:Vial) -> Vial {
+        let total = lhs.numberOfBacteria + rhs.numberOfBacteria
+        return Vial(total)
+    }
+    static func +=(lhs: inout Vial, rhs:Vial) {
+        let total = lhs.numberOfBacteria + rhs.numberOfBacteria
+        lhs.numberOfBacteria = total
+    }
+
+    static func ==(lhs:Vial, rhs:Vial) -> Bool {
+        return lhs.numberOfBacteria == rhs.numberOfBacteria
+    }
+}
+do {
+    var v1 = Vial(500_000)
+    let v2 = Vial(400_000)
+    let v3 = v1 + v2
+    (v3.numberOfBacteria) // 900000
+    v1 += v2
+    (v1.numberOfBacteria) // 900000
+    let arr = [v1,v2]
+    let ix = arr.index(of:v1) // Optional wrapping 0
+}
+
 /*:
  ## Prefix and Postfix Operators
  Classes and structures can also provide implementations of the standard unary operators. Unary operators operate on a single target. They are prefix if they precede their target (such as -a) and postfix operators if they follow their target (such as b!).
@@ -328,5 +359,30 @@ do {
  You do not specify a precedence when defining a prefix or postfix operator. However, if you apply both a prefix and a postfix operator to the same operand, the postfix operator is applied first.
  在定义前缀或后缀运算符时，不要指定优先级。但是，如果将前缀和后缀运算符应用于同一个操作数，则首先应用后缀运算符。
  */
+//: 中间运算符 infix
+infix operator ^^
+extension Int {
+    static func ^^(lhs:Int, rhs:Int) -> Int {
+        var result = lhs
+        for _ in 1..<rhs {result *= lhs}
+        return result
+    }
+}
+do {
+    (2^^2) // 4
+    (2^^3) // 8
+    (3^^3) // 27
+}
+
+infix operator >>> : RangeFormationPrecedence
+func >>><Bound>(maximum: Bound, minimum: Bound)
+    -> ReversedRandomAccessCollection<CountableRange<Bound>>
+    where Bound : Comparable & Strideable, Bound.Stride : Integer {
+        return (minimum..<maximum).reversed()
+}
+do {
+    let r2 = 10>>>1
+    for i in r2 {print(i)}
+}
 
 //: [Next](@next)

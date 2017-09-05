@@ -1,32 +1,6 @@
 //: [Previous](@previous)
 
-struct Vial {
-    var numberOfBacteria : Int
-    init(_ n: Int) {
-        self.numberOfBacteria = n
-    }
-}
-func +(lhs:Vial, rhs:Vial) -> Vial {
-    let total = lhs.numberOfBacteria + rhs.numberOfBacteria
-    return Vial(total)
-}
-func +=(lhs:inout Vial, rhs:Vial) {
-    let total = lhs.numberOfBacteria + rhs.numberOfBacteria
-    lhs.numberOfBacteria = total
-}
-func ==(lhs:Vial, rhs:Vial) -> Bool {
-    return lhs.numberOfBacteria == rhs.numberOfBacteria
-}
-extension Vial: Equatable{}
 
-//: 中间运算符 infix
-infix operator ^^
-func ^^(lhs:Int, rhs:Int) -> Int {
-    var result = lhs
-    for _ in 1..<rhs {result *= lhs}
-    return result
-}
-5^^6
 
 // 定义Type协议
 protocol Type {

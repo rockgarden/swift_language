@@ -12,14 +12,14 @@ private class GroupChatController: UITableViewController {
     
     override init(style: UITableViewStyle) {
         super.init(style: style)
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: messageCellIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: messageCellIdentifier)
         view.frame = CGRect(x: 0, y: 0, width: 320, height: 300)
-        tableView.separatorStyle = .SingleLine
-        tableView.separatorColor = .blueColor() // FIXME: not working
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .blue // FIXME: not working
         tableView.estimatedRowHeight = 60
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
     
