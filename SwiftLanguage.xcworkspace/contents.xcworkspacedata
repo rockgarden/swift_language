@@ -17,6 +17,9 @@
       location = "group:Playground"
       name = "Playground">
       <FileRef
+         location = "group:ConcurrencyInSwift.playground">
+      </FileRef>
+      <FileRef
          location = "group:Swift Language Guide.playground">
       </FileRef>
       <FileRef
