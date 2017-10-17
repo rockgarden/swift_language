@@ -25,8 +25,10 @@ import PlaygroundSupport
 PlaygroundPage.current.needsIndefiniteExecution = true
 
 
-/*: 
-# OperationQueue
+/*:
+ # OperationQueue 操作队列
+ 简单来说说操作队列，这是建立在 GCD 顶层的附加 API，把并行队列和模型任务看作为操作，易于取消，依赖其它操作完成情况来执行任务。
+ 操作可以有优先级，定义了执行的顺序，也可以添加到 OperationQueues 异步执行。
 */
 
 
@@ -75,6 +77,8 @@ op4.addDependency(op3)
 
 queue.addOperation(op4)  // op3 will complete before op4, always
 queue.addOperation(op3)
+
+//也可以使用 removeDependency(operation:) 移除依赖，依赖是存储在一个公开访问的依赖数组中。
 
 //: Operation status
 
