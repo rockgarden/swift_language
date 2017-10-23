@@ -3,12 +3,37 @@ import UIKit
 /*: 
  # Protocol
  灵活的提供Func或Var。
- 相当于Java的接口，但不能和Java一样在协议中直接提供属性和方法的默认实现，而需要在协议扩展真实现。
+ 相当于Java的接口，但不能和Java一样在协议中直接提供属性和方法的默认实现，而需要在协议扩展中实现。
  
  协议在Swift中有两个主要目的：
  - 第一个目的是用来实现多继承(swift语言被设计为单继承的）。
  - 第二个目的是强制实现者必须准守自己所指定的泛型约束。
  */
+protocol MyProtocol {
+    var prop: Int { get set }
+    var propertyWithImplementation: String { get }
+    func foo()
+}
+
+// 通过协议扩展完成属性和方法的默认实现
+extension MyProtocol {
+    var propertyWithImplementation: String {
+        return "foo"
+    }
+    
+    func foo() {
+        print(prop)
+    }
+}
+do {
+    class testProtocol: MyProtocol {
+        var prop: Int = 29
+    }
+    let t = testProtocol()
+    t.foo()
+}
+
+
 //: # Protocol Syntax
 protocol SomeProtocol {
     // protocol definition goes here
@@ -99,7 +124,8 @@ print("And another one: \(generator.random())")
 /*: 
  # Mutating Method Requirements
  https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Methods.html#//apple_ref/doc/uid/TP40014097-CH15-ID239
- If you define a protocol instance method requirement that is intended to mutate instances of any type that adopts the protocol, mark the method with the mutating keyword as part of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement. 如果您定义了一个协议实例方法要求，该要求旨在使采用协议的任何类型的实例变异，请使用mutating关键字将该方法标记为协议定义的一部分。 这使得结构和枚举能够采用协议并满足该方法的要求。
+ If you define a protocol instance method requirement that is intended to mutate instances of any type that adopts the protocol, mark the method with the mutating keyword as part of the protocol’s definition. This enables structures and enumerations to adopt the protocol and satisfy that method requirement. 如果您定义了一个协议实例方法要求，该要求旨在使采用协议的任何类型的实例变异，请使用mutating关键字将该方法标记为协议定义的一部分。这使得结构和枚举能够采用协议并满足该方法的要求。
+ 我们的协议中可以定义可变方法，如果协议中定义的实例方法会改变遵循该协议的类型的实例。
  - NOTE:
  If you mark a protocol instance method requirement as mutating, you do not need to write the mutating keyword when writing an implementation of that method for a class. The mutating keyword is only used by structures and enumerations. 
  在 class 中实现带有mutating方法的接口时, 不用mutating进行修饰, 因为对于class来说, 类的成员变量和方法都是透明的, 所以不必使用 mutating 来进行修饰
@@ -257,8 +283,10 @@ for _ in 0...9 {
     print("Random dice roll is \(d6.roll())")
 }
 
-
-//: # Delegation
+/*:
+ # Delegation
+ Swift 可以使用 Protocol 来实现委托（代理）模式，委托（代理）模式允许类或结构体将一些需要它们负责的功能委托给其他类型的实例。
+ */
 protocol DiceGame {
     var dice: Dice { get }
     func play()
@@ -326,16 +354,16 @@ class DiceGameTracker: DiceGameDelegate {
         print("The game lasted for \(numberOfTurns) turns")
     }
 }
-
-let tracker = DiceGameTracker()
-let game = SnakesAndLadders()
-game.delegate = tracker
-game.play()
-
+do {
+    let tracker = DiceGameTracker()
+    let game = SnakesAndLadders()
+    game.delegate = tracker
+    game.play()
+}
 
 /*: 
  # Adding Protocol Conformance with an Extension
- 添加协议符合扩展
+ 通过扩展添加协议一致性
  You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand. 即使您无法访问现有类型的源代码，也可以扩展现有类型以采用并符合新协议。扩展可以将新的属性，方法和下标添加到现有类型，因此能够添加协议可能需要的任何要求。
  - NOTE:
  Existing instances of a type automatically adopt and conform to a protocol when that conformance is added to the instance’s type in an extension. 当扩展中添加实例的类型时，类型的现有实例会自动采用并符合协议。
@@ -362,6 +390,7 @@ extension SnakesAndLadders: TextRepresentable {
 
 /*: 
  ## Declaring Protocol Adoption with an Extension
+ 通过扩展声明采用的协议
  */
 struct Hamster {
     var name: String
@@ -432,6 +461,7 @@ protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
 
 /*:
  # Protocol Composition
+ 协议组合
  It can be useful to require a type to conform to multiple protocols at once.
  You can combine multiple protocols into a single requirement with a protocol composition.
  Protocol compositions have the form protocol<SomeProtocol, AnotherProtocol>.
@@ -448,12 +478,11 @@ struct Personn: Named, Aged {
     var age: Int
 }
 do {
-    func wishHappyBirthday(to celebrator: protocol<Named, Aged>) {
+    /// 也可以给组合的协议指定一个别名：typealias Property = Named & Aged
+    func wishHappyBirthday(to celebrator: Named & Aged) {
         print("Happy birthday \(celebrator.name) - you're \(celebrator.age)!")
     }
-    do {
-        func wishHappyBirthday(to celebrator: Named & Aged) { }
-    }
+    
     let birthdayPerson = Personn(name: "Malcolm", age: 21)
     wishHappyBirthday(to:birthdayPerson)
 }
@@ -463,12 +492,38 @@ do {
  协议组成不定义新的永久协议类型。 相反，它们定义了具有组合中所有协议的组合要求的临时本地协议。
  */
 
+/*:
+ # 协议与类组合
+ */
+class Location {
+    var latitude: Double
+    var longitude: Double
+    init(latitude: Double, longitude: Double) {
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+}
+do {
+    class City: Location, Named {
+        var name: String
+        init(name: String, latitude: Double, longitude: Double) {
+            self.name = name
+            super.init(latitude: latitude, longitude: longitude)
+        }
+    }
+    func beginConcert(in location: Location & Named) {
+        print("Hello, \(location.name)!")
+    }
+
+    let seattle = City(name: "Seattle", latitude: 47.6, longitude: -122.3)
+    beginConcert(in: seattle)
+}
 
 /*:
  # Checking for Protocol Conformance
  检查协议一致性
- You can use the is and as operators described in Type Casting to check for protocol conformance,
- and to cast to a specific protocol. Checking for and casting to a protocol follows exactly the same syntax as checking for and casting to a type:
+ 通过 is as? as 来检查某个实例是否符合某个协议。
+ You can use the is and as operators described in Type Casting to check for protocol conformance, and to cast to a specific protocol. Checking for and casting to a protocol follows exactly the same syntax as checking for and casting to a type:
  - The is operator returns true if an instance conforms to a protocol and returns false if it does not.
  - The as? version of the downcast operator returns an optional value of the protocol’s type, and this value is nil if the instance does not conform to that protocol.
  - The as! version of the downcast operator forces the downcast to the protocol type and triggers a runtime error if the downcast does not succeed.
@@ -505,7 +560,6 @@ do {
         }
     }
 }
-
 
 /*:
  # Optional Protocol Requirements
@@ -608,7 +662,7 @@ extension PrettyTextRepresentable  {
 
 /*:
  ## Adding Constraints to Protocol Extensions
- 向协议扩展添加约束
+ 向协议扩展添加类型约束
  When you define a protocol extension, you can specify constraints that conforming types must satisfy before the methods and properties of the extension are available. You write these constraints after the name of the protocol you’re extending using a generic where clause, as described in https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Generics.html#//apple_ref/doc/uid/TP40014097-CH26-ID192.
  */
 extension Collection where Iterator.Element: TextRepresentable {
@@ -622,7 +676,7 @@ do {
     let morganTheHamster = Hamster(name: "Morgan")
     let mauriceTheHamster = Hamster(name: "Maurice")
     let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
-    //: Because Array conforms to CollectionType and the array’s elements conform to the TextRepresentable protocol, the array can use the textualDescription property to get a textual representation of its contents.
+    //: Because Array conforms to CollectionType and the array’s elements conform to the TextRepresentable protocol, the array can use the textualDescription property to get a textual representation of its contents.Swift 中 Array 符合 Collection 协议，而 Hamster 类型又符合 TextRepresentable 协议，所以 hamsters 可以使用 textualDescription 属性得到数组内容的文本表示。
     (hamsters.textualDescription)
 }
 /*:
@@ -637,7 +691,6 @@ do {
 
 /// protocol为参数
 do {
-    func f(f: protocol<CustomStringConvertible, CustomDebugStringConvertible>) {}
     func f(f: CustomStringConvertible & CustomDebugStringConvertible) {}
 }
 
