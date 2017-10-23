@@ -2,10 +2,11 @@
 import UIKit
 /*: 
  # Protocol
- 灵活的提供Func或Var
+ 灵活的提供Func或Var。
+ 相当于Java的接口，但不能和Java一样在协议中直接提供属性和方法的默认实现，而需要在协议扩展真实现。
  
  协议在Swift中有两个主要目的：
- - 第一个目的是用来实现多继承(swift语言被设计为单继承的）
+ - 第一个目的是用来实现多继承(swift语言被设计为单继承的）。
  - 第二个目的是强制实现者必须准守自己所指定的泛型约束。
  */
 //: # Protocol Syntax
@@ -334,7 +335,8 @@ game.play()
 
 /*: 
  # Adding Protocol Conformance with an Extension
- You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand. 即使您无法访问现有类型的源代码，也可以扩展现有类型以采用并符合新协议。 扩展可以将新的属性，方法和下标添加到现有类型，因此能够添加协议可能需要的任何要求。
+ 添加协议符合扩展
+ You can extend an existing type to adopt and conform to a new protocol, even if you do not have access to the source code for the existing type. Extensions can add new properties, methods, and subscripts to an existing type, and are therefore able to add any requirements that a protocol may demand. 即使您无法访问现有类型的源代码，也可以扩展现有类型以采用并符合新协议。扩展可以将新的属性，方法和下标添加到现有类型，因此能够添加协议可能需要的任何要求。
  - NOTE:
  Existing instances of a type automatically adopt and conform to a protocol when that conformance is added to the instance’s type in an extension. 当扩展中添加实例的类型时，类型的现有实例会自动采用并符合协议。
  */
