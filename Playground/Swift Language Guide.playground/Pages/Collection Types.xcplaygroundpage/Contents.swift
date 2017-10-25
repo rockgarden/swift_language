@@ -45,21 +45,25 @@ var threeDoubles = Array(repeating: 0.0, count: 3)
 
 //: ## Creating an Array by Adding Two Arrays Together
 do {
-    var anotherThreeDoubles = Array(repeating: 2.5, count: 3)
-    var sixDoubles = threeDoubles + anotherThreeDoubles
+    let anotherThreeDoubles = Array(repeating: 2.5, count: 3)
+    let sixDoubles = threeDoubles + anotherThreeDoubles
+    sixDoubles
 }
 
 //: ## Creating an Array with an Array Literal
 /// initialize an array with an array literal: [value 1, value 2, value 3]
-var shoppingList: [String] = ["Eggs", "Milk"]
+do {
+    let shoppingList: [String] = ["Eggs", "Milk"]
+    shoppingList
+}
 /*:
  - NOTE:
  The shoppingList array is declared as a variable (with the var introducer) and not a constant (with the let introducer) because more items are added to the shopping list in the examples below.
  */
-do {
-    /// alse can creating like below
-    var shoppingList = ["Eggs", "Milk"]
-}
+
+/// alse can creating like below
+var shoppingList = ["Eggs", "Milk"]
+
 
 //: ## Accessing and Modifying an Array
 do {
@@ -861,7 +865,7 @@ do {
     print(sum)
 
     let min = d.values.min()
-    print(min) // Optional(1)
+    print(min as Any) // Optional(1)
 
     let arr = Array(d.values.filter{$0 < 2})
     print(arr)
@@ -886,7 +890,7 @@ do {
             nc.post(name:test, object: self, userInfo: ["progress":3])
         }
 
-        func notificationArrived(_ n:Notification) {
+        @objc func notificationArrived(_ n:Notification) {
             let prog = (n.userInfo?["progress"] as? NSNumber)?.doubleValue
             if prog != nil {
                 self.progress = prog!

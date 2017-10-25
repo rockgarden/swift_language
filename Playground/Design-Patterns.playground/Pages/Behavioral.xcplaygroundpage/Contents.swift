@@ -4,9 +4,12 @@
 /*:
  Behavioral
  ==========
+ 行为型模式设计到算法和对象间的职责分配，不仅描述对象或类的模式，还描述它们之间的通信方式，刻划了运行时难以跟踪的复杂的控制流，它们将你的注意力从控制流转移到对象间的关系上来。行为型类模式采用继承机制在类间分派行为，例如Template Method 和Interpreter；行为对象模式使用对象复合而不是继承。一些行为对象模式描述了一组相互对等的对象如何相互协作以完成其中任何一个对象都单独无法完成的任务，如Mediator、Chain of Responsibility、Strategy；其它的行为对象模式常将行为封装封装在一个对象中，并将请求指派给它。
+
+ 常见行为型模式有11种：CCIIMM（Chain of Responsibility职责链、Command命令、Interpreter解释器、Iterator迭代、Mediator中介者、Memento备忘录），OSSTV（Observer观察者、State状态、Strategy策略、Template Method模版方法、Visitor访问者）。
 
  >In software engineering, behavioral design patterns are design patterns that identify common communication patterns between objects and realize these patterns. By doing so, these patterns increase flexibility in carrying out this communication.
- >
+ >在软件工程中，行为设计模式是识别对象之间常见通信模式的设计模式，并实现这些模式。 通过这样做，这些模式增加了进行此通信的灵活性。
  >**Source:** [wikipedia.org](http://en.wikipedia.org/wiki/Behavioral_pattern)
  */
 import Swift
@@ -19,8 +22,21 @@ import Foundation
  The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
 
  百度百科：在责任链模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理这个请求，这使得系统可以在不影响客户端的情况下动态地重新组织和分配责任。
+ 使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。职责链可简化对象的相互连接，它们仅需保持一个指向后继者的引用，而不需要保持所有候选者的引用，链中对象不用知道链的结构，接受者和发送者都没有对方的明确信息。可以通过在运行时刻动态的增加或修改链来动态的改变处理一个请求的职责；不能保证请求一定被接受，一个请求也可能因链没有被正确配置而得不到处理。
 
  设计模式分类：行为型模式
+
+ http://www.cnblogs.com/doit8791/archive/2012/05/08/2490989.html
+ 
+ 参与者：
+
+ （1）Handler：定义一个实现请求的接口。
+
+ （2）ConcreteHandler：处理它负责的请求，可访问它的后继者；如果可处理请求就处理，否则将请求转发给它的后后继者。
+
+ （3）Client：向链上的具体处理者对象提交请求。
+
+ 协作：当客户提交一个请求时，请求沿着链传递直至有一个ConcreteHandler对象负责处理它或者到链末。
 
  ### Example:
  */
