@@ -127,9 +127,37 @@ atm.canWithdraw(amount: 30)  // Can withdraw - 1x20, 2x10
  */
 /*:
  👫 Command
- ----------
+ -----------
+ **命令模式**
+ -----------
 
  The command pattern is used to express a request, including the call to be made and all of its required parameters, in a command object. The command may then be executed immediately or held for later use.
+在软件系统中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合，比如要对行为进行“记录、撤销/重做、事务”等处理，这种无法抵御变化的紧耦合是不合适的。在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，实现二者之间的松耦合。这就是命令模式（Command Pattern）。
+
+ ### 模式结构
+ Command：
+ 定义命令的接口，声明执行的方法。
+ ConcreteCommand：
+ 命令接口实现对象，是“虚”的实现；通常会持有接收者，并调用接收者的功能来完成命令要执行的操作。
+ Receiver：
+ 接收者，真正执行命令的对象。任何类都可能成为一个接收者，只要它能够实现命令要求实现的相应功能。
+ Invoker：
+ 要求命令对象执行请求，通常会持有命令对象，可以持有很多的命令对象。这个是客户端真正触发命令并要求命令执行相应操作的地方，也就是说相当于使用命令对象的入口。
+ Client：
+ 创建具体的命令对象，并且设置命令对象的接收者。注意这个不是我们常规意义上的客户端，而是在组装命令对象和接收者，或许，把这个Client称为装配者会更好理解，因为真正使用命令的客户端是从Invoker来触发执行。
+
+ ### 模式协作
+ 1. Client创建一个ConcreteCommand对象并指定他的Receiver对象
+ 2. 某个Invoker对象存储该ConcreteCommand对象
+ 3. 该Invoker通过调用Command对象的Execute操作来提交一个请求。若该命令是可撤销的，ConcreteCommand就在执行Execute操作之前存储当前状态以用于取消该命令
+ 4. ConcreteCommand对象对调用它的Receiver的一些操作以执行该请求
+
+ ### 模式分析
+ 1.命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。
+ 2.每一个命令都是一个操作：请求的一方发出请求，要求执行一个操作；接收的一方收到请求，并执行操作。
+ 3.命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求是怎么被接收，以及操作是否被执行、何时被执行，以及是怎么被执行的。
+ 4.命令模式使请求本身成为一个对象，这个对象和其他对象一样可以被存储和传递。
+ 5.命令模式的关键在于引入了抽象命令接口，且发送者针对抽象命令接口编程，只有实现了抽象命令接口的具体命令才能与接收者相关联。
 
  ### Example:
  */
@@ -186,11 +214,14 @@ let doorModule = HAL9000DoorsOperations(doors:podBayDoors)
 
 doorModule.open()
 doorModule.close()
+
 /*:
  🎶 Interpreter
  --------------
+ ## 解释器
 
  The interpreter pattern is used to evaluate sentences in a language.
+ Interpreter(解释器)模式是一种特殊的设计模式，它建立一个解释器（Interpreter），对于特定的计算机程序设计语言，用来解释预先定义的文法。简单地说，Interpreter模式是一种简单的语法解释器构架。
 
  ### Example
  */
@@ -281,8 +312,21 @@ var result = expression.evaluate(context)
 /*:
  🍫 Iterator
  -----------
-
+ ## 迭代器模式
  The iterator pattern is used to provide a standard interface for traversing a collection of items in an aggregate object without the need to understand its underlying structure.
+
+ 定义为：提供一种方法访问一个容器（container）对象中各个元素，而又不需暴露该对象的内部细节。 从定义可见，迭代器模式是为容器而生。很明显，对容器对象的访问必然涉及到遍历算法。你可以一股脑的将遍历方法塞到容器对象中去；或者根本不去提供什么遍历算法，让使用容器的人自己去实现去吧。这两种情况好像都能够解决问题。
+
+ https://en.wikipedia.org/wiki/Iterator_pattern
+
+ 迭代器模式由以下角色组成：
+ 1) 迭代器角色（Iterator）：迭代器角色负责定义访问和遍历元素的接口。
+ 2) 具体迭代器角色（Concrete Iterator）：具体迭代器角色要实现迭代器接口，并要记录遍历中的当前位置。
+ 3) 容器角色（Container）：容器角色负责提供创建具体迭代器角色的接口。
+ 4) 具体容器角色（Concrete Container）：具体容器角色实现创建具体迭代器角色的接口——这个具体迭代器角色与该容器的结构相关。
+
+ 从结构上可以看出，迭代器模式在客户与容器之间加入了迭代器角色。迭代器角色的加入，就可以很好的避免容器内部细节的暴露，而且也使得设计符合“单一职责原则”。
+ 注意，在迭代器模式中，具体迭代器角色和具体容器角色是耦合在一起的——遍历算法是与容器的内部细节紧密相关的。为了使客户程序从与具体迭代器角色耦合的困境中脱离出来，避免具体迭代器角色的更换给客户程序带来的修改，迭代器模式抽象了具体迭代器角色，使得客户程序更具一般性和重用性。这被称为多态迭代。
 
  ### Example:
  */
@@ -325,8 +369,11 @@ for novella in greatNovellas {
 /*:
  💐 Mediator
  -----------
+ ## 调停者模式
 
  The mediator pattern is used to reduce coupling between classes that communicate with each other. Instead of classes communicating directly, and thus requiring knowledge of their implementation, the classes send messages via a mediator object.
+
+ https://en.wikipedia.org/wiki/Mediator_pattern
 
  ### Example
  */

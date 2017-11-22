@@ -124,7 +124,7 @@ public class AEXMLElement: NSObject {
     /// Returns number of all elements with equal name as `self`.
     public var count: Int { return all?.count ?? 0 }
     
-    private func allWithCondition(fulfillCondition: (element: AEXMLElement) -> Bool) -> [AEXMLElement]? {
+    private func allWithCondition(fulfillCondition: (_ element: AEXMLElement) -> Bool) -> [AEXMLElement]? {
         var found = [AEXMLElement]()
         if let elements = all {
             for element in elements {
@@ -196,7 +196,7 @@ public class AEXMLElement: NSObject {
      
      :returns: Child XML element with `self` as `parent`.
      */
-    public func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement {
+    public func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement {
         let child = AEXMLElement(name, value: value, attributes: attributes)
         return addChild(child)
     }
@@ -377,7 +377,7 @@ public class AEXMLDocument: AEXMLElement {
 
 // MARK: -
 
-private class AEXMLParser: NSObject, NSXMLParserDelegate {
+private class AEXMLParser: NSObject, XMLParserDelegate {
     
     // MARK: Properties
     
