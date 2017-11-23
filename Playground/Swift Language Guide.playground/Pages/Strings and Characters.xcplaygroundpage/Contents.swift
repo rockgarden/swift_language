@@ -74,7 +74,11 @@ do {
 
 /*:
  # Working with Characters
+ 
+ in swift 4, 'characters' is deprecated: Please use String or Substring directly:
+ String.count
  */
+
 do {
     for character in "Dog!🐶".characters {
         print(character)

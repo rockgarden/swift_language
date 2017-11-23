@@ -303,18 +303,32 @@ do {
     var strEnum1: String.suit? = String.judgeSuits(s: "j")
 }
 
-
-//: # Example
-
-//: protocol extension
-extension CustomStringConvertible {
-    var upperDescription: String {
-        return self.description.uppercased()
-    }
-}
-do {
-    ["key":"value"].upperDescription
-}
+/*:
+ # 限定扩展 extesion where
+ 需要给A类扩展另外一个属性，但B和C暂时不需要，大部分人的思维肯定是既然只有A需要，那我们就单独给A来扩展一个属性不就可以了吗，这样肯定行得通，但既然我们都已经走上了POP编程的道路，可以在给protocol扩展的时候添加限定,就是说在满足该限定条件（遵循另一个协议或者满足某个类型）下才能允许使用此扩展下的属性或方法, 而这个限定就是通过where来添加的。
+ */
+// TODO: 示例
+//class A {}
+//protocol someProtocol {
+//    var clickCount: Int { set get }
+//    func ClickEvent(action: String,value: NSNumber)
+//}
+//
+//extension A: someProtocol {
+//    var clickCount: Int {
+//        set {}
+//        get {}
+//    }
+//    func ClickEvent(action: String,value: NSNumber){}
+//}
+//
+//extension someProtocol where Self: UIViewController{
+//    var otherProperty: String{
+//        return "something you want"
+//    }
+//
+//    func handleError(error: String) {}
+//}
 
 class Dog<T> {
     var name: T?
@@ -326,6 +340,18 @@ extension Dog {
 }
 extension Dog where T: Equatable { }
 
+
+//: # Example
+
+// protocol extension
+extension CustomStringConvertible {
+    var upperDescription: String {
+        return self.description.uppercased()
+    }
+}
+do {
+    ["key":"value"].upperDescription
+}
 
 // Array in extension
 extension String {

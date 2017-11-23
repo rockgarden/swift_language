@@ -91,8 +91,8 @@ do {
             return (prefix != nil ? prefix! + " " : "") + name
         }
     }
-    var ncc1701 = Starship(name: "Enterprise", prefix: "USS")
-    var ncc1702 = Starship(name: "Enterprise")
+    let ncc1701 = Starship(name: "Enterprise", prefix: "USS")
+    let ncc1702 = Starship(name: "Enterprise")
     ncc1701.fullName
     ncc1702.fullName
 }
@@ -164,7 +164,7 @@ class OnOffClass: Togglable {
 }
 do {
     var lightSwitch = OnOffSwitch.Off
-    var onOffClass = OnOffClass(oo: .off)
+    let onOffClass = OnOffClass(oo: .off)
     lightSwitch.toggle()
     onOffClass.toggle()
 }
@@ -354,12 +354,11 @@ class DiceGameTracker: DiceGameDelegate {
         print("The game lasted for \(numberOfTurns) turns")
     }
 }
-do {
-    let tracker = DiceGameTracker()
-    let game = SnakesAndLadders()
-    game.delegate = tracker
-    game.play()
-}
+
+let tracker = DiceGameTracker()
+let game = SnakesAndLadders()
+game.delegate = tracker
+game.play()
 
 /*: 
  # Adding Protocol Conformance with an Extension
