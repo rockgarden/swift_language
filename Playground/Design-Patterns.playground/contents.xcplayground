@@ -4,5 +4,6 @@
         <page name='Behavioral'/>
         <page name='Creational'/>
         <page name='Structural'/>
+        <page name='Singleton'/>
     </pages>
 </playground>

@@ -4,5 +4,6 @@
         <page name='Collection Array'/>
         <page name='autoreleasepool'/>
         <page name='DanglingPointer'/>
+        <page name='ByVal'/>
     </pages>
 </playground>

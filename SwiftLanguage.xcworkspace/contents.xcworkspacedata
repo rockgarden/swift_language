@@ -53,9 +53,6 @@
          location = "group:Help.playground">
       </FileRef>
       <FileRef
-         location = "group:KVOPlayground.playground">
-      </FileRef>
-      <FileRef
          location = "group:Swift Standard Library.playground">
       </FileRef>
       <FileRef
