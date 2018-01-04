@@ -4,8 +4,12 @@
 /*:
  Creational
  ==========
-
+ 创建模式
  > In software engineering, creational design patterns are design patterns that deal with object creation mechanisms, trying to create objects in a manner suitable to the situation. The basic form of object creation could result in design problems or added complexity to the design. Creational design patterns solve this problem by somehow controlling this object creation.
+ >
+ > 在软件工程中，创作设计模式是处理对象创建机制的设计模式，试图以适合情况的方式创建对象。 对象创建的基本形式可能会导致设计问题或增加设计的复杂性。 创造性的设计模式通过控制这个对象创建来解决这个问题。
+ >
+ > 创建模式包括5种具体的模式：Abstract Factory（抽象工厂模式）， Builder（创建者模式，生成器模式）， Factory Method（工厂方法模式）， Prototype（原型模式）， Singleton（单例模式）。
  >
  >**Source:** [wikipedia.org](http://en.wikipedia.org/wiki/Creational_pattern)
  */

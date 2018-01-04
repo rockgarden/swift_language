@@ -8,8 +8,10 @@
 
  常见行为型模式有11种：CCIIMM（Chain of Responsibility职责链、Command命令、Interpreter解释器、Iterator迭代、Mediator中介者、Memento备忘录），OSSTV（Observer观察者、State状态、Strategy策略、Template Method模版方法、Visitor访问者）。
 
- >In software engineering, behavioral design patterns are design patterns that identify common communication patterns between objects and realize these patterns. By doing so, these patterns increase flexibility in carrying out this communication.
- >在软件工程中，行为设计模式是识别对象之间常见通信模式的设计模式，并实现这些模式。 通过这样做，这些模式增加了进行此通信的灵活性。
+ > In software engineering, behavioral design patterns are design patterns that identify common communication patterns between objects and realize these patterns. By doing so, these patterns increase flexibility in carrying out this communication.
+ >
+ > 在软件工程中，行为设计模式是识别对象之间常见通信模式的设计模式，并实现这些模式。 通过这样做，这些模式增加了进行此通信的灵活性。
+ >
  >**Source:** [wikipedia.org](http://en.wikipedia.org/wiki/Behavioral_pattern)
  */
 import Swift
@@ -431,6 +433,8 @@ spamMonster(message: "I'd Like to Add you to My Professional Network", worker: m
  ----------
 
  The memento pattern is used to capture the current state of an object and store it in such a manner that it can be restored at a later time without breaking the rules of encapsulation.
+ 
+ 备忘录模式用于捕获对象的当前状态并将其存储，以便在稍后恢复，而不会破坏封装规则。
 
  ### Example
  */
@@ -515,6 +519,8 @@ if let memento = CheckPoint.restore(saveName: "gameState1") {
 
  The observer pattern is used to allow an object to publish changes to its state.
  Other objects subscribe to be immediately notified of any changes.
+ 
+ 观察者模式用于允许对象发布对其状态的更改。 其他对象订阅立即通知的任何变化
 
  ### Example
  */
