@@ -18,8 +18,7 @@ import Foundation
 /*:
  🏭 Factory Method
  -----------------
- 工厂方法模式
- ----------
+ 工厂方法
 
  The factory pattern is used to replace class constructors, abstracting the process of object generation so that the type of the object instantiated can be determined at run-time.
 
@@ -86,18 +85,19 @@ CurrencyFactory.currency(for: .uk)?.code() ?? noCurrencyCode
 /*:
  🌰 Abstract Factory
  -------------------
- 抽象工厂模式
- ----------
+ 抽象工厂
 
  The abstract factory pattern is used to provide a client with a set of related or dependant objects (maybe classes or structs).
  The "family" of objects created by the factory are determined at run-time.
+ 抽象工厂模式用于为客户端提供一组相关或依赖对象。
+ 工厂创建的对象的“族”在运行时确定。
 
  百度百科：为创建一组相关或相互依赖的对象提供一个接口，而且无需指定他们的具体类
  设计模式分类：创建型模式
 
- ### Example
+ ## Example
  */
-/// Protocols 抽象工厂
+//: Protocols
 protocol Decimal {
     func stringValue() -> String
     // factory 工厂方法
@@ -129,7 +129,7 @@ struct SwiftNumber : Decimal {
     }
 }
 
-/// Abstract factory (不用实例化)
+//: Abstract factory (不用实例化)
 enum NumberType {
     case nextStep, swift
 }
@@ -157,11 +157,11 @@ numberTwo.stringValue()
 /*:
  👷 Builder
  ----------
- 创建者模式
- --------
+ 构建器模式
 
  The builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm.
  An external class controls the construction algorithm.
+ 构建器模式用于创建复杂对象，其中组成部分必须以相同顺序或使用特定算法创建。外部类控制构造算法。
  
  百度百科：其核心思想是将一个“复杂对象的构建算法”与它的“部件及组装方式”分离，使得构件算法和组装方式可以独立应对变化；复用同样的构建算法可以创建不同的表示，不同的构建过程可以复用相同的部件组装方式
  设计模式分类：创建型模式
@@ -212,7 +212,7 @@ let empire = DeathStarBuilder { builder in
     builder.z = 0.3
 }
 
-let deathStar = DeathStar(builder:empire)
+let deathStar = DeathStar(builder:empire)reduce
 /*:
  >**Further Examples:** [Design Patterns in Swift](https://github.com/kingreza/Swift-Builder)
  */

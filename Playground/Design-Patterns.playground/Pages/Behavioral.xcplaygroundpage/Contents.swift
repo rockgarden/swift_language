@@ -631,10 +631,10 @@ userContext.changeStateToUnauthorized()
  >**Further Examples:** [Design Patterns in Swift](https://github.com/kingreza/Swift-State)
  */
 /*:
- 💡 Strategy
- -----------
+ 💡 Strategy 策略
+ ----------------
 
- The strategy pattern is used to create an interchangeable family of algorithms from which the required process is chosen at run-time.
+ 策略模式用于创建可互换的算法族，在运行时从中选择所需的过程。
 
  ### Example
  */
@@ -644,6 +644,7 @@ protocol PrintStrategy {
 
 final class Printer {
 
+    // 采用PrintStrategy协议的任何类型的实例
     private let strategy: PrintStrategy
 
     func print(_ string: String) -> String {
@@ -652,6 +653,12 @@ final class Printer {
 
     init(strategy: PrintStrategy) {
         self.strategy = strategy
+    }
+}
+
+final class UpperCaseStrategy: PrintStrategy {
+    func print(_ string: String) -> String {
+        return string.uppercased()
     }
 }
 
